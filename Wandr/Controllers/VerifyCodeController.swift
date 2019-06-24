@@ -27,7 +27,6 @@ class VerifyCodeController: UIViewController, UITextFieldDelegate {
         return field
     }()
     
-    
     let infoLabel: UILabel = {
         let label = UILabel()
         label.text = "Ding! We Sent You A Code"
@@ -111,7 +110,12 @@ class VerifyCodeController: UIViewController, UITextFieldDelegate {
         let credential: PhoneAuthCredential = PhoneAuthProvider.provider().credential(withVerificationID: defaults.string(forKey: "authVID")!, verificationCode: codeField.text!)
         Auth.auth().signIn(with: credential) { (user, error) in
             if error != nil {
-                print("error: \(error!.localizedDescription)")
+                let errorDescription = error!.localizedDescription
+                print(errorDescription)
+                if errorDescription.contains("The SMS verification code used to create the phone auth credential is invalid") {
+                    self.infoLabel.text = "Invalid Code. Please Try Again"
+                    self.infoLabel.font = UIFont(name: "NexaBold", size: 23)
+                }
             } else {
                 let vc = HomeController()
                 let transition = CATransition().fromBottom()
