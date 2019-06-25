@@ -38,12 +38,8 @@
 		63351F8622AF2DA60027AEC4 /* categoryFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351F8522AF2DA60027AEC4 /* categoryFiltersView.swift */; };
 		63351F8822AF2F4D0027AEC4 /* filtersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351F8722AF2F4D0027AEC4 /* filtersView.swift */; };
 		6346780522B808AD00166628 /* CreateMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346780422B808AC00166628 /* CreateMessageView.swift */; };
-		634698FA22BEC82B002AB392 /* RegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634698F922BEC82B002AB392 /* RegistrationController.swift */; };
-		634698FB22BEC82B002AB392 /* RegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634698F922BEC82B002AB392 /* RegistrationController.swift */; };
-		634698FC22BEC82B002AB392 /* RegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634698F922BEC82B002AB392 /* RegistrationController.swift */; };
+		634698FA22BEC82B002AB392 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634698F922BEC82B002AB392 /* LoginController.swift */; };
 		634698FE22BEC832002AB392 /* VerifyCodeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634698FD22BEC832002AB392 /* VerifyCodeController.swift */; };
-		634698FF22BEC832002AB392 /* VerifyCodeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634698FD22BEC832002AB392 /* VerifyCodeController.swift */; };
-		6346990022BEC832002AB392 /* VerifyCodeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634698FD22BEC832002AB392 /* VerifyCodeController.swift */; };
 		6346990222BEC84C002AB392 /* PlaceTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346990122BEC84C002AB392 /* PlaceTag.swift */; };
 		6346990322BEC84C002AB392 /* PlaceTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346990122BEC84C002AB392 /* PlaceTag.swift */; };
 		6346990422BEC84C002AB392 /* PlaceTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346990122BEC84C002AB392 /* PlaceTag.swift */; };
@@ -64,6 +60,7 @@
 		6346991822BEC8EC002AB392 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6346991522BEC8EC002AB392 /* GoogleService-Info.plist */; };
 		638991FD22B196A4007BE014 /* NewPlanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638991FC22B196A4007BE014 /* NewPlanController.swift */; };
 		638991FF22B1B7CE007BE014 /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638991FE22B1B7CE007BE014 /* ContactView.swift */; };
+		638E9E4922C162A900DD4B7B /* EmailInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638E9E4822C162A900DD4B7B /* EmailInputController.swift */; };
 		63A9A3AD22BF100B0063E8B8 /* cvCellShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A9A3AC22BF100B0063E8B8 /* cvCellShadowExtension.swift */; };
 /* End PBXBuildFile section */
 
@@ -119,7 +116,7 @@
 		63351F8522AF2DA60027AEC4 /* categoryFiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = categoryFiltersView.swift; sourceTree = "<group>"; };
 		63351F8722AF2F4D0027AEC4 /* filtersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = filtersView.swift; sourceTree = "<group>"; };
 		6346780422B808AC00166628 /* CreateMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMessageView.swift; sourceTree = "<group>"; };
-		634698F922BEC82B002AB392 /* RegistrationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationController.swift; sourceTree = "<group>"; };
+		634698F922BEC82B002AB392 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		634698FD22BEC832002AB392 /* VerifyCodeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyCodeController.swift; sourceTree = "<group>"; };
 		6346990122BEC84C002AB392 /* PlaceTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceTag.swift; sourceTree = "<group>"; };
 		6346990522BEC852002AB392 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -129,6 +126,7 @@
 		6346991522BEC8EC002AB392 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		638991FC22B196A4007BE014 /* NewPlanController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlanController.swift; sourceTree = "<group>"; };
 		638991FE22B1B7CE007BE014 /* ContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactView.swift; sourceTree = "<group>"; };
+		638E9E4822C162A900DD4B7B /* EmailInputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailInputController.swift; sourceTree = "<group>"; };
 		63A9A3AC22BF100B0063E8B8 /* cvCellShadowExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cvCellShadowExtension.swift; sourceTree = "<group>"; };
 		B122AA00A3A9A3644C38A580 /* Pods_Wandr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wandr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4535119BFFDAE6BA03FF87D /* Pods-Wandr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wandr.release.xcconfig"; path = "Target Support Files/Pods-Wandr/Pods-Wandr.release.xcconfig"; sourceTree = "<group>"; };
@@ -300,11 +298,10 @@
 		63351F7E22AEC5B40027AEC4 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				638E9E4A22C168D000DD4B7B /* Registration */,
 				0ADCFB6122A0585E00047E93 /* HomeController.swift */,
 				6318706F22B045DA005C6FA4 /* MyPlansController.swift */,
 				638991FC22B196A4007BE014 /* NewPlanController.swift */,
-				634698F922BEC82B002AB392 /* RegistrationController.swift */,
-				634698FD22BEC832002AB392 /* VerifyCodeController.swift */,
 				63133CDE22B5467A00D5ADB1 /* ProfileController.swift */,
 				63133CE022B5882C00D5ADB1 /* PlanChatController.swift */,
 			);
@@ -324,6 +321,16 @@
 			children = (
 			);
 			path = MyPlansViews;
+			sourceTree = "<group>";
+		};
+		638E9E4A22C168D000DD4B7B /* Registration */ = {
+			isa = PBXGroup;
+			children = (
+				634698F922BEC82B002AB392 /* LoginController.swift */,
+				634698FD22BEC832002AB392 /* VerifyCodeController.swift */,
+				638E9E4822C162A900DD4B7B /* EmailInputController.swift */,
+			);
+			path = Registration;
 			sourceTree = "<group>";
 		};
 		EEA58BB0016EE1C384046E92 /* Pods */ = {
@@ -529,8 +536,9 @@
 				6329FB0022AAEDBE006C5E33 /* bottomOfCard.swift in Sources */,
 				6346990A22BEC85A002AB392 /* Contact.swift in Sources */,
 				63351F8422AEDFE40027AEC4 /* tagsFiltersView.swift in Sources */,
-				634698FA22BEC82B002AB392 /* RegistrationController.swift in Sources */,
+				634698FA22BEC82B002AB392 /* LoginController.swift in Sources */,
 				6318706A22B0064F005C6FA4 /* FriendsBubbles.swift in Sources */,
+				638E9E4922C162A900DD4B7B /* EmailInputController.swift in Sources */,
 				63176ED422B40FCD0030C2D2 /* PlanPreview.swift in Sources */,
 				6346991222BEC8A2002AB392 /* FilterCell.swift in Sources */,
 				6346780522B808AD00166628 /* CreateMessageView.swift in Sources */,
@@ -557,9 +565,7 @@
 			files = (
 				6346990B22BEC85A002AB392 /* Contact.swift in Sources */,
 				6346991322BEC8A2002AB392 /* FilterCell.swift in Sources */,
-				634698FB22BEC82B002AB392 /* RegistrationController.swift in Sources */,
 				6346990722BEC852002AB392 /* Category.swift in Sources */,
-				634698FF22BEC832002AB392 /* VerifyCodeController.swift in Sources */,
 				6346990F22BEC897002AB392 /* CardDeckView.swift in Sources */,
 				6346990322BEC84C002AB392 /* PlaceTag.swift in Sources */,
 				0ADCFB7822A0585F00047E93 /* WandrTests.swift in Sources */,
@@ -572,9 +578,7 @@
 			files = (
 				6346990C22BEC85A002AB392 /* Contact.swift in Sources */,
 				6346991422BEC8A2002AB392 /* FilterCell.swift in Sources */,
-				634698FC22BEC82B002AB392 /* RegistrationController.swift in Sources */,
 				6346990822BEC852002AB392 /* Category.swift in Sources */,
-				6346990022BEC832002AB392 /* VerifyCodeController.swift in Sources */,
 				6346991022BEC897002AB392 /* CardDeckView.swift in Sources */,
 				6346990422BEC84C002AB392 /* PlaceTag.swift in Sources */,
 				0ADCFB8322A0585F00047E93 /* WandrUITests.swift in Sources */,

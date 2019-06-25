@@ -95,7 +95,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     }
     
     @objc func showRegistration() {
-        let vc = RegistrationController()
+        let vc = LoginController()
         let transition = CATransition().fromBottom()
         self.navigationController!.view.layer.add(transition, forKey: kCATransition)
         self.navigationController?.pushViewController(vc, animated: false)
