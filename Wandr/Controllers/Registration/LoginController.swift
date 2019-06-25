@@ -10,7 +10,7 @@ import UIKit
 import FirebaseAuth
 import PhoneNumberKit
 
-class RegistrationController: UIViewController {
+class LoginController: UIViewController {
     
     //MARK:- Variables
     var countryCode: String = "+1"
