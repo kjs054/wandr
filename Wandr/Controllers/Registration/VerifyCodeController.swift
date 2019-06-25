@@ -12,29 +12,19 @@ import FirebaseAuth
 class VerifyCodeController: UIViewController, UITextFieldDelegate {
     
     //MARK:- Elements
-    let codeField: UITextField = {
-        let field = UITextField()
+    let codeField: LoginAndRegisterTextField = {
+        let field = LoginAndRegisterTextField()
         field.keyboardType = .numberPad
-        field.backgroundColor = .white
-        field.layer.masksToBounds = true
-        field.layer.cornerRadius = 18
         field.font = UIFont(name: "Avenir-Heavy", size: 30)
-        field.textColor = wandrBlue
         field.textAlignment = .center
         field.autocorrectionType = .no
         field.placeholder = "Code"
-        field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
     
-    let infoLabel: UILabel = {
-        let label = UILabel()
+    let infoLabel: LoginAndRegisterInfoLabel = {
+        let label = LoginAndRegisterInfoLabel()
         label.text = "Ding! We Sent You A Code"
-        label.font = UIFont(name: "NexaBold", size: 25)
-        label.adjustsFontSizeToFitWidth = true
-        label.textColor = .white
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -78,6 +68,7 @@ class VerifyCodeController: UIViewController, UITextFieldDelegate {
         contentView.addSubview(infoLabel)
         infoLabel.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         infoLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        infoLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
     }
     
     fileprivate func setupContentView() {
@@ -109,22 +100,25 @@ class VerifyCodeController: UIViewController, UITextFieldDelegate {
         let defaults = UserDefaults.standard
         let credential: PhoneAuthCredential = PhoneAuthProvider.provider().credential(withVerificationID: defaults.string(forKey: "authVID")!, verificationCode: codeField.text!)
         Auth.auth().signIn(with: credential) { (user, error) in
-            if error != nil {
-                let errorDescription = error!.localizedDescription
-                print(errorDescription)
-                if errorDescription.contains("The SMS verification code used to create the phone auth credential is invalid") {
-                    self.infoLabel.text = "Invalid Code. Please Try Again"
-                    self.infoLabel.font = UIFont(name: "NexaBold", size: 23)
-                }
+            if let error = error {
+                self.handleAuthError(error: error)
             } else {
-                let vc = HomeController()
-                let transition = CATransition().fromBottom()
-                self.navigationController!.view.layer.add(transition, forKey: kCATransition)
-                self.navigationController?.pushViewController(vc, animated: false)
+                self.showNextController()
             }
         }
     }
     
+    func handleAuthError(error: Error?) {
+        let errorDescription = error!.localizedDescription
+        if errorDescription.contains("The SMS verification code used to create the phone auth credential is invalid") {
+            self.infoLabel.text = "Invalid Code. Please Try Again"
+        }
+    }
+    
+    func showNextController() {
+        let vc = EmailInputController()
+        navigationController?.pushViewController(vc, animated: false)
+    }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard let textFieldText = textField.text,
