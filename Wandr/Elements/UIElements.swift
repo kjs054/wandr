@@ -17,7 +17,8 @@ class RoundedButton: UIButton {
         layer.cornerRadius = radius
         translatesAutoresizingMaskIntoConstraints = false
         clipsToBounds = true
-        layer.masksToBounds = false
+        layer.masksToBounds = true
+        imageView?.contentMode = .scaleAspectFill
         backgroundColor = UIColor.white
         layer.shadowRadius = 6.0
         layer.shadowOpacity = 0.15

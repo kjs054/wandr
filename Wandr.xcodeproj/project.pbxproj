@@ -37,6 +37,8 @@
 		63351F8422AEDFE40027AEC4 /* tagsFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351F8322AEDFE40027AEC4 /* tagsFiltersView.swift */; };
 		63351F8622AF2DA60027AEC4 /* categoryFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351F8522AF2DA60027AEC4 /* categoryFiltersView.swift */; };
 		63351F8822AF2F4D0027AEC4 /* filtersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351F8722AF2F4D0027AEC4 /* filtersView.swift */; };
+		633B384322C27B9B00138BE7 /* BirthdayInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633B384222C27B9B00138BE7 /* BirthdayInputController.swift */; };
+		633B384522C2857900138BE7 /* ProfileImageInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633B384422C2857900138BE7 /* ProfileImageInputController.swift */; };
 		6346780522B808AD00166628 /* CreateMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346780422B808AC00166628 /* CreateMessageView.swift */; };
 		634698FA22BEC82B002AB392 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634698F922BEC82B002AB392 /* LoginController.swift */; };
 		634698FE22BEC832002AB392 /* VerifyCodeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634698FD22BEC832002AB392 /* VerifyCodeController.swift */; };
@@ -115,6 +117,8 @@
 		63351F8322AEDFE40027AEC4 /* tagsFiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tagsFiltersView.swift; sourceTree = "<group>"; };
 		63351F8522AF2DA60027AEC4 /* categoryFiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = categoryFiltersView.swift; sourceTree = "<group>"; };
 		63351F8722AF2F4D0027AEC4 /* filtersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = filtersView.swift; sourceTree = "<group>"; };
+		633B384222C27B9B00138BE7 /* BirthdayInputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayInputController.swift; sourceTree = "<group>"; };
+		633B384422C2857900138BE7 /* ProfileImageInputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageInputController.swift; sourceTree = "<group>"; };
 		6346780422B808AC00166628 /* CreateMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMessageView.swift; sourceTree = "<group>"; };
 		634698F922BEC82B002AB392 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		634698FD22BEC832002AB392 /* VerifyCodeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyCodeController.swift; sourceTree = "<group>"; };
@@ -329,6 +333,8 @@
 				634698F922BEC82B002AB392 /* LoginController.swift */,
 				634698FD22BEC832002AB392 /* VerifyCodeController.swift */,
 				638E9E4822C162A900DD4B7B /* EmailInputController.swift */,
+				633B384222C27B9B00138BE7 /* BirthdayInputController.swift */,
+				633B384422C2857900138BE7 /* ProfileImageInputController.swift */,
 			);
 			path = Registration;
 			sourceTree = "<group>";
@@ -544,8 +550,10 @@
 				6346780522B808AD00166628 /* CreateMessageView.swift in Sources */,
 				63A9A3AD22BF100B0063E8B8 /* cvCellShadowExtension.swift in Sources */,
 				63351F8222AEC7080027AEC4 /* CardViewModel.swift in Sources */,
+				633B384522C2857900138BE7 /* ProfileImageInputController.swift in Sources */,
 				6318706C22B01464005C6FA4 /* User.swift in Sources */,
 				0A1D78EE22A19B23004AB1FF /* AutoLayoutExtension.swift in Sources */,
+				633B384322C27B9B00138BE7 /* BirthdayInputController.swift in Sources */,
 				0A2BA67622A9948800F2F7C4 /* Place.swift in Sources */,
 				63133CE622B5917A00D5ADB1 /* membersView.swift in Sources */,
 				0A1D78FE22A72F96004AB1FF /* CardView.swift in Sources */,
