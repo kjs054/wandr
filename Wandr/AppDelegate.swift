@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         FirebaseApp.configure()
         if Auth.auth().currentUser == nil {
-            let navController = UINavigationController(rootViewController: RegistrationController())
+            let navController = UINavigationController(rootViewController: LoginController())
             self.window?.rootViewController = navController
             navController.view.backgroundColor = .white
         } else {
