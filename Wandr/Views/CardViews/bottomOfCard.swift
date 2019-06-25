@@ -9,6 +9,7 @@
 import UIKit
 class bottomOfCard: UIView {
     
+    //MARK:- Elements
     let saveIcon: UIImageView = {
         let imageView = UIImageView(image: #imageLiteral(resourceName: "saveIcon"))
         imageView.contentMode = .scaleAspectFit
@@ -17,8 +18,10 @@ class bottomOfCard: UIView {
     
     let moreInfoButton: UIButton = {
         let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "infoIcon"), for: .normal)
-        button.imageView?.contentMode = .scaleAspectFit
+        button.setTitle("...", for: .normal)
+        button.setTitleColor(#colorLiteral(red: 0, green: 0.6588235294, blue: 1, alpha: 1), for: .normal)
+        button.titleLabel?.font = UIFont(name: "Avenir-Black", size: 30)
+        button.addTarget(self, action: #selector(showInfoAlert), for: .touchUpInside)
         return button
     }()
     
@@ -38,6 +41,7 @@ class bottomOfCard: UIView {
         return label
     }()
     
+    //MARK:- Setup View
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.masksToBounds = true
@@ -79,7 +83,7 @@ class bottomOfCard: UIView {
         addSubview(moreInfoButton)
         moreInfoButton.translatesAutoresizingMaskIntoConstraints = false
         moreInfoButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -(contentMargin-7)).isActive = true
-        moreInfoButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        moreInfoButton.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -8).isActive = true
         moreInfoButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.6).isActive = true
         moreInfoButton.widthAnchor.constraint(equalTo: moreInfoButton.heightAnchor).isActive = true
     }
@@ -98,4 +102,20 @@ class bottomOfCard: UIView {
         bottomBarInfo.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.5).isActive = true
     }
     
+    //MARK:- Logic
+    @objc func showInfoAlert() {
+        let alert = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Like", style: .default, handler: { (UIAlertAction) in
+            print("Like")
+        }))
+        alert.addAction(UIAlertAction(title: "Navigate", style: .default, handler: { (UIAlertAction) in
+            print("Navigate")
+        }))
+        alert.addAction(UIAlertAction(title: "Make A Plan", style: .default, handler: { (UIAlertAction) in
+            print("Make A Plan")
+        }))
+        alert.addAction(UIAlertAction(title: "Report", style: .default, handler: { (UIAlertAction) in
+            print("Report")
+        }))
+    }
 }
