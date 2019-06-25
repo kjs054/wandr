@@ -39,6 +39,31 @@ class circularButton: UIButton {
     }
 }
 
+class LoginAndRegisterTextField: UITextField {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        font = UIFont(name: "Avenir-Heavy", size: 22)
+        autocorrectionType = .no
+        adjustsFontSizeToFitWidth = true
+        textColor = wandrBlue
+        backgroundColor = .white
+        layer.masksToBounds = true
+        layer.cornerRadius = 18
+        translatesAutoresizingMaskIntoConstraints = false
+    }
+}
+
+class LoginAndRegisterInfoLabel: UILabel {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        font = UIFont(name: "NexaBold", size: 25)
+        adjustsFontSizeToFitWidth = true
+        textColor = .white
+        textAlignment = .center
+        translatesAutoresizingMaskIntoConstraints = false
+    }
+}
+
 class actionButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
