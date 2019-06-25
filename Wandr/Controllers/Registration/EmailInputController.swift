@@ -93,15 +93,12 @@ class EmailInputController: UIViewController {
         nextButton.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         nextButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-//        nextButton.addTarget(self, action: #selector(attemptSignIn), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(showNextController), for: .touchUpInside)
     }
 
     //MARK:- Logic
-    
-    func showNextController() {
-        let vc = HomeController()
-        let transition = CATransition().fromBottom()
-        navigationController!.view.layer.add(transition, forKey: kCATransition)
+    @objc func showNextController() {
+        let vc = BirthdayInputController()
         navigationController?.pushViewController(vc, animated: false)
     }
     
