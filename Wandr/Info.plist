@@ -47,6 +47,10 @@
 	<false/>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow to have an awesome profile picture</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Allow to have an awesome profile picture</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
