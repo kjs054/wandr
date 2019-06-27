@@ -75,6 +75,7 @@ class LoginController: UIViewController {
         setupContentView()
         self.navigationController?.navigationBar.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        self.navigationController?.view.backgroundColor = wandrBlue
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -89,7 +90,7 @@ class LoginController: UIViewController {
     fileprivate func setupContentView() {
         view.addSubview(contentView)
         contentView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.85).isActive = true
-        contentView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
+        contentView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         contentView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
         contentView.heightAnchor.constraint(equalToConstant: 300).isActive = true
         setupLogoImage()

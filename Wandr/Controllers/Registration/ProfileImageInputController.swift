@@ -53,7 +53,7 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
     
     fileprivate func setupContentView() {
         view.addSubview(contentView)
-        contentView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
+        contentView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         contentView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
         contentView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.85).isActive = true
         contentView.heightAnchor.constraint(equalToConstant: 285).isActive = true
@@ -73,15 +73,17 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
         nextButton.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         nextButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        //        nextButton.addTarget(self, action: #selector(attemptSignIn), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(addProfileImageToData), for: .touchUpInside)
     }
     
     //MARK:- Logic
-    func showNextController() {
-        let vc = HomeController()
-        let transition = CATransition().fromBottom()
-        navigationController!.view.layer.add(transition, forKey: kCATransition)
-        navigationController?.pushViewController(vc, animated: false)
+    
+    @objc func addProfileImageToData() {
+        if profilePicture.imageView?.image != nil {
+            uploadImageToStorage(image: profilePicture.imageView!.image!)
+        } else {
+            profilePicture.setTitle("Profile Picture Required", for: .normal)
+        }
     }
     
     @objc func handleProfilePictureChange() {
@@ -113,7 +115,7 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let editedImage = info[.editedImage] as? UIImage else {
-             fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
+            fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
         }
         dismiss(animated: true, completion: nil)
         profilePicture.setImage(editedImage, for: .normal)

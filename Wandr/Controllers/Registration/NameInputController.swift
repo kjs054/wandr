@@ -9,21 +9,21 @@
 import UIKit
 import FirebaseAuth
 
-class EmailInputController: UIViewController {
+class NameInputController: UIViewController {
     
     //MARK:- Elements
-    let emailField: LoginAndRegisterTextField = {
+    let nameField: LoginAndRegisterTextField = {
         let field = LoginAndRegisterTextField()
         field.autocorrectionType = .no
         field.adjustsFontSizeToFitWidth = true
         field.textAlignment = .center
-        field.placeholder = "Email Address"
+        field.placeholder = "Name"
         return field
     }()
     
     let infoLabel: LoginAndRegisterInfoLabel = {
         let label = LoginAndRegisterInfoLabel()
-        label.text = "In Case You Change Phone Numbers"
+        label.text = "Oh Na Na, What's Your..."
         return label
     }()
     
@@ -54,11 +54,12 @@ class EmailInputController: UIViewController {
         setupNextButton()
         self.navigationController?.navigationBar.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        self.navigationController?.view.backgroundColor = wandrBlue
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(false)
-        emailField.becomeFirstResponder()
+        nameField.becomeFirstResponder()
     }
     
     fileprivate func setupInfoLabel() {
@@ -77,33 +78,33 @@ class EmailInputController: UIViewController {
     }
     
     fileprivate func setupEmailField() {
-        contentView.addSubview(emailField)
-        emailField.topAnchor.constraint(equalTo: infoLabel.bottomAnchor, constant: 35).isActive = true
-        emailField.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
-        emailField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        contentView.addSubview(nameField)
+        nameField.topAnchor.constraint(equalTo: infoLabel.bottomAnchor, constant: 35).isActive = true
+        nameField.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        nameField.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
     fileprivate func setupNextButton() {
         contentView.addSubview(nextButton)
-        nextButton.topAnchor.constraint(equalTo: emailField.bottomAnchor, constant: 35).isActive = true
+        nextButton.topAnchor.constraint(equalTo: nameField.bottomAnchor, constant: 35).isActive = true
         nextButton.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         nextButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        nextButton.addTarget(self, action: #selector(addEmailToData), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(addNameToData), for: .touchUpInside)
     }
     
     //MARK:- Logic
-    @objc func addEmailToData() {
-        if emailField.text != nil {
-            newUserData["email"] = emailField.text!
+    @objc func addNameToData() {
+        if nameField.text != nil {
+            newUserData["name"] = nameField.text!
             showNextController()
         } else {
-            infoLabel.text = "A Valid Email is Required"
+            infoLabel.text = "Please Enter Your Name"
         }
     }
     
-    func showNextController() {
-        let vc = NameInputController()
+    @objc func showNextController() {
+        let vc = BirthdayInputController()
         navigationController?.pushViewController(vc, animated: false)
     }
     

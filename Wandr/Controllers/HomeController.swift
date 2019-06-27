@@ -49,6 +49,7 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
         self.filters.categoryFilters.selectionDelegate = self
+        self.navigationController?.view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         setupNavigationBar()
         setupLayout()
         setupPlanGesture()

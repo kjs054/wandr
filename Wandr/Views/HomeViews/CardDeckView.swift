@@ -85,8 +85,4 @@ class cardCell: GeminiCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    @objc func handlePan(gesture: UIPanGestureRecognizer) {
-        print(gesture.translation(in: nil).x)
-    }
 }

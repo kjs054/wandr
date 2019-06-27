@@ -8,14 +8,13 @@
 
 import Foundation
 
-let users = [
-    user(userName: "sarahshif", profileImage: "sarahprofilepic", userId: 3),
-    user(userName: "kevin", profileImage: "kevinprofilepic", userId: 1),
-    user(userName: "mariar", profileImage: "mariaprofilepic", userId: 4)
-]
+let users = [user]()
 
 struct user {
-    var userName: String
-    var profileImage: String
-    var userId: Int
+    var name: String
+    var profileImageURL: String
+    var age: Int
+    var phoneNumber: String
+    var email: String
+    var uid: String
 }

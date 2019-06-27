@@ -74,7 +74,7 @@ class BirthdayInputController: UIViewController {
     
     fileprivate func setupContentView() {
         view.addSubview(contentView)
-        contentView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
+        contentView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         contentView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
         contentView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.85).isActive = true
         contentView.heightAnchor.constraint(equalToConstant: 213).isActive = true
@@ -93,11 +93,20 @@ class BirthdayInputController: UIViewController {
         nextButton.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         nextButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        nextButton.addTarget(self, action: #selector(showNextController), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(addBirthdayToData), for: .touchUpInside)
     }
     
     //MARK:- Logic
-    @objc func showNextController() {
+    @objc func addBirthdayToData() {
+        if birthdayField.text != nil {
+            newUserData["birthday"] = birthdayField.text!
+            showNextController()
+        } else {
+            infoLabel.text = "Please Enter Your Birthday"
+        }
+    }
+    
+    func showNextController() {
         let vc = ProfileImageInputController()
         navigationController?.pushViewController(vc, animated: false)
     }

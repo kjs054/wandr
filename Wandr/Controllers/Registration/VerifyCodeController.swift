@@ -9,6 +9,8 @@
 import UIKit
 import FirebaseAuth
 
+var newUserData = [String: String]()
+
 class VerifyCodeController: UIViewController, UITextFieldDelegate {
     
     //MARK:- Elements
@@ -73,7 +75,7 @@ class VerifyCodeController: UIViewController, UITextFieldDelegate {
     
     fileprivate func setupContentView() {
         view.addSubview(contentView)
-        contentView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
+        contentView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         contentView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
         contentView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.85).isActive = true
         contentView.heightAnchor.constraint(equalToConstant: 213).isActive = true
@@ -103,6 +105,8 @@ class VerifyCodeController: UIViewController, UITextFieldDelegate {
             if let error = error {
                 self.handleAuthError(error: error)
             } else {
+                newUserData["uid"] = user!.user.uid
+                newUserData["phoneNumber"] = user!.user.phoneNumber!
                 self.showNextController()
             }
         }

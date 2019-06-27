@@ -9,4 +9,6 @@ target 'Wandr' do
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
   pod 'PhoneNumberKit', '~> 2.6'
+  pod 'Firebase/Firestore'
+  pod 'Firebase/Storage'
 end

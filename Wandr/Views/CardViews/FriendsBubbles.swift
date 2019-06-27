@@ -45,7 +45,7 @@ class FriendsBubbles: UIView, UICollectionViewDelegateFlowLayout, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: friendCellId, for: indexPath) as! friendCell
-        cell.profileImage.image = UIImage(named: users[indexPath.row].profileImage)
+//        cell.profileImage.image = UIImage(named: users[indexPath.row].profileImage)
         return cell
     }
     
