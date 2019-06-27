@@ -14,25 +14,22 @@ import FirebaseStorage
 
 
 extension ProfileImageInputController {
-    
+    //MARK:- Logic
     func handleRegister() {
         nextButton.isEnabled = false
         let db = Firestore.firestore()
-        let uid = newUserData["uid"]!
+        guard let uid = newUserData["uid"] else {
+            print("Error: No valid UID!")
+            return
+        }
         db.collection("users").document(uid).setData(newUserData) { err in
             if let err = err {
                 print("Error writing document: \(err)")
             } else {
+                print("Document Written Successfully")
                 self.showNextController()
             }
         }
-    }
-    
-    fileprivate func showNextController() {
-        let vc = HomeController()
-        let transition = CATransition().fromBottom()
-        navigationController!.view.layer.add(transition, forKey: kCATransition)
-        navigationController?.pushViewController(vc, animated: false)
     }
     
     func uploadImageToStorage(image: UIImage) {
@@ -57,13 +54,17 @@ extension ProfileImageInputController {
             }
         }
     }
+
+    fileprivate func showNextController() {
+        let vc = HomeController()
+        let transition = CATransition().fromBottom()
+        navigationController!.view.layer.add(transition, forKey: kCATransition)
+        navigationController?.pushViewController(vc, animated: false)
+    }
     
     func showActivityIndicator() {
-        let activityIndication = UIActivityIndicatorView(style: .whiteLarge)
-        view.addSubview(activityIndication)
-        activityIndication.fillSuperView()
-        activityIndication.backgroundColor = wandrBlue
-        activityIndication.startAnimating()
-        activityIndication.layer.opacity = 1
+        let activityIndicator = ActivityIndicatorView()
+        view.addSubview(activityIndicator)
+        activityIndicator.fillSuperView()
     }
 }
