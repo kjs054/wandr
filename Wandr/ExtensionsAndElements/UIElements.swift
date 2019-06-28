@@ -26,7 +26,7 @@ class RoundedButton: UIButton {
     }
 }
 
-class circularButton: UIButton {
+class circularImageView: UIImageView {
     override func layoutSubviews() {
         super.layoutSubviews()
         let radius: CGFloat = bounds.size.width / 2.0
@@ -34,7 +34,7 @@ class circularButton: UIButton {
         translatesAutoresizingMaskIntoConstraints = false
         clipsToBounds = true
         layer.masksToBounds = true
-        imageView?.contentMode = .scaleAspectFill
+        contentMode = .scaleAspectFill
         backgroundColor = wandrBlue
         layer.shadowOffset = CGSize(width: 0, height: 0)
     }

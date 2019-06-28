@@ -16,9 +16,8 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     let savedCardId = "savedCard"
     
     //MARK:- Elements
-    let profilePicture: circularButton = {
-        let pf = circularButton()
-        pf.setImage(#imageLiteral(resourceName: "kevinprofilepic"), for: .normal)
+    let profilePicture: circularImageView = {
+        let pf = circularImageView()
         return pf
     }()
     
