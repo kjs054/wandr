@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 var newUserData = [String: String]()
 
@@ -107,7 +108,21 @@ class VerifyCodeController: UIViewController, UITextFieldDelegate {
             } else {
                 newUserData["uid"] = user!.user.uid
                 newUserData["phoneNumber"] = user!.user.phoneNumber!
-                self.showNextController()
+                self.doesUserExist(user!)
+            }
+        }
+    }
+    
+    func doesUserExist(_ user: AuthDataResult) {
+        let storage = Firestore.firestore()
+        let docRef = storage.collection("users").document(user.user.uid)
+        docRef.getDocument { (document, error) in
+            if let document = document {
+                if document.exists {
+                    self.showNextController(HomeController())
+                } else {
+                    self.showNextController(EmailInputController())
+                }
             }
         }
     }
@@ -119,8 +134,7 @@ class VerifyCodeController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func showNextController() {
-        let vc = EmailInputController()
+    func showNextController(_ vc: UIViewController) {
         navigationController?.pushViewController(vc, animated: false)
     }
     
