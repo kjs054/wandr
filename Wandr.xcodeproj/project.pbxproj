@@ -65,6 +65,7 @@
 		6346991822BEC8EC002AB392 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6346991522BEC8EC002AB392 /* GoogleService-Info.plist */; };
 		636A8D1D22C2CFF200F2D1C3 /* NameInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636A8D1C22C2CFF200F2D1C3 /* NameInputController.swift */; };
 		636A8D1F22C2DE7F00F2D1C3 /* RegistrationHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636A8D1E22C2DE7F00F2D1C3 /* RegistrationHandlers.swift */; };
+		6370C2CD22C6C83800057BE7 /* InformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6370C2CC22C6C83800057BE7 /* InformationView.swift */; };
 		638991FD22B196A4007BE014 /* NewPlanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638991FC22B196A4007BE014 /* NewPlanController.swift */; };
 		638991FF22B1B7CE007BE014 /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638991FE22B1B7CE007BE014 /* ContactView.swift */; };
 		638E9E4922C162A900DD4B7B /* EmailInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638E9E4822C162A900DD4B7B /* EmailInputController.swift */; };
@@ -138,6 +139,7 @@
 		6346991522BEC8EC002AB392 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		636A8D1C22C2CFF200F2D1C3 /* NameInputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameInputController.swift; sourceTree = "<group>"; };
 		636A8D1E22C2DE7F00F2D1C3 /* RegistrationHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationHandlers.swift; sourceTree = "<group>"; };
+		6370C2CC22C6C83800057BE7 /* InformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationView.swift; sourceTree = "<group>"; };
 		638991FC22B196A4007BE014 /* NewPlanController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlanController.swift; sourceTree = "<group>"; };
 		638991FE22B1B7CE007BE014 /* ContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactView.swift; sourceTree = "<group>"; };
 		638E9E4822C162A900DD4B7B /* EmailInputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailInputController.swift; sourceTree = "<group>"; };
@@ -179,9 +181,9 @@
 				631E169A22C58FD50012094C /* RegistrationViews */,
 				638991FE22B1B7CE007BE014 /* ContactView.swift */,
 				63133CE222B58B7100D5ADB1 /* PlanChatViews */,
-				638991FB22B19607007BE014 /* MyPlansViews */,
 				6318706E22B01DEB005C6FA4 /* CardViews */,
 				6318706D22B01DCA005C6FA4 /* HomeViews */,
+				6370C2CC22C6C83800057BE7 /* InformationView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -331,11 +333,11 @@
 		63351F7E22AEC5B40027AEC4 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				6370C2CE22C6CDEE00057BE7 /* Profile */,
 				631E169C22C590110012094C /* Home */,
 				638E9E4A22C168D000DD4B7B /* Registration */,
 				6318706F22B045DA005C6FA4 /* MyPlansController.swift */,
 				638991FC22B196A4007BE014 /* NewPlanController.swift */,
-				63133CDE22B5467A00D5ADB1 /* ProfileController.swift */,
 				63133CE022B5882C00D5ADB1 /* PlanChatController.swift */,
 			);
 			path = Controllers;
@@ -349,11 +351,12 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		638991FB22B19607007BE014 /* MyPlansViews */ = {
+		6370C2CE22C6CDEE00057BE7 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				63133CDE22B5467A00D5ADB1 /* ProfileController.swift */,
 			);
-			path = MyPlansViews;
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		638E9E4A22C168D000DD4B7B /* Registration */ = {
@@ -591,6 +594,7 @@
 				633B384322C27B9B00138BE7 /* BirthdayInputController.swift in Sources */,
 				0A2BA67622A9948800F2F7C4 /* Place.swift in Sources */,
 				63133CE622B5917A00D5ADB1 /* membersView.swift in Sources */,
+				6370C2CD22C6C83800057BE7 /* InformationView.swift in Sources */,
 				0A1D78FE22A72F96004AB1FF /* CardView.swift in Sources */,
 				634698FE22BEC832002AB392 /* VerifyCodeController.swift in Sources */,
 				0ADCFB6022A0585E00047E93 /* AppDelegate.swift in Sources */,

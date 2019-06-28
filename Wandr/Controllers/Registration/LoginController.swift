@@ -82,10 +82,6 @@ class LoginController: UIViewController {
         super.viewDidAppear(false)
         phoneNumField.becomeFirstResponder()
     }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
 
     fileprivate func setupContentView() {
         view.addSubview(contentView)
@@ -138,6 +134,7 @@ class LoginController: UIViewController {
             }
         }
     }
+    
     var minHeight = CGFloat()
     @objc func keyboardWillShow(notification: NSNotification) {  
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
