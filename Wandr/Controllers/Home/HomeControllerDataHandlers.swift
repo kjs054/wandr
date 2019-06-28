@@ -20,16 +20,24 @@ extension HomeController {
         }
         let docRef = db.collection("users").document(uid) //Retrieves document named with users id
         docRef.getDocument { (snapshot, error) in
-            if error != nil {
-                print(error!)
-                return
+            if let snapshot = snapshot {
+                if snapshot.exists {
+                    let imageURL = snapshot.get("profileImageURL") as! String
+                    currentUser["profileImageURL"] = imageURL //Add URL of users profile image to current user dict.
+                    //Perform element setup after fetching complete
+                    self.setupProfilePictureNavigationBar()
+                } else {
+                    self.showRegistration()
+                }
             }
-            let imageURL = snapshot?.get("profileImageURL") as! String
-            currentUser["profileImageURL"] = imageURL //Add URL of users profile image to current user dict.
-            
-            //Perform element setup after fetching complete
-            self.setupProfilePictureNavigationBar()
         }
+    }
+    
+    func showRegistration() {
+        let vc = LoginController()
+        let transition = CATransition().fromBottom()
+        self.navigationController!.view.layer.add(transition, forKey: kCATransition)
+        self.navigationController?.pushViewController(vc, animated: false)
     }
     
     func setupProfilePictureNavigationBar() {
