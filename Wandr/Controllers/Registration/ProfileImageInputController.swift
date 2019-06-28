@@ -88,10 +88,10 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
     
     @objc func handleProfilePictureChange() {
         let alert = UIAlertController(title: "Select A Source", message: "", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (_) in
             self.getImage(sourceType: .photoLibrary)
         }))
-        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (_) in
             self.getImage(sourceType: .camera)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
