@@ -12,13 +12,10 @@ import FirebaseAuth
 class NameInputController: UIViewController {
     
     //MARK:- Elements
-    let nameField: LoginAndRegisterTextField = {
-        let field = LoginAndRegisterTextField()
-        field.autocorrectionType = .no
-        field.adjustsFontSizeToFitWidth = true
-        field.textAlignment = .center
-        field.placeholder = "Name"
-        return field
+    let contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     let infoLabel: LoginAndRegisterInfoLabel = {
@@ -27,10 +24,22 @@ class NameInputController: UIViewController {
         return label
     }()
     
-    let contentView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    let firstName: LoginAndRegisterTextField = {
+        let field = LoginAndRegisterTextField()
+        field.autocorrectionType = .no
+        field.adjustsFontSizeToFitWidth = true
+        field.textAlignment = .center
+        field.placeholder = "First Name"
+        return field
+    }()
+    
+    let lastName: LoginAndRegisterTextField = {
+        let field = LoginAndRegisterTextField()
+        field.autocorrectionType = .no
+        field.adjustsFontSizeToFitWidth = true
+        field.textAlignment = .center
+        field.placeholder = "Last Name"
+        return field
     }()
     
     let nextButton: UIButton = {
@@ -50,7 +59,8 @@ class NameInputController: UIViewController {
         view.backgroundColor = wandrBlue
         setupContentView()
         setupInfoLabel()
-        setupEmailField()
+        setupFirstNameField()
+        setupLastNameField()
         setupNextButton()
         self.navigationController?.navigationBar.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -59,7 +69,15 @@ class NameInputController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(false)
-        nameField.becomeFirstResponder()
+        firstName.becomeFirstResponder()
+    }
+    
+    fileprivate func setupContentView() {
+        view.addSubview(contentView)
+        contentView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        contentView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        contentView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.85).isActive = true
+        contentView.heightAnchor.constraint(equalToConstant: 250).isActive = true
     }
     
     fileprivate func setupInfoLabel() {
@@ -69,34 +87,32 @@ class NameInputController: UIViewController {
         infoLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
     }
     
-    fileprivate func setupContentView() {
-        view.addSubview(contentView)
-        contentView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        contentView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        contentView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.85).isActive = true
-        contentView.heightAnchor.constraint(equalToConstant: 213).isActive = true
+    fileprivate func setupFirstNameField() {
+        contentView.addSubview(firstName)
+        firstName.topAnchor.constraint(equalTo: infoLabel.bottomAnchor, constant: 35).isActive = true
+        firstName.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        firstName.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
-    fileprivate func setupEmailField() {
-        contentView.addSubview(nameField)
-        nameField.topAnchor.constraint(equalTo: infoLabel.bottomAnchor, constant: 35).isActive = true
-        nameField.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
-        nameField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+    fileprivate func setupLastNameField() {
+        contentView.addSubview(lastName)
+        lastName.topAnchor.constraint(equalTo: firstName.bottomAnchor, constant: 20).isActive = true
+        lastName.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        lastName.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
     fileprivate func setupNextButton() {
         contentView.addSubview(nextButton)
-        nextButton.topAnchor.constraint(equalTo: nameField.bottomAnchor, constant: 35).isActive = true
+        nextButton.topAnchor.constraint(equalTo: lastName.bottomAnchor, constant: 35).isActive = true
         nextButton.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         nextButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         nextButton.addTarget(self, action: #selector(addNameToData), for: .touchUpInside)
     }
     
     //MARK:- Logic
     @objc func addNameToData() {
-        if nameField.text != nil {
-            newUserData["name"] = nameField.text!
+        if firstName.text != nil, lastName.text != nil {
+            newUserData["name"] = "\(firstName.text!) \(lastName.text!)"
             showNextController()
         } else {
             infoLabel.text = "Please Enter Your Name"
