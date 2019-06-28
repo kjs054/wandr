@@ -10,13 +10,15 @@ import UIKit
 import FirebaseAuth
 
 class HomeController: UIViewController {
-    
+
     //MARK:- Variables
     var contactsViewHeight: CGFloat = 0
     let sendPlanTranslationThreshold: CGFloat = -100
     
     //MARK:- Elements
     let contactsView = NewPlanController()
+    
+    let profileButton = circularImageView()
     
     let titleImageView: UIImageView = {
         let imageView = UIImageView(image: #imageLiteral(resourceName: "wandrwhite"))
@@ -53,6 +55,7 @@ class HomeController: UIViewController {
         setupNavigationBar()
         setupLayout()
         setupPlanGesture()
+        fetchUserData()
     }
     
     func hasBottomSafeArea() -> Bool {
@@ -78,10 +81,7 @@ class HomeController: UIViewController {
         myPlansButton.addTarget(self, action: #selector(showMessages), for: .touchUpInside)
         myPlansButton.setImage(#imageLiteral(resourceName: "messageIcon").withRenderingMode(.alwaysOriginal), for: .normal)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: myPlansButton)
-        let profileButton = circularButton()
-        profileButton.addTarget(self, action: #selector(showProfile), for: .touchUpInside)
         profileButton.widthAnchor.constraint(equalToConstant: 45).isActive = true
-        profileButton.setImage(#imageLiteral(resourceName: "kevinprofilepic").withRenderingMode(.alwaysOriginal), for: .normal)
         profileButton.clipsToBounds = true
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: profileButton)
         self.navigationController!.navigationBar.layer.zPosition = -1;
