@@ -11,8 +11,8 @@ import UIKit
 class ContactView: UIView {
     
     //MARK:- Elements
-    let profileImages: circularButton = {
-        let view = circularButton()
+    let profileImages: circularImageView = {
+        let view = circularImageView()
         view.backgroundColor = wandrBlue
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
