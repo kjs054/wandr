@@ -83,6 +83,8 @@ class HomeController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: myPlansButton)
         profileButton.widthAnchor.constraint(equalToConstant: 45).isActive = true
         profileButton.clipsToBounds = true
+        let profileButtonTapGesture = UITapGestureRecognizer(target: self, action: #selector(showProfile))
+        profileButton.addGestureRecognizer(profileButtonTapGesture)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: profileButton)
         self.navigationController!.navigationBar.layer.zPosition = -1;
     }
