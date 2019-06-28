@@ -16,11 +16,6 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     let savedCardId = "savedCard"
     
     //MARK:- Elements
-    let profilePicture: circularImageView = {
-        let pf = circularImageView()
-        return pf
-    }()
-    
     let segmentedControl: UISegmentedControl = {
         let items = ["Liked", "History"]
         let sc = UISegmentedControl(items: items)
@@ -42,11 +37,16 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     //MARK:- Controller Setup
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupProfilePicture()
         setupSegmentedControl()
         setupCollectionView()
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
         setupNavigationBar()
+    }
+    
+    func setupSegmentedControl() {
+        view.addSubview(segmentedControl)
+        segmentedControl.anchor(top: view.topAnchor, bottom: nil, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 20, left: 15, bottom: 0, right: -15))
+        segmentedControl.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
     
     fileprivate func setupCollectionView() {
@@ -75,7 +75,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
         settingsButton.addTarget(self, action: #selector(handleLogOut), for: .touchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: settingsButton)
     }
-    
+    //MARK:- Logic
     @objc func dismissViewController() {
         let transition = CATransition().fromRight()
         self.navigationController!.view.layer.add(transition, forKey: kCATransition)
@@ -104,6 +104,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
         collectionView.reloadData()
     }
     
+    //MARK:- CollectionView Functions
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cardViewModels.count
     }
@@ -121,20 +122,6 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width * 0.93, height: 375)
-    }
-    
-    func setupProfilePicture() {
-        view.addSubview(profilePicture)
-        profilePicture.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
-        profilePicture.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        profilePicture.widthAnchor.constraint(equalToConstant: 125).isActive = true
-        profilePicture.heightAnchor.constraint(equalTo: profilePicture.widthAnchor).isActive = true
-    }
-    
-    func setupSegmentedControl() {
-        view.addSubview(segmentedControl)
-        segmentedControl.anchor(top: profilePicture.bottomAnchor, bottom: nil, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 20, left: 15, bottom: 0, right: -15))
-        segmentedControl.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
 }
 
