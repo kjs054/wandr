@@ -60,7 +60,11 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     
     func setupNavigationBar() {
         let backButton = UIButton()
-        navigationItem.title = "Kevin Shiflett"
+        guard let name = currentUser["name"] as? String else {
+            print("Name not found")
+            return
+        }
+        navigationItem.title = name
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: wandrBlue, .font: UIFont(name: "NexaBold", size: 23)!]
         navigationController?.navigationBar.isTranslucent = false
         backButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)

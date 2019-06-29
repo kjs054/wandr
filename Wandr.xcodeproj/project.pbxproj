@@ -191,6 +191,7 @@
 		0A1D78F822A369B0004AB1FF /* ExtensionsAndElements */ = {
 			isa = PBXGroup;
 			children = (
+				0A1D78ED22A19B23004AB1FF /* AutoLayoutExtension.swift */,
 				0A1D78F922A36A0B004AB1FF /* UIElements.swift */,
 				63A9A3AC22BF100B0063E8B8 /* cvCellShadowExtension.swift */,
 				631E169D22C592810012094C /* downloadCacheDisplayImage.swift */,
@@ -243,7 +244,6 @@
 				63351F7E22AEC5B40027AEC4 /* Controllers */,
 				0A1D78F822A369B0004AB1FF /* ExtensionsAndElements */,
 				0ADCFB5F22A0585E00047E93 /* AppDelegate.swift */,
-				0A1D78ED22A19B23004AB1FF /* AutoLayoutExtension.swift */,
 				0ADCFB6322A0585E00047E93 /* Main.storyboard */,
 				0ADCFB6922A0585F00047E93 /* Assets.xcassets */,
 				0ADCFB6B22A0585F00047E93 /* LaunchScreen.storyboard */,
