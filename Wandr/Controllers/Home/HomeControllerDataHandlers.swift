@@ -22,8 +22,7 @@ extension HomeController {
         docRef.getDocument { (snapshot, error) in
             if let snapshot = snapshot {
                 if snapshot.exists {
-                    let imageURL = snapshot.get("profileImageURL") as! String
-                    currentUser["profileImageURL"] = imageURL //Add URL of users profile image to current user dict.
+                    currentUser = snapshot.data() as! [String : String]
                     //Perform element setup after fetching complete
                     self.setupProfilePictureNavigationBar()
                 } else {
