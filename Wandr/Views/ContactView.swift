@@ -11,13 +11,18 @@ import UIKit
 class ContactView: UIView {
     
     //MARK:- Elements
-    let profileImages: circularImageView = {
-        let view = circularImageView()
-        view.backgroundColor = wandrBlue
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    let profileImageView = circularView()
     
+    let initialsLabel: UILabel = { //Used for non-registered users
+        let label = UILabel()
+        label.font = UIFont(name: "Avenir-Black", size: 30)
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+
     let title: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -59,17 +64,24 @@ class ContactView: UIView {
         super.init(frame: frame)
         setupProfileImages()
         addSubview(title)
-        title.leftAnchor.constraint(equalTo: profileImages.rightAnchor, constant: 15).isActive = true
+        title.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 15).isActive = true
         title.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -10).isActive = true
         addSubview(subTitle)
-        subTitle.anchor(top: title.bottomAnchor, bottom: nil, leading: profileImages.trailingAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: 15, bottom: -25, right: 0))
+        subTitle.anchor(top: title.bottomAnchor, bottom: nil, leading: profileImageView.trailingAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: 15, bottom: -25, right: 0))
     }
     
     func setupProfileImages() {
-        addSubview(profileImages)
-        profileImages.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.8).isActive = true
-        profileImages.widthAnchor.constraint(equalTo: profileImages.heightAnchor).isActive = true
-        profileImages.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        addSubview(profileImageView)
+        profileImageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.8).isActive = true
+        profileImageView.widthAnchor.constraint(equalTo: profileImageView.heightAnchor).isActive = true
+        profileImageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        setupInitialsLabel() //TODO:- Dynamic if user is registered or not
+    }
+    
+    func setupInitialsLabel() {
+        profileImageView.addSubview(initialsLabel)
+        initialsLabel.widthAnchor.constraint(equalTo: profileImageView.widthAnchor).isActive = true
+        initialsLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor).isActive = true
     }
     
     func setupRadioButton() {

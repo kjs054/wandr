@@ -129,8 +129,11 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     var selectedIndexes = [Int]()
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: otherContactId, for: indexPath) as! otherContactCell
-        cell.contactCellView.title.text = userContacts[indexPath.row].name
-        cell.contactCellView.subTitle.text = userContacts[indexPath.row].phoneNum
+        let contactName = userContacts[indexPath.row].name
+        let contactPhone = userContacts[indexPath.row].phoneNum
+        cell.contactCellView.title.text = contactName
+        cell.contactCellView.subTitle.text = contactPhone
+        cell.contactCellView.initialsLabel.text = String(contactName.first!)
         cell.selectionStyle = .none
         if userContacts[indexPath.row].selected {
             cell.contactCellView.radioButton.isSelected = true
@@ -138,6 +141,11 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
             cell.contactCellView.radioButton.isSelected = false
         }
         return cell
+    }
+    
+    func getInitials(_ name: String) -> String {
+        let initials = String(name.first!)
+        return initials
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

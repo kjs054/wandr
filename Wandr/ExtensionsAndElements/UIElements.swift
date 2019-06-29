@@ -36,7 +36,18 @@ class circularImageView: UIImageView {
         layer.masksToBounds = true
         contentMode = .scaleAspectFill
         backgroundColor = wandrBlue
-        layer.shadowOffset = CGSize(width: 0, height: 0)
+    }
+}
+
+class circularView: UIView {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let radius: CGFloat = bounds.size.width / 2.0
+        layer.cornerRadius = radius
+        translatesAutoresizingMaskIntoConstraints = false
+        clipsToBounds = true
+        layer.masksToBounds = true
+        backgroundColor = wandrBlue
     }
 }
 
