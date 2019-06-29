@@ -11,11 +11,15 @@ import UIKit
 class ContactView: UIView {
     
     //MARK:- Elements
-    let profileImageView = circularView()
+    let profileImageView: circularView = {
+        let piv = circularView()
+        piv.translatesAutoresizingMaskIntoConstraints = false
+        return piv
+    }()
     
     let initialsLabel: UILabel = { //Used for non-registered users
         let label = UILabel()
-        label.font = UIFont(name: "Avenir-Black", size: 30)
+        label.font = UIFont(name: "Avenir-Black", size: 28)
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
@@ -62,6 +66,7 @@ class ContactView: UIView {
     //MARK:- View Setup
     override init(frame: CGRect) {
         super.init(frame: frame)
+        isUserInteractionEnabled = false
         setupProfileImages()
         addSubview(title)
         title.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 15).isActive = true

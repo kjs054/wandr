@@ -133,7 +133,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         let contactPhone = userContacts[indexPath.row].phoneNum
         cell.contactCellView.title.text = contactName
         cell.contactCellView.subTitle.text = contactPhone
-        cell.contactCellView.initialsLabel.text = String(contactName.first!)
+        cell.contactCellView.initialsLabel.text = contactName.getInitials()
         cell.selectionStyle = .none
         if userContacts[indexPath.row].selected {
             cell.contactCellView.radioButton.isSelected = true
