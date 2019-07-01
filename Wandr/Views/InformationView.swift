@@ -10,7 +10,7 @@ import UIKit
 
 class InformationView: UIView {
     
-    let couchImage: UIImageView = {
+    let informationImage: UIImageView = {
         let imageView = UIImageView(image: #imageLiteral(resourceName: "couch"))
         return imageView
     }()
@@ -45,16 +45,16 @@ class InformationView: UIView {
     }
     
     func setupCouchImage() {
-        addSubview(couchImage)
-        couchImage.anchor(top: topAnchor, bottom: nil, leading: nil, trailing: nil, padding: UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0))
-        couchImage.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5).isActive = true
-        couchImage.heightAnchor.constraint(equalTo: couchImage.widthAnchor).isActive = true
-        couchImage.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        addSubview(informationImage)
+        informationImage.anchor(top: topAnchor, bottom: nil, leading: nil, trailing: nil, padding: UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0))
+        informationImage.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5).isActive = true
+        informationImage.heightAnchor.constraint(equalTo: informationImage.widthAnchor).isActive = true
+        informationImage.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     }
     
     func setupInformationTitle() {
         addSubview(informationTitle)
-        informationTitle.anchor(top: couchImage.bottomAnchor, bottom: nil, leading: nil, trailing: nil, padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+        informationTitle.anchor(top: informationImage.bottomAnchor, bottom: nil, leading: nil, trailing: nil, padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
         informationTitle.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     }
     

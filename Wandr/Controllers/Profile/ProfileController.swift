@@ -24,7 +24,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
         sc.tintColor = wandrBlue
         return sc
     }()
-    
+
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -33,12 +33,18 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
         cv.backgroundColor = .clear
         return cv
     }()
-
+    
+    let informationView = InformationView()
+    
     //MARK:- Controller Setup
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSegmentedControl()
-        setupCollectionView()
+        if 0 == 1 {
+            setupCollectionView()
+        } else {
+            setupInformationView()
+        }
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
         setupNavigationBar()
     }
@@ -56,6 +62,16 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
         collectionView.register(savedCardCell.self, forCellWithReuseIdentifier: savedCardId)
         view.addSubview(collectionView)
         collectionView.anchor(top: segmentedControl.bottomAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0))
+    }
+    
+    fileprivate func setupInformationView() {
+        view.addSubview(informationView)
+        informationView.anchor(top: nil, bottom: nil, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0))
+        informationView.heightAnchor.constraint(equalToConstant: 400).isActive = true
+        informationView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        informationView.informationImage.image = #imageLiteral(resourceName: "brokenheart")
+        informationView.informationTitle.text = "You Haven't Saved Any Places"
+        informationView.informationSubTitle.text = "Start saving places by clicking \n the three dots on a place card."
     }
     
     func setupNavigationBar() {
@@ -110,7 +126,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     
     //MARK:- CollectionView Functions
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cardViewModels.count
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
