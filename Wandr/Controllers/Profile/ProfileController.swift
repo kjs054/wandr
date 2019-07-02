@@ -15,6 +15,8 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     let historyCardId = "historyCard"
     let savedCardId = "savedCard"
     let noLikedPlacesId = "noLikedPlaces"
+    let noHistoryId = "noHistory"
+    var currentSegmentedControlIndex = 0
     
     //MARK:- Elements
     let segmentedControl: UISegmentedControl = {
@@ -42,7 +44,6 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
         super.viewDidLoad()
         setupSegmentedControl()
         setupCollectionView()
-        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
         setupNavigationBar()
     }
     
@@ -50,6 +51,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
         view.addSubview(segmentedControl)
         segmentedControl.anchor(top: view.topAnchor, bottom: nil, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 20, left: 15, bottom: 0, right: -15))
         segmentedControl.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
     }
     
     fileprivate func setupCollectionView() {
@@ -58,6 +60,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
         collectionView.register(savedCardCell.self, forCellWithReuseIdentifier: historyCardId)
         collectionView.register(savedCardCell.self, forCellWithReuseIdentifier: savedCardId)
         collectionView.register(noLikedPlacesCell.self, forCellWithReuseIdentifier: noLikedPlacesId)
+        collectionView.register(noHistoryCell.self, forCellWithReuseIdentifier: noHistoryId)
         view.addSubview(collectionView)
         collectionView.anchor(top: segmentedControl.bottomAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0))
     }
@@ -83,6 +86,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
         settingsButton.addTarget(self, action: #selector(handleLogOut), for: .touchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: settingsButton)
     }
+    
     //MARK:- Logic
     @objc func dismissViewController() {
         let transition = CATransition().fromRight()
@@ -110,6 +114,19 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     
     @objc func segmentedControlValueChanged() {
         collectionView.reloadData()
+        if segmentedControl.selectedSegmentIndex == 0 {
+            currentSegmentedControlIndex = 0
+        } else {
+            currentSegmentedControlIndex = 1
+        }
+    }
+    
+    func checkIfKeyExists(key: String) -> Bool{
+        if currentUser[key] != nil {
+            return true
+        } else {
+            return false
+        }
     }
     
     //MARK:- CollectionView Functions
@@ -118,27 +135,41 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if 0 == 1 { //TODO:- Change collectionView content if nothing is liked
-            if segmentedControl.selectedSegmentIndex == 0 {
+        if currentSegmentedControlIndex == 0 {
+            if checkIfKeyExists(key: "likedPlaces") {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: savedCardId, for: indexPath) as! savedCardCell
                 cell.card.cardViewModel = cardViewModels[indexPath.row]
                 return cell
             } else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: savedCardId, for: indexPath) as! savedCardCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: noLikedPlacesId, for: indexPath) as! noLikedPlacesCell
+                collectionView.isScrollEnabled = false
                 return cell
             }
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: noLikedPlacesId, for: indexPath) as! noLikedPlacesCell
-            collectionView.isScrollEnabled = false
-            return cell
+            if checkIfKeyExists(key: "userHistory") {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: savedCardId, for: indexPath) as! savedCardCell
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: noHistoryId, for: indexPath) as! noHistoryCell
+                collectionView.isScrollEnabled = false
+                return cell
+            }
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if 0 == 1{ //TODO:- Adjust size if nothing is liked for noLikedPlacesCell
-            return CGSize(width: collectionView.frame.width * 0.93, height: 375)
+        if currentSegmentedControlIndex == 0 { //TODO:- Adjust size if nothing is liked for noLikedPlacesCell
+            if checkIfKeyExists(key: "likedPlaces") {
+                return CGSize(width: collectionView.frame.width * 0.93, height: 375)
+            } else {
+                return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+            }
         } else {
-            return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+            if checkIfKeyExists(key: "userHistory") {
+                return CGSize(width: collectionView.frame.width * 0.93, height: 375)
+            } else {
+                return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+            }
         }
     }
 }
@@ -175,6 +206,32 @@ class noLikedPlacesCell: UICollectionViewCell {
         infoView.informationImage.image = #imageLiteral(resourceName: "brokenheart")
         infoView.informationTitle.text = "You Haven't Liked Any Places"
         infoView.informationSubTitle.text = "Liking places is easy. Click the three \n dots on a place card and then tap 'Like'."
-        infoView.fillSuperView()
+        infoView.translatesAutoresizingMaskIntoConstraints = false
+        infoView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        infoView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        infoView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        infoView.heightAnchor.constraint(equalToConstant: 500).isActive = true
+    }
+}
+
+class noHistoryCell: UICollectionViewCell {
+    let infoView = InformationView()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupInformationView()
+    }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    private func setupInformationView() {
+        self.addSubview(infoView)
+        infoView.informationImage.image = #imageLiteral(resourceName: "clock")
+        infoView.informationTitle.text = "You Do Not Have Any History"
+        infoView.informationSubTitle.text = "The history of your plans will be here. \n Start making plans with friends to see."
+        infoView.translatesAutoresizingMaskIntoConstraints = false
+        infoView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        infoView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        infoView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        infoView.heightAnchor.constraint(equalToConstant: 500).isActive = true
     }
 }
