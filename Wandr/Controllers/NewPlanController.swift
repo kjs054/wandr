@@ -86,6 +86,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     func setupNavigationBar() {
         navigationItem.title = "Make A Plan"
+        self.navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0, green: 0.6588235294, blue: 1, alpha: 1), .font: UIFont(name: "NexaBold", size: 23)!]
         let closeButton = UIButton()
         closeButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)

@@ -71,6 +71,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
             print("Name not found")
             return
         }
+        self.navigationController?.navigationBar.shadowImage = UIImage()
         navigationItem.title = name
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: wandrBlue, .font: UIFont(name: "NexaBold", size: 23)!]
         navigationController?.navigationBar.isTranslucent = false
