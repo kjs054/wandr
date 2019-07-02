@@ -101,21 +101,4 @@ class bottomOfCard: UIView {
         bottomBarInfo.anchor(top: nil, bottom: bottomAnchor, leading: leadingAnchor, trailing: moreInfoButton.leadingAnchor, padding: UIEdgeInsets(top: 0, left: contentMargin, bottom: -2, right: 0))
         bottomBarInfo.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.5).isActive = true
     }
-    
-    //MARK:- Logic
-    @objc func showInfoAlert() {
-        let alert = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Like", style: .default, handler: { (UIAlertAction) in
-            print("Like")
-        }))
-        alert.addAction(UIAlertAction(title: "Navigate", style: .default, handler: { (UIAlertAction) in
-            print("Navigate")
-        }))
-        alert.addAction(UIAlertAction(title: "Make A Plan", style: .default, handler: { (UIAlertAction) in
-            print("Make A Plan")
-        }))
-        alert.addAction(UIAlertAction(title: "Report", style: .default, handler: { (UIAlertAction) in
-            print("Report")
-        }))
-    }
 }

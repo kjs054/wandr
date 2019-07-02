@@ -75,11 +75,31 @@ class CardDeckView: UIView, UICollectionViewDelegateFlowLayout, UICollectionView
 }
 
 class cardCell: GeminiCell {
+    
     let cardView = CardView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(cardView)
         cardView.fillSuperView()
+        cardView.cardBottom.moreInfoButton.addTarget(self, action: #selector(didTapMoreInfo), for: .touchUpInside)
+    }
+    
+    @objc func didTapMoreInfo() {
+        let cardActionsMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        cardActionsMenu.addAction(UIAlertAction(title: "Make Plan", style: .default, handler: { (_) in
+            print("Make Plan")
+        }))
+        cardActionsMenu.addAction(UIAlertAction(title: "Like", style: .default, handler: { (_) in
+            print("Like")
+        }))
+        cardActionsMenu.addAction(UIAlertAction(title: "Navigate", style: .default, handler: { (_) in
+            print("Navigate")
+        }))
+        cardActionsMenu.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
+            print("Cancel")
+        }))
+        UIApplication.shared.keyWindow?.rootViewController?.present(cardActionsMenu, animated: true, completion: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
