@@ -124,7 +124,7 @@ class planPreviewCell: UITableViewCell {
 class MakeBetterPlansCell: UITableViewCell {
     
     //MARK:- Subviews
-    let informationView = InformationView()
+    let infoView = InformationView()
     
     //MARK:- Setup Cell
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -133,8 +133,11 @@ class MakeBetterPlansCell: UITableViewCell {
     }
     
     func setupInformationView() {
-        addSubview(informationView)
-        informationView.fillSuperView()
+        addSubview(infoView)
+        infoView.informationImage.image = #imageLiteral(resourceName: "couch")
+        infoView.informationTitle.text = "Lets Make Some Better Plans"
+        infoView.informationSubTitle.text = "Another night on the couch? \n Send a place to a friend(s) and \n make some plans."
+        infoView.fillSuperView()
     }
     
     required init?(coder aDecoder: NSCoder) {

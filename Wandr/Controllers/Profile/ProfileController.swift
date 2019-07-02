@@ -14,6 +14,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     //MARK:- Variables
     let historyCardId = "historyCard"
     let savedCardId = "savedCard"
+    let noLikedPlacesId = "noLikedPlaces"
     
     //MARK:- Elements
     let segmentedControl: UISegmentedControl = {
@@ -40,11 +41,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSegmentedControl()
-        if 0 == 1 {
-            setupCollectionView()
-        } else {
-            setupInformationView()
-        }
+        setupCollectionView()
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
         setupNavigationBar()
     }
@@ -58,20 +55,11 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     fileprivate func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(historyCardCell.self, forCellWithReuseIdentifier: historyCardId)
+        collectionView.register(savedCardCell.self, forCellWithReuseIdentifier: historyCardId)
         collectionView.register(savedCardCell.self, forCellWithReuseIdentifier: savedCardId)
+        collectionView.register(noLikedPlacesCell.self, forCellWithReuseIdentifier: noLikedPlacesId)
         view.addSubview(collectionView)
         collectionView.anchor(top: segmentedControl.bottomAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0))
-    }
-    
-    fileprivate func setupInformationView() {
-        view.addSubview(informationView)
-        informationView.anchor(top: nil, bottom: nil, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0))
-        informationView.heightAnchor.constraint(equalToConstant: 400).isActive = true
-        informationView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        informationView.informationImage.image = #imageLiteral(resourceName: "brokenheart")
-        informationView.informationTitle.text = "You Haven't Saved Any Places"
-        informationView.informationSubTitle.text = "Start saving places by clicking \n the three dots on a place card."
     }
     
     func setupNavigationBar() {
@@ -126,26 +114,36 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     
     //MARK:- CollectionView Functions
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if segmentedControl.selectedSegmentIndex == 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: historyCardId, for: indexPath) as! historyCardCell
-            cell.card.cardViewModel = cardViewModels[indexPath.row]
-            return cell
+        if 0 == 1 { //TODO:- Change collectionView content if nothing is liked
+            if segmentedControl.selectedSegmentIndex == 0 {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: savedCardId, for: indexPath) as! savedCardCell
+                cell.card.cardViewModel = cardViewModels[indexPath.row]
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: savedCardId, for: indexPath) as! savedCardCell
+                return cell
+            }
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: savedCardId, for: indexPath) as! savedCardCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: noLikedPlacesId, for: indexPath) as! noLikedPlacesCell
+            collectionView.isScrollEnabled = false
             return cell
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width * 0.93, height: 375)
+        if 0 == 1{ //TODO:- Adjust size if nothing is liked for noLikedPlacesCell
+            return CGSize(width: collectionView.frame.width * 0.93, height: 375)
+        } else {
+            return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+        }
     }
 }
 
-class historyCardCell: UICollectionViewCell {
+class savedCardCell: UICollectionViewCell {
     let card = CardView()
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -163,14 +161,20 @@ class historyCardCell: UICollectionViewCell {
     }
 }
 
-class savedCardCell: UICollectionViewCell {
+class noLikedPlacesCell: UICollectionViewCell {
+    let infoView = InformationView()
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .orange
-        layer.cornerRadius = 15
+        setupInformationView()
     }
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    private func setupInformationView() {
+        self.addSubview(infoView)
+        infoView.informationImage.image = #imageLiteral(resourceName: "brokenheart")
+        infoView.informationTitle.text = "You Haven't Liked Any Places"
+        infoView.informationSubTitle.text = "Liking places is easy. Click the three \n dots on a place card and then tap 'Like'."
+        infoView.fillSuperView()
     }
 }

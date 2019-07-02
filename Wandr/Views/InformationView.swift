@@ -19,7 +19,6 @@ class InformationView: UIView {
         let label = UILabel()
         label.font = UIFont(name: "NexaBold", size: 20)
         label.textColor = wandrBlue
-        label.text = "Lets Make Some Better Plans"
         return label
     }()
     
@@ -29,7 +28,6 @@ class InformationView: UIView {
         label.textColor = #colorLiteral(red: 0.5333333333, green: 0.5333333333, blue: 0.5333333333, alpha: 1)
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.text = "Another night on the couch? \n Send a place to a friend(s) and \n make some plans"
         return label
     }()
     
