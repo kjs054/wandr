@@ -88,7 +88,7 @@ class cardCell: GeminiCell {
     @objc func didTapMoreInfo() {
         let cardActionsMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         cardActionsMenu.addAction(UIAlertAction(title: "Make Plan", style: .default, handler: { (_) in
-            print("Make Plan")
+            self.showNewPlan()
         }))
         cardActionsMenu.addAction(UIAlertAction(title: "Like", style: .default, handler: { (_) in
             print("Like")
@@ -96,10 +96,19 @@ class cardCell: GeminiCell {
         cardActionsMenu.addAction(UIAlertAction(title: "Navigate", style: .default, handler: { (_) in
             print("Navigate")
         }))
+        cardActionsMenu.addAction(UIAlertAction(title: "Report", style: .default, handler: { (_) in
+            print("Report")
+        }))
         cardActionsMenu.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
             print("Cancel")
         }))
         UIApplication.shared.keyWindow?.rootViewController?.present(cardActionsMenu, animated: true, completion: nil)
+    }
+    
+    private func showNewPlan() {
+        let vc = NewPlanController()
+        let navController = UINavigationController(rootViewController: vc) // Creating a navigation controller with vc at the root of the navigation stack.
+        UIApplication.shared.keyWindow?.rootViewController?.present(navController, animated: true, completion: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
