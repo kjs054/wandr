@@ -76,15 +76,20 @@ class CardDeckView: UIView, UICollectionViewDelegateFlowLayout, UICollectionView
 
 class cardCell: GeminiCell {
     
+    //MARK:- Subviews
     let cardView = CardView()
     
+    
+    //MARK:- Setup Cell
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(cardView)
         cardView.fillSuperView()
         cardView.cardBottom.moreInfoButton.addTarget(self, action: #selector(didTapMoreInfo), for: .touchUpInside)
+        setupMenuLongPressGesture()
     }
     
+    //MARK:- Logic
     @objc func didTapMoreInfo() {
         let cardActionsMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         cardActionsMenu.addAction(UIAlertAction(title: "Make Plan", style: .default, handler: { (_) in
@@ -103,6 +108,15 @@ class cardCell: GeminiCell {
             print("Cancel")
         }))
         UIApplication.shared.keyWindow?.rootViewController?.present(cardActionsMenu, animated: true, completion: nil)
+    }
+    
+    func setupMenuLongPressGesture() {
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleMenuLongPressGesture))
+        addGestureRecognizer(gesture)
+    }
+    
+    @objc func handleMenuLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
+        didTapMoreInfo()
     }
     
     private func showNewPlan() {
