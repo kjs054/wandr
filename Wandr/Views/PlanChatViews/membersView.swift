@@ -90,7 +90,6 @@ class membersCell: UICollectionViewCell {
         backgroundColor = .white
         layer.cornerRadius = frame.height / 2
         clipsToBounds = true
-        backgroundView = UIImageView(image: #imageLiteral(resourceName: "kevinprofilepic"))
     }
     
     required init?(coder aDecoder: NSCoder) {

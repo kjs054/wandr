@@ -120,7 +120,6 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if userContacts[indexPath.row].selected { //checks to see if user is already selected
             userContacts[indexPath.row].selected = false
-            
         } else {
             userContacts[indexPath.row].selected = true
         }
@@ -142,11 +141,6 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
             cell.contactCellView.radioButton.isSelected = false
         }
         return cell
-    }
-    
-    func getInitials(_ name: String) -> String {
-        let initials = String(name.first!)
-        return initials
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -179,6 +173,12 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     //MARK:- Navigation Functions
     @objc func dismissViewController() {
         navigationController?.dismiss(animated: true, completion: nil)
+    }
+    
+    //MARK:- Logic
+    func getInitials(_ name: String) -> String {
+        let initials = String(name.first!)
+        return initials
     }
 }
 

@@ -112,9 +112,20 @@ class HomeController: UIViewController {
     
     //MARK:- Plan Gesture Functions
     func setupPlanGesture() {
-        let planGesture = UIPanGestureRecognizer(target: self, action: #selector(setupMakePlanGesture))
+        let planGesture = UIPanGestureRecognizer(target: self, action: #selector(handleMakePlanGesture))
         cardDeckView.addGestureRecognizer(planGesture)
-        setupMakePlanGesture(planGesture)
+        handleMakePlanGesture(planGesture)
+    }
+    
+    @objc fileprivate func handleMakePlanGesture(_ gesture: UIPanGestureRecognizer) {
+        switch gesture.state {
+        case .changed:
+            handlePlanGestureChanged(gesture)
+        case .ended:
+            handlePlanGestureEnded(gesture)
+        default:
+            ()
+        }
     }
     
     func handlePlanGestureChanged(_ gesture: UIPanGestureRecognizer) {
@@ -139,17 +150,6 @@ class HomeController: UIViewController {
                 self.cardDeckView.transform = .identity
                 self.cardDeckView.frame = CGRect(x: 0, y: self.filters.frame.height + 15, width: self.cardDeckView.frame.width, height: self.cardDeckView.frame.height)
             }
-        }
-    }
-    
-    @objc fileprivate func setupMakePlanGesture(_ gesture: UIPanGestureRecognizer) {
-        switch gesture.state {
-        case .changed:
-            handlePlanGestureChanged(gesture)
-        case .ended:
-            handlePlanGestureEnded(gesture)
-        default:
-            ()
         }
     }
 }
