@@ -95,8 +95,8 @@ class cardCell: GeminiCell {
         cardActionsMenu.addAction(UIAlertAction(title: "Make Plan", style: .default, handler: { (_) in
             self.showNewPlan()
         }))
-        cardActionsMenu.addAction(UIAlertAction(title: "Like", style: .default, handler: { (_) in
-            print("Like")
+        cardActionsMenu.addAction(UIAlertAction(title: "Save", style: .default, handler: { (_) in
+            print("Save")
         }))
         cardActionsMenu.addAction(UIAlertAction(title: "Navigate", style: .default, handler: { (_) in
             print("Navigate")

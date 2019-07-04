@@ -23,6 +23,9 @@
 		0ADCFB7822A0585F00047E93 /* WandrTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADCFB7722A0585F00047E93 /* WandrTests.swift */; };
 		0ADCFB8322A0585F00047E93 /* WandrUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADCFB8222A0585F00047E93 /* WandrUITests.swift */; };
 		54B6AEB785C5D9B803257EC5 /* Pods_Wandr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B122AA00A3A9A3644C38A580 /* Pods_Wandr.framework */; };
+		630E540822CD5651007B6327 /* GoldenRanger.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 630E540722CD5651007B6327 /* GoldenRanger.ttf */; };
+		630E540922CD5651007B6327 /* GoldenRanger.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 630E540722CD5651007B6327 /* GoldenRanger.ttf */; };
+		630E540A22CD5651007B6327 /* GoldenRanger.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 630E540722CD5651007B6327 /* GoldenRanger.ttf */; };
 		630E64A022AC836A00D07F5D /* topOfCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630E649F22AC836A00D07F5D /* topOfCard.swift */; };
 		63133CDF22B5467A00D5ADB1 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63133CDE22B5467A00D5ADB1 /* ProfileController.swift */; };
 		63133CE122B5882C00D5ADB1 /* PlanChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63133CE022B5882C00D5ADB1 /* PlanChatController.swift */; };
@@ -110,6 +113,7 @@
 		0ADCFB7E22A0585F00047E93 /* WandrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WandrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0ADCFB8222A0585F00047E93 /* WandrUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WandrUITests.swift; sourceTree = "<group>"; };
 		0ADCFB8422A0585F00047E93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		630E540722CD5651007B6327 /* GoldenRanger.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = GoldenRanger.ttf; path = ../../../../../Downloads/GoldenRanger.ttf; sourceTree = "<group>"; };
 		630E649F22AC836A00D07F5D /* topOfCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = topOfCard.swift; sourceTree = "<group>"; };
 		63133CDE22B5467A00D5ADB1 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		63133CE022B5882C00D5ADB1 /* PlanChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanChatController.swift; sourceTree = "<group>"; };
@@ -251,6 +255,7 @@
 				0ADCFB6922A0585F00047E93 /* Assets.xcassets */,
 				0ADCFB6B22A0585F00047E93 /* LaunchScreen.storyboard */,
 				0A2BA67822A9A26300F2F7C4 /* NexaBold.otf */,
+				630E540722CD5651007B6327 /* GoldenRanger.ttf */,
 				0ADCFB6E22A0585F00047E93 /* Info.plist */,
 				6346991522BEC8EC002AB392 /* GoogleService-Info.plist */,
 				0ADCFB6622A0585E00047E93 /* Wandr.xcdatamodeld */,
@@ -494,6 +499,7 @@
 				0ADCFB6D22A0585F00047E93 /* LaunchScreen.storyboard in Resources */,
 				0A2BA67922A9A26300F2F7C4 /* NexaBold.otf in Resources */,
 				6346991622BEC8EC002AB392 /* GoogleService-Info.plist in Resources */,
+				630E540822CD5651007B6327 /* GoldenRanger.ttf in Resources */,
 				0ADCFB6A22A0585F00047E93 /* Assets.xcassets in Resources */,
 				0ADCFB6522A0585E00047E93 /* Main.storyboard in Resources */,
 			);
@@ -503,6 +509,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				630E540922CD5651007B6327 /* GoldenRanger.ttf in Resources */,
 				0A2BA67A22A9A26300F2F7C4 /* NexaBold.otf in Resources */,
 				6346991722BEC8EC002AB392 /* GoogleService-Info.plist in Resources */,
 			);
@@ -512,6 +519,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				630E540A22CD5651007B6327 /* GoldenRanger.ttf in Resources */,
 				0A2BA67B22A9A26300F2F7C4 /* NexaBold.otf in Resources */,
 				6346991822BEC8EC002AB392 /* GoogleService-Info.plist in Resources */,
 			);

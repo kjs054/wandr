@@ -20,7 +20,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     
     //MARK:- Elements
     let segmentedControl: UISegmentedControl = {
-        let items = ["Liked", "History"]
+        let items = ["Saved", "History"]
         let sc = UISegmentedControl(items: items)
         sc.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "Avenir-Heavy", size: 15) ?? ""], for: .normal)
         sc.selectedSegmentIndex = 0
@@ -205,8 +205,8 @@ class noLikedPlacesCell: UICollectionViewCell {
     private func setupInformationView() {
         self.addSubview(infoView)
         infoView.informationImage.image = #imageLiteral(resourceName: "brokenheart")
-        infoView.informationTitle.text = "You Haven't Liked Any Places"
-        infoView.informationSubTitle.text = "Liking places is easy. Click the three \n dots on a place card and then tap 'Like'."
+        infoView.informationTitle.text = "You Haven't Saved Any Places"
+        infoView.informationSubTitle.text = "Saving places is easy. Click the three \n dots on a place card and then tap 'Save'."
         infoView.translatesAutoresizingMaskIntoConstraints = false
         infoView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         infoView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
