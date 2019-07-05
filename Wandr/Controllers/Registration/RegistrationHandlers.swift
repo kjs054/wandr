@@ -11,6 +11,7 @@ import UIKit
 import FirebaseFirestore
 import FirebaseAuth
 import FirebaseStorage
+import Contacts
 
 
 extension ProfileImageInputController {
@@ -26,8 +27,40 @@ extension ProfileImageInputController {
             if let err = err {
                 print("Error writing document: \(err)")
             } else {
+                self.addContactsSubCollection(uid)
                 print("Document Written Successfully")
                 self.showNextController()
+            }
+        }
+    }
+    
+    fileprivate func addContactsSubCollection(_ uid: String) {
+        let cn = CNContactStore()
+        cn.requestAccess(for: .contacts) { (granted, err) in
+            if let err = err {
+                print("Failed to Request Access:", err)
+                return
+            }
+            if granted {
+                let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey] //Gets name, last name, and phone number(s)
+                let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
+                do {
+                    try cn.enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
+                        let phone = contact.phoneNumbers.first?.value.stringValue ?? "" //get first phone number
+                        let name = "\(contact.givenName) \(contact.familyName)" //combine first and last name
+                        if contact.givenName.isEmpty || phone.isEmpty { //if the contact is missing data don't add to array of contacts
+                            return
+                        } else {
+                            let contactData = ["name":name, "phone":phone]
+                            let db = Firestore.firestore()
+                            db.collection("users").document(uid).collection("contacts").document(name).setData(contactData)
+                        }
+                    })
+                } catch let err {
+                    print(err)
+                }
+            } else {
+                print("Denied")
             }
         }
     }
@@ -54,7 +87,7 @@ extension ProfileImageInputController {
             }
         }
     }
-
+    
     fileprivate func showNextController() {
         let vc = HomeController()
         let transition = CATransition().fromBottom()
@@ -62,7 +95,7 @@ extension ProfileImageInputController {
         navigationController?.pushViewController(vc, animated: false)
     }
     
-    func showActivityIndicator() {
+    fileprivate func showActivityIndicator() {
         let activityIndicator = ActivityIndicatorView()
         view.addSubview(activityIndicator)
         activityIndicator.fillSuperView()
