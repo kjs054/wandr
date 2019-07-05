@@ -184,8 +184,8 @@
 		0A1D78F422A365C7004AB1FF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				631E169A22C58FD50012094C /* RegistrationViews */,
 				638991FE22B1B7CE007BE014 /* ContactView.swift */,
+				631E169A22C58FD50012094C /* RegistrationViews */,
 				63133CE222B58B7100D5ADB1 /* PlanChatViews */,
 				6318706E22B01DEB005C6FA4 /* CardViews */,
 				6318706D22B01DCA005C6FA4 /* HomeViews */,

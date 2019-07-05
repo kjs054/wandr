@@ -100,7 +100,7 @@ class ContactView: UIView {
     
     func setupTimeStamp() {
         addSubview(timeStamp)
-        timeStamp.anchor(top: nil, bottom: nil, leading: nil, trailing: trailingAnchor, padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -15))
+        timeStamp.anchor(top: nil, bottom: nil, leading: nil, trailing: trailingAnchor)
         timeStamp.centerYAnchor.constraint(equalTo: subTitle.centerYAnchor).isActive = true
     }
     

@@ -11,7 +11,6 @@ import UIKit
 class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //MARK:- Variables
     let planPreviewId = "planPreviewId"
-    
     let informationCellId = "informationCellId"
     
     //MARK:- Elements
@@ -21,6 +20,7 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
         tv.allowsSelection = true
         tv.backgroundColor = .clear
         tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.showsHorizontalScrollIndicator = false
         return tv
     }()
     
@@ -50,7 +50,7 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
         view.addSubview(tableView)
         tableView.register(planPreviewCell.self, forCellReuseIdentifier: planPreviewId)
         tableView.register(MakeBetterPlansCell.self, forCellReuseIdentifier: informationCellId)
-        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 5, left: 15, bottom: 0, right: 0))
+        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 5, left: 15, bottom: 0, right: -15))
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -74,6 +74,7 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: informationCellId, for: indexPath) as! MakeBetterPlansCell
+            cell.selectionStyle = .none
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: planPreviewId, for: indexPath) as! planPreviewCell

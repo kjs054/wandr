@@ -137,6 +137,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         cell.selectionStyle = .none
         if userContacts[indexPath.row].selected {
             cell.contactCellView.radioButton.isSelected = true
+            //TODO:- Add to selected contacts array
         } else {
             cell.contactCellView.radioButton.isSelected = false
         }
