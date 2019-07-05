@@ -53,7 +53,7 @@ extension ProfileImageInputController {
                         } else {
                             let contactData = ["name":name, "phone":phone]
                             let db = Firestore.firestore()
-                            db.collection("users").document(uid).collection("contacts").document(name).setData(contactData)
+                            db.collection("users").document(uid).collection("contacts").addDocument(data: contactData)
                         }
                     })
                 } catch let err {
