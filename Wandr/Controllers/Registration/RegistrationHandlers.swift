@@ -27,14 +27,31 @@ extension ProfileImageInputController {
             if let err = err {
                 print("Error writing document: \(err)")
             } else {
-                self.addContactsSubCollection(uid)
+                self.getContacts(uid)
                 print("Document Written Successfully")
                 self.showNextController()
             }
         }
     }
     
-    fileprivate func addContactsSubCollection(_ uid: String) {
+    fileprivate func addDataToContactsSubCollection(_ uid: String, _ formattedPhone: String, _ name: String) {
+        let db = Firestore.firestore()
+        let ref = db.collection("registeredPhones").document(formattedPhone)
+        ref.getDocument { (snapshot, error) in
+            if let snapshot = snapshot {
+                if snapshot.exists {
+                    let uidFromDatabase = snapshot.get("uid") as! String
+                    let contactData = ["name": name, "phone": formattedPhone, "uid": uidFromDatabase]
+                    db.collection("users").document(uid).collection("contacts").addDocument(data: contactData)
+                } else {
+                    let contactData = ["name": name, "phone": formattedPhone]
+                    db.collection("users").document(uid).collection("contacts").addDocument(data: contactData)
+                }
+            }
+        }
+    }
+    
+    fileprivate func getContacts(_ uid: String) {
         let cn = CNContactStore()
         cn.requestAccess(for: .contacts) { (granted, err) in
             if let err = err {
@@ -52,20 +69,7 @@ extension ProfileImageInputController {
                             return
                         } else {
                             if let formattedPhone = phone.formatPhone() {
-                                let db = Firestore.firestore()
-                                let ref = db.collection("registeredPhones").document(formattedPhone)
-                                ref.getDocument { (snapshot, error) in
-                                    if let snapshot = snapshot {
-                                        if snapshot.exists {
-                                            let uidFromDatabase = snapshot.get("uid") as! String
-                                            let contactData = ["name": name, "phone": formattedPhone, "uid": uidFromDatabase]
-                                            db.collection("users").document(uid).collection("contacts").addDocument(data: contactData)
-                                        } else {
-                                            let contactData = ["name": name, "phone": formattedPhone]
-                                            db.collection("users").document(uid).collection("contacts").addDocument(data: contactData)
-                                        }
-                                    }
-                                }
+                                self.addDataToContactsSubCollection(uid, formattedPhone, name)
                             }
                         }
                     })
@@ -77,6 +81,8 @@ extension ProfileImageInputController {
             }
         }
     }
+    
+    
     
     fileprivate func sendCurrentUserToken() {
         let currentUser = Auth.auth().currentUser
