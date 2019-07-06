@@ -52,9 +52,20 @@ extension ProfileImageInputController {
                             return
                         } else {
                             if let formattedPhone = phone.formatPhone() {
-                                let contactData = ["name": name, "phone": formattedPhone]
                                 let db = Firestore.firestore()
-                                db.collection("users").document(uid).collection("contacts").addDocument(data: contactData)
+                                let ref = db.collection("registeredPhones").document(formattedPhone)
+                                ref.getDocument { (snapshot, error) in
+                                    if let snapshot = snapshot {
+                                        if snapshot.exists {
+                                            let uidFromDatabase = snapshot.get("uid") as! String
+                                            let contactData = ["name": name, "phone": formattedPhone, "uid": uidFromDatabase]
+                                            db.collection("users").document(uid).collection("contacts").addDocument(data: contactData)
+                                        } else {
+                                            let contactData = ["name": name, "phone": formattedPhone]
+                                            db.collection("users").document(uid).collection("contacts").addDocument(data: contactData)
+                                        }
+                                    }
+                                }
                             }
                         }
                     })
