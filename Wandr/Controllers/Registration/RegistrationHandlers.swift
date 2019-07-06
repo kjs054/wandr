@@ -51,9 +51,11 @@ extension ProfileImageInputController {
                         if contact.givenName.isEmpty || phone.isEmpty { //if the contact is missing data don't add to array of contacts
                             return
                         } else {
-                            let contactData = ["name":name, "phone":phone]
-                            let db = Firestore.firestore()
-                            db.collection("users").document(uid).collection("contacts").addDocument(data: contactData)
+                            if let formattedPhone = phone.formatPhone() {
+                                let contactData = ["name": name, "phone": formattedPhone]
+                                let db = Firestore.firestore()
+                                db.collection("users").document(uid).collection("contacts").addDocument(data: contactData)
+                            }
                         }
                     })
                 } catch let err {
@@ -62,6 +64,17 @@ extension ProfileImageInputController {
             } else {
                 print("Denied")
             }
+        }
+    }
+    
+    fileprivate func sendCurrentUserToken() {
+        let currentUser = Auth.auth().currentUser
+        currentUser?.getIDTokenForcingRefresh(true) { idToken, error in
+            if let error = error {
+                print(error)
+                return;
+            }
+            
         }
     }
     

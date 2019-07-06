@@ -73,6 +73,7 @@
 		638991FD22B196A4007BE014 /* NewPlanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638991FC22B196A4007BE014 /* NewPlanController.swift */; };
 		638991FF22B1B7CE007BE014 /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638991FE22B1B7CE007BE014 /* ContactView.swift */; };
 		638E9E4922C162A900DD4B7B /* EmailInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638E9E4822C162A900DD4B7B /* EmailInputController.swift */; };
+		639D6B6222D10ECA0057B1FA /* FormatPhoneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639D6B6122D10ECA0057B1FA /* FormatPhoneExtension.swift */; };
 		63A9A3AD22BF100B0063E8B8 /* cvCellShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A9A3AC22BF100B0063E8B8 /* cvCellShadowExtension.swift */; };
 /* End PBXBuildFile section */
 
@@ -149,6 +150,7 @@
 		638991FC22B196A4007BE014 /* NewPlanController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlanController.swift; sourceTree = "<group>"; };
 		638991FE22B1B7CE007BE014 /* ContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactView.swift; sourceTree = "<group>"; };
 		638E9E4822C162A900DD4B7B /* EmailInputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailInputController.swift; sourceTree = "<group>"; };
+		639D6B6122D10ECA0057B1FA /* FormatPhoneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatPhoneExtension.swift; sourceTree = "<group>"; };
 		63A9A3AC22BF100B0063E8B8 /* cvCellShadowExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cvCellShadowExtension.swift; sourceTree = "<group>"; };
 		B122AA00A3A9A3644C38A580 /* Pods_Wandr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wandr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4535119BFFDAE6BA03FF87D /* Pods-Wandr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wandr.release.xcconfig"; path = "Target Support Files/Pods-Wandr/Pods-Wandr.release.xcconfig"; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 			isa = PBXGroup;
 			children = (
 				0A1D78ED22A19B23004AB1FF /* AutoLayoutExtension.swift */,
+				639D6B6122D10ECA0057B1FA /* FormatPhoneExtension.swift */,
 				0A1D78F922A36A0B004AB1FF /* UIElements.swift */,
 				63A9A3AC22BF100B0063E8B8 /* cvCellShadowExtension.swift */,
 				6328941C22C80A830069EA79 /* StringExtension.swift */,
@@ -601,6 +604,7 @@
 				631E169E22C592810012094C /* downloadCacheDisplayImage.swift in Sources */,
 				631E169922C549630012094C /* HomeControllerDataHandlers.swift in Sources */,
 				633B384522C2857900138BE7 /* ProfileImageInputController.swift in Sources */,
+				639D6B6222D10ECA0057B1FA /* FormatPhoneExtension.swift in Sources */,
 				6318706C22B01464005C6FA4 /* User.swift in Sources */,
 				0A1D78EE22A19B23004AB1FF /* AutoLayoutExtension.swift in Sources */,
 				633B384322C27B9B00138BE7 /* BirthdayInputController.swift in Sources */,
