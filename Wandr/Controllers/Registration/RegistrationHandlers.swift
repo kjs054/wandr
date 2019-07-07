@@ -13,12 +13,12 @@ import FirebaseAuth
 import FirebaseStorage
 import Contacts
 
+fileprivate let db = Firestore.firestore()
 
 extension ProfileImageInputController {
     //MARK:- Logic
     func handleRegister() {
         nextButton.isEnabled = false
-        let db = Firestore.firestore()
         guard let uid = newUserData["uid"] else {
             print("Error: No valid UID!")
             return
@@ -28,14 +28,22 @@ extension ProfileImageInputController {
                 print("Error writing document: \(err)")
             } else {
                 self.getContacts(uid)
+                self.savePhoneNumberToRegisteredPhoneCollection(uid)
                 print("Document Written Successfully")
                 self.showNextController()
             }
         }
     }
     
+    fileprivate func savePhoneNumberToRegisteredPhoneCollection(_ uid: String) {
+        guard let phoneNumber = newUserData["phoneNumber"] else {
+            print("Couldnt get phone number")
+            return
+        }
+        db.collection("registeredPhones").document(phoneNumber).setData(["uid": uid])
+    }
+    
     fileprivate func addDataToContactsSubCollection(_ uid: String, _ formattedPhone: String, _ name: String) {
-        let db = Firestore.firestore()
         let ref = db.collection("registeredPhones").document(formattedPhone)
         ref.getDocument { (snapshot, error) in
             if let snapshot = snapshot {
