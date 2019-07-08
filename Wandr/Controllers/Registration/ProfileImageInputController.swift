@@ -73,14 +73,16 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
         nextButton.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         nextButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        nextButton.addTarget(self, action: #selector(addProfileImageToData), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(handleRegistration), for: .touchUpInside)
     }
     
     //MARK:- Logic
-    
-    @objc func addProfileImageToData() {
-        if profilePicture.imageView?.image != nil {
-            uploadImageToStorage(image: profilePicture.imageView!.image!)
+    @objc func handleRegistration() {
+        if let imageToUpload = profilePicture.imageView?.image {
+            showActivityIndicator()
+            self.uploadProfileImageToStorage(image: imageToUpload, complete: ({ () -> () in
+                self.addUserDataToUsersCollection()
+            }))
         } else {
             profilePicture.setTitle("Profile Picture Required", for: .normal)
         }
@@ -120,5 +122,10 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
         dismiss(animated: true, completion: nil)
         profilePicture.setImage(editedImage, for: .normal)
     }
+    
+    fileprivate func showActivityIndicator() {
+        let activityIndicator = ActivityIndicatorView()
+        view.addSubview(activityIndicator)
+        activityIndicator.fillSuperView()
+    }
 }
-

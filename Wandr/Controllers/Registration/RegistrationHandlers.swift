@@ -15,10 +15,38 @@ import Contacts
 
 fileprivate let db = Firestore.firestore()
 
-extension ProfileImageInputController {
+protocol firebaseFunctions {
+    func uploadProfileImageToStorage(image: UIImage, complete:@escaping ()->())
+    func addUserDataToUsersCollection()
+}
+
+extension firebaseFunctions {
+    
     //MARK:- Logic
-    func handleRegister() {
-        nextButton.isEnabled = false
+    func uploadProfileImageToStorage(image: UIImage, complete:@escaping ()->()) {
+        let storage = Storage.storage()
+        let storageRef = storage.reference().child("profileImages/\(newUserData["uid"]!)")
+        if let uploadData = (image).pngData() {
+            storageRef.putData(uploadData, metadata: nil) { (metaData, error) in
+                if error != nil {
+                    print(error!)
+                    return
+                }
+                storageRef.downloadURL(completion: { (url, error) in
+                    guard let downloadURL = url?.absoluteString else {
+                        print(error!)
+                        return
+                    }
+                    newUserData["profileImageURL"] = downloadURL
+                    complete()
+                    print(downloadURL)
+
+                })
+            }
+        }
+    }
+    
+    func addUserDataToUsersCollection() {
         guard let uid = newUserData["uid"] else {
             print("Error: No valid UID!")
             return
@@ -28,35 +56,18 @@ extension ProfileImageInputController {
                 print("Error writing document: \(err)")
             } else {
                 self.getContacts(uid)
-                self.savePhoneNumberToRegisteredPhoneCollection(uid)
+                self.savePhoneNumberToRegisteredPhonesCollection(uid)
                 print("Document Written Successfully")
-                self.showNextController()
             }
         }
     }
     
-    fileprivate func savePhoneNumberToRegisteredPhoneCollection(_ uid: String) {
+    func savePhoneNumberToRegisteredPhonesCollection(_ uid: String) {
         guard let phoneNumber = newUserData["phoneNumber"] else {
             print("Couldnt get phone number")
             return
         }
         db.collection("registeredPhones").document(phoneNumber).setData(["uid": uid])
-    }
-    
-    fileprivate func addDataToContactsSubCollection(_ uid: String, _ formattedPhone: String, _ name: String) {
-        let ref = db.collection("registeredPhones").document(formattedPhone)
-        ref.getDocument { (snapshot, error) in
-            if let snapshot = snapshot {
-                if snapshot.exists {
-                    let uidFromDatabase = snapshot.get("uid") as! String
-                    let contactData = ["name": name, "phone": formattedPhone, "uid": uidFromDatabase]
-                    db.collection("users").document(uid).collection("contacts").addDocument(data: contactData)
-                } else {
-                    let contactData = ["name": name, "phone": formattedPhone]
-                    db.collection("users").document(uid).collection("contacts").addDocument(data: contactData)
-                }
-            }
-        }
     }
     
     fileprivate func getContacts(_ uid: String) {
@@ -90,7 +101,20 @@ extension ProfileImageInputController {
         }
     }
     
-    
+    fileprivate func addDataToContactsSubCollection(_ uid: String, _ formattedPhone: String, _ name: String) {
+        let ref = db.collection("registeredPhones").document(formattedPhone)
+        ref.getDocument { (snapshot, error) in
+            if let snapshot = snapshot {
+                if snapshot.exists {
+                    let uidFromDatabase = snapshot.get("uid") as! String
+                    let contactData = ["uid": uidFromDatabase]
+                    db.collection("users").document(uid).collection("contacts").document(formattedPhone).setData(contactData)
+                } else {
+                    return
+                }
+            }
+        }
+    }
     
     fileprivate func sendCurrentUserToken() {
         let currentUser = Auth.auth().currentUser
@@ -102,40 +126,6 @@ extension ProfileImageInputController {
             
         }
     }
-    
-    func uploadImageToStorage(image: UIImage) {
-        showActivityIndicator()
-        let storage = Storage.storage()
-        let storageRef = storage.reference().child("profileImages/\(newUserData["uid"]!)")
-        if let uploadData = (image).pngData() {
-            storageRef.putData(uploadData, metadata: nil) { (metaData, error) in
-                if error != nil {
-                    print(error!)
-                    return
-                }
-                storageRef.downloadURL(completion: { (url, error) in
-                    guard let downloadURL = url?.absoluteString else {
-                        print(error!)
-                        return
-                    }
-                    newUserData["profileImageURL"] = downloadURL
-                    print(downloadURL)
-                    self.handleRegister()
-                })
-            }
-        }
-    }
-    
-    fileprivate func showNextController() {
-        let vc = HomeController()
-        let transition = CATransition().fromBottom()
-        navigationController!.view.layer.add(transition, forKey: kCATransition)
-        navigationController?.pushViewController(vc, animated: false)
-    }
-    
-    fileprivate func showActivityIndicator() {
-        let activityIndicator = ActivityIndicatorView()
-        view.addSubview(activityIndicator)
-        activityIndicator.fillSuperView()
-    }
 }
+
+extension ProfileImageInputController: firebaseFunctions {}
