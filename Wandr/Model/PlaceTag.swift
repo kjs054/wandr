@@ -23,8 +23,4 @@ class PlaceTag {
     init(tagName: String, tagId: Int, recWeight: Double) {
         self.tagName = tagName; self.tagId = tagId; self.recWeight = recWeight
     }
-    
-    func selectTagFilter() {
-        
-    }
 }

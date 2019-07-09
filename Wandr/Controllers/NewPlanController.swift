@@ -7,18 +7,18 @@
 //
 
 import UIKit
-import Contacts
+import Firebase
+import FirebaseFirestore
 
 class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //MARK:- Variables
     var userContacts = [SelectableContact]()
-    
-    var selectedContacts = [SelectableContact]()
+    var contactsOnWandr = [SelectableContact]()
     
     //FIXME:- Add cells for recent contacts and groups
-    //    let recentContactId = "recentContactId"
-    //    let activeContactId = "activeContactId"
+    let recentContactId = "recentContactId"
+    let activeContactId = "activeContactId"
     let otherContactId = "otherContactId"
     
     //MARK:- Elements
@@ -41,39 +41,6 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         return button
     }()
     
-    //MARK:- Contacts Logic
-    private func fetchContacts() {
-        let cn = CNContactStore()
-        cn.requestAccess(for: .contacts) { (granted, err) in
-            if let err = err {
-                print("Failed to Request Access:", err)
-                return
-            }
-            if granted {
-                let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey] //Gets name, last name, and phone number(s)
-                let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
-                do {
-                    try cn.enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
-                        let phone = contact.phoneNumbers.first?.value.stringValue ?? "" //get first phone number
-                        let name = "\(contact.givenName) \(contact.familyName)" //combine first and last name
-                        if contact.givenName.isEmpty || phone.isEmpty { //if the contact is missing data don't add to array of contacts
-                            return
-                        } else {
-                            self.userContacts.append(SelectableContact(name: name, phoneNum: phone, selected: false))
-                            DispatchQueue.main.async {
-                                self.contactsTable.reloadData() //reloads the data on permission granted
-                            }
-                        }
-                    })
-                } catch let err {
-                    print(err)
-                }
-            } else {
-                print("Denied")
-            }
-        }
-    }
-    
     //MARK:- Controller Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +48,6 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         setupNavigationBar()
         setupCreatePlanButton()
         setupContactsTable()
-        fetchContacts()
     }
     
     func setupNavigationBar() {
@@ -103,10 +69,19 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func setupContactsTable() {
+        userContacts = getContacts()
+        userContacts.forEach { (contact) in
+            DispatchQueue.main.async {
+                self.checkIfContactIsUser(phone: contact.phoneNum, callback: { (uid) in
+                    self.contactsOnWandr.append(SelectableContact(name: contact.name, phoneNum: contact.phoneNum, uid: uid, selected: false))
+                    self.contactsTable.reloadData()
+                })
+            }
+        }
         contactsTable.delegate = self
         contactsTable.dataSource = self
-//        contactsTable.register(recentContactCell.self, forCellReuseIdentifier: recentContactId)
-//        contactsTable.register(activeContactCell.self, forCellReuseIdentifier: activeContactId)
+        //        contactsTable.register(recentContactCell.self, forCellReuseIdentifier: recentContactId)
+        contactsTable.register(activeContactCell.self, forCellReuseIdentifier: activeContactId)
         contactsTable.register(otherContactCell.self, forCellReuseIdentifier: otherContactId)
         view.addSubview(contactsTable)
         contactsTable.anchor(top: view.topAnchor, bottom: createPlanButton.topAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 15, bottom: -15, right: 0))
@@ -114,7 +89,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     //MARK:- Contacts Table Functions
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -125,9 +100,25 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         }
         tableView.reloadData()
     }
-
+    
     var selectedIndexes = [Int]()
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: activeContactId, for: indexPath) as! activeContactCell
+            let contactName = contactsOnWandr[indexPath.row].name
+            let contactPhone = contactsOnWandr[indexPath.row].phoneNum
+            cell.contactCellView.title.text = contactName
+            cell.contactCellView.subTitle.text = contactPhone
+            cell.contactCellView.initialsLabel.text = contactName.getInitials()
+            cell.selectionStyle = .none
+            if contactsOnWandr[indexPath.row].selected {
+                cell.contactCellView.radioButton.isSelected = true
+                //TODO:- Add to selected contacts array
+            } else {
+                cell.contactCellView.radioButton.isSelected = false
+            }
+            return cell
+        }
         let cell = tableView.dequeueReusableCell(withIdentifier: otherContactId, for: indexPath) as! otherContactCell
         let contactName = userContacts[indexPath.row].name
         let contactPhone = userContacts[indexPath.row].phoneNum
@@ -149,6 +140,9 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return contactsOnWandr.count
+        }
         return userContacts.count
     }
     
@@ -162,9 +156,9 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         
         switch section {
         case 0:
-            label.text = "My Contacts"
-        case 1:
             label.text = "On Wandr"
+        case 1:
+            label.text = "Recent"
         default:
             label.text = "All Contacts"
         }

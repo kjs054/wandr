@@ -8,10 +8,9 @@
 
 import Foundation
 
-var userContacts = [SelectableContact]()
-
 struct SelectableContact {
     var name: String
     var phoneNum: String
+    var uid: String?
     var selected: Bool
 }
