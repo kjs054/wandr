@@ -93,10 +93,19 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if userContacts[indexPath.row].selected { //checks to see if user is already selected
-            userContacts[indexPath.row].selected = false
-        } else {
-            userContacts[indexPath.row].selected = true
+        if indexPath.section == 0 {
+            if contactsOnWandr[indexPath.row].selected { //checks to see if user is already selected
+                contactsOnWandr[indexPath.row].selected = false
+            } else {
+                contactsOnWandr[indexPath.row].selected = true
+            }
+        }
+        if indexPath.section == 1 {
+            if userContacts[indexPath.row].selected { //checks to see if user is already selected
+                userContacts[indexPath.row].selected = false
+            } else {
+                userContacts[indexPath.row].selected = true
+            }
         }
         tableView.reloadData()
     }
@@ -105,13 +114,9 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: activeContactId, for: indexPath) as! activeContactCell
-            let contactName = contactsOnWandr[indexPath.row].name
-            let contactPhone = contactsOnWandr[indexPath.row].phoneNum
-            cell.contactCellView.title.text = contactName
-            cell.contactCellView.subTitle.text = contactPhone
-            cell.contactCellView.initialsLabel.text = contactName.getInitials()
+            cell.contact = contactsOnWandr[indexPath.row]
             cell.selectionStyle = .none
-            if contactsOnWandr[indexPath.row].selected {
+            if cell.contact.selected {
                 cell.contactCellView.radioButton.isSelected = true
                 //TODO:- Add to selected contacts array
             } else {
@@ -120,13 +125,9 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: otherContactId, for: indexPath) as! otherContactCell
-        let contactName = userContacts[indexPath.row].name
-        let contactPhone = userContacts[indexPath.row].phoneNum
-        cell.contactCellView.title.text = contactName
-        cell.contactCellView.subTitle.text = contactPhone
-        cell.contactCellView.initialsLabel.text = contactName.getInitials()
+        cell.contact = userContacts[indexPath.row]
         cell.selectionStyle = .none
-        if userContacts[indexPath.row].selected {
+        if cell.contact.selected {
             cell.contactCellView.radioButton.isSelected = true
             //TODO:- Add to selected contacts array
         } else {
@@ -158,7 +159,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         case 0:
             label.text = "On Wandr"
         case 1:
-            label.text = "Recent"
+            label.text = "All Contacts"
         default:
             label.text = "All Contacts"
         }
@@ -195,6 +196,14 @@ class recentContactCell: UITableViewCell {
 
 class activeContactCell: UITableViewCell {
     
+    var contact: SelectableContact! {
+        didSet {
+            contactCellView.title.text = contact.name
+            contactCellView.subTitle.text = contact.phoneNum
+            contactCellView.initialsLabel.text = contact.name.getInitials()
+        }
+    }
+    
     let contactCellView = ContactView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -210,6 +219,14 @@ class activeContactCell: UITableViewCell {
 }
 
 class otherContactCell: UITableViewCell {
+    
+    var contact: SelectableContact! {
+        didSet {
+            contactCellView.title.text = contact.name
+            contactCellView.subTitle.text = contact.phoneNum
+            contactCellView.initialsLabel.text = contact.name.getInitials()
+        }
+    }
     
     let contactCellView = ContactView()
     
