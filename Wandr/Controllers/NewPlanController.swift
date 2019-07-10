@@ -69,15 +69,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func setupContactsTable() {
-        userContacts = getContacts()
-        userContacts.forEach { (contact) in
-            DispatchQueue.main.async {
-                self.checkIfContactIsUser(phone: contact.phoneNum, callback: { (uid) in
-                    self.contactsOnWandr.append(SelectableContact(name: contact.name, phoneNum: contact.phoneNum, uid: uid, selected: false))
-                    self.contactsTable.reloadData()
-                })
-            }
-        }
+        getTableData()
         contactsTable.delegate = self
         contactsTable.dataSource = self
         //        contactsTable.register(recentContactCell.self, forCellReuseIdentifier: recentContactId)
@@ -175,6 +167,28 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     func getInitials(_ name: String) -> String {
         let initials = String(name.first!)
         return initials
+    }
+    
+    fileprivate func getTableData() {
+        userContacts = getContacts()
+        let localStorage = LocalStorage()
+        if let savedRegisteredUsers = localStorage.loadRegisteredContacts() {
+            contactsOnWandr = savedRegisteredUsers
+        }
+        userContacts.forEach { (contact) in
+            if contactsOnWandr.contains(where: { $0.phoneNum == contact.phoneNum }) {
+                return
+            } else {
+                DispatchQueue.main.async {
+                    self.checkIfContactIsUser(contact: contact, callback: { (uid) in
+                        self.contactsOnWandr.append(SelectableContact(name: contact.name, phoneNum: contact.phoneNum, uid: uid, selected: false))
+                        localStorage.saveRegisteredContact(registeredContacts: self.contactsOnWandr)
+                        self.contactsTable.reloadData()
+                    })
+                }
+            }
+        }
+        print(contactsOnWandr)
     }
 }
 

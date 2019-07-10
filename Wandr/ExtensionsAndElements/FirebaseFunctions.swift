@@ -19,7 +19,7 @@ protocol firebaseFunctions {
     func uploadProfileImageToStorage(image: UIImage, complete:@escaping ()->())
     func addUserDataToUsersCollection()
     func getContacts() -> [SelectableContact]
-    func checkIfContactIsUser(phone: String, callback: @escaping ((_ uid:String) ->Void ))
+    func checkIfContactIsUser(contact: SelectableContact, callback: @escaping ((_ uid:String) ->Void ))
 }
 
 extension firebaseFunctions {
@@ -90,7 +90,6 @@ extension firebaseFunctions {
                             }
                         }
                     })
-                    print(userContacts)
                 } catch let err {
                     print(err)
                 }
@@ -101,20 +100,18 @@ extension firebaseFunctions {
         return userContacts
     }
     
-    func checkIfContactIsUser(phone: String, callback: @escaping ((_ uid:String) ->Void ))  {
-        let ref = db.collection("registeredPhones").document(phone)
+    func checkIfContactIsUser(contact: SelectableContact, callback: @escaping ((_ uid:String) ->Void ))  {
+        let ref = db.collection("registeredPhones").document(contact.phoneNum)
         ref.getDocument { (snapshot, error) in
             if let snapshot = snapshot {
                 if snapshot.exists {
                     let uidForContact = snapshot.get("uid") as! String
                     let contactData = ["uid": uidForContact]
-                    let ref = db.collection("users").document(self.getUID()).collection("contacts").document(phone)
+                    let ref = db.collection("users").document(self.getUID()).collection("contacts").document(contact.phoneNum)
                     ref.getDocument(completion: { (snapshot, error) in
                         if let snapshot = snapshot {
-                            if snapshot.exists {
-                                callback(uidForContact)
-                            } else {
-                                callback(uidForContact)
+                            callback(uidForContact)
+                            if snapshot.exists == false {
                                 ref.setData(contactData)
                             }
                         }
