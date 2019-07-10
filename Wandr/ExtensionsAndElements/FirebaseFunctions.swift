@@ -20,6 +20,7 @@ protocol firebaseFunctions {
     func addUserDataToUsersCollection()
     func getContacts() -> [SelectableContact]
     func checkIfContactIsUser(contact: SelectableContact, callback: @escaping ((_ uid:String) ->Void ))
+    func fetchUserData(completionHandler: @escaping (_ userExists: Bool) -> ())
 }
 
 extension firebaseFunctions {
@@ -28,7 +29,7 @@ extension firebaseFunctions {
     func uploadProfileImageToStorage(image: UIImage, complete:@escaping ()->()) {
         let storage = Storage.storage()
         let storageRef = storage.reference().child("profileImages/\(getUID())")
-        if let uploadData = (image).pngData() {
+        if let uploadData = image.jpeg(.medium) {
             storageRef.putData(uploadData, metadata: nil) { (metaData, error) in
                 if error != nil {
                     print(error!)
@@ -41,8 +42,6 @@ extension firebaseFunctions {
                     }
                     newUserData["profileImageURL"] = downloadURL
                     complete()
-                    print(downloadURL)
-                    
                 })
             }
         }
@@ -110,10 +109,10 @@ extension firebaseFunctions {
                     let ref = db.collection("users").document(self.getUID()).collection("contacts").document(contact.phoneNum)
                     ref.getDocument(completion: { (snapshot, error) in
                         if let snapshot = snapshot {
-                            callback(uidForContact)
                             if snapshot.exists == false {
                                 ref.setData(contactData)
                             }
+                            callback(uidForContact)
                         }
                     })
                 } else {
@@ -141,7 +140,26 @@ extension firebaseFunctions {
         }
         return uid
     }
+    
+    func fetchUserData(completionHandler: @escaping (_ userExists: Bool) -> ()) { //gets the users data from firestore and stores it in currentUser dictionary
+        let localStorage = LocalStorage()
+        let uid = getUID()
+        let docRef = db.collection("users").document(uid) //Retrieves document named with users id
+        docRef.getDocument { (snapshot, error) in
+            if let snapshot = snapshot {
+                if snapshot.exists {
+                    let data = snapshot.data() as! [String : String]
+                    localStorage.saveCurrentUserData(userData: data)
+                    completionHandler(true)
+                    //Perform element setup after fetching complete
+                } else {
+                    completionHandler(false)
+                }
+            }
+        }
+    }
 }
 
 extension NewPlanController: firebaseFunctions {}
 extension ProfileImageInputController: firebaseFunctions {}
+extension HomeController: firebaseFunctions {}
