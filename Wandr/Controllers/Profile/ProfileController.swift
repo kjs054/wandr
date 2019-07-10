@@ -18,6 +18,8 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     let noHistoryId = "noHistory"
     var currentSegmentedControlIndex = 0
     
+    let localStorage = LocalStorage()
+    
     //MARK:- Elements
     let segmentedControl: UISegmentedControl = {
         let items = ["Saved", "History"]
@@ -67,7 +69,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     
     func setupNavigationBar() {
         let backButton = UIButton()
-        guard let name = currentUser["name"] as? String else {
+        guard let name = localStorage.currentUserData()?["name"] else {
             print("Name not found")
             return
         }
@@ -99,6 +101,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
         let firebaseAuth = Auth.auth()
         do {
             try firebaseAuth.signOut()
+            localStorage.clearData()
             showRegistration()
         } catch let signOutError as NSError {
             print ("Error signing out : %@", signOutError)
@@ -123,7 +126,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     }
     
     func checkIfKeyExists(key: String) -> Bool{
-        if currentUser[key] != nil {
+        if localStorage.currentUserData()?[key] != nil {
             return true
         } else {
             return false

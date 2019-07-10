@@ -18,6 +18,8 @@ class HomeController: UIViewController {
     //MARK:- Elements
     let contactsView = NewPlanController()
     
+    let localStorage = LocalStorage()
+    
     let profileButton = circularImageView()
     
     let titleImageView: UIImageView = {
@@ -55,7 +57,13 @@ class HomeController: UIViewController {
         setupNavigationBar()
         setupLayout()
         setupPlanGesture()
-        fetchUserData()
+        fetchUserData { (userExists) in
+            if userExists {
+                self.setupProfilePictureNavigationBar()
+            } else {
+                self.showLogin()
+            }
+        }
     }
     
     func hasBottomSafeArea() -> Bool {
@@ -110,6 +118,13 @@ class HomeController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
+    @objc func showLogin() {
+        let vc = LoginController()
+        let transition = CATransition().fromBottom()
+        self.navigationController!.view.layer.add(transition, forKey: kCATransition)
+        self.navigationController?.pushViewController(vc, animated: false)
+    }
+    
     //MARK:- Plan Gesture Functions
     func setupPlanGesture() {
         let planGesture = UIPanGestureRecognizer(target: self, action: #selector(handleMakePlanGesture))
@@ -151,6 +166,20 @@ class HomeController: UIViewController {
                 self.cardDeckView.frame = CGRect(x: 0, y: self.filters.frame.height + 15, width: self.cardDeckView.frame.width, height: self.cardDeckView.frame.height)
             }
         }
+    }
+    func showRegistration() {
+        let vc = LoginController()
+        let transition = CATransition().fromBottom()
+        self.navigationController!.view.layer.add(transition, forKey: kCATransition)
+        self.navigationController?.pushViewController(vc, animated: false)
+    }
+    
+    func setupProfilePictureNavigationBar() {
+        guard let imageURL = localStorage.currentUserData()?["profileImageURL"] else { //Unwraps url stored as type Any to String
+            print("Could not get image url for some fucking reason")
+            return
+        }
+        self.profileButton.loadImageWithCacheFromURLString(urlstring: imageURL) //Download, cache, and display
     }
 }
 
