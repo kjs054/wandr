@@ -10,9 +10,6 @@ import Foundation
 
 class LocalStorage {
     
-    static  let sharedInstance  = LocalStorage()
-    public init() {}
-    
     // MARK: User
     func saveRegisteredContact(registeredContacts: [SelectableContact]){
         do {
