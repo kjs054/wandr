@@ -13,8 +13,8 @@ import FirebaseFirestore
 class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //MARK:- Variables
-    var userContacts = [SelectableContact]()
-    var contactsOnWandr = [SelectableContact]()
+    var userContacts = [ContactViewModel]()
+    var contactsOnWandr = [ContactViewModel]()
     
     //FIXME:- Add cells for recent contacts and groups
     let recentContactId = "recentContactId"
@@ -106,9 +106,14 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: activeContactId, for: indexPath) as! activeContactCell
-            cell.contact = contactsOnWandr[indexPath.row]
+            cell.contactViewModel = contactsOnWandr[indexPath.row]
             cell.selectionStyle = .none
-            if cell.contact.selected {
+            fetchCurrentUserData(uid: contactsOnWandr[indexPath.row].uid!) { (userData) in
+                if let userData = userData {
+                    cell.contactCellView.profileImage.loadImageWithCacheFromURLString(urlstring: userData["profileImageURL"]!)
+                }
+            }
+            if cell.contactViewModel.selected {
                 cell.contactCellView.radioButton.isSelected = true
                 //TODO:- Add to selected contacts array
             } else {
@@ -117,9 +122,9 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: otherContactId, for: indexPath) as! otherContactCell
-        cell.contact = userContacts[indexPath.row]
+        cell.contactViewModel = userContacts[indexPath.row]
         cell.selectionStyle = .none
-        if cell.contact.selected {
+        if cell.contactViewModel.selected {
             cell.contactCellView.radioButton.isSelected = true
             //TODO:- Add to selected contacts array
         } else {
@@ -170,10 +175,10 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     fileprivate func getTableData() {
-        userContacts = getContacts()
+        userContacts = getContacts().map({return ContactViewModel(contact: $0) })
         let localStorage = LocalStorage()
         if let savedRegisteredUsers = localStorage.loadRegisteredContacts() {
-            contactsOnWandr = savedRegisteredUsers
+            contactsOnWandr = savedRegisteredUsers.map({return ContactViewModel(contact: $0)})
         }
         userContacts.forEach { (contact) in
             if contactsOnWandr.contains(where: { $0.phoneNum == contact.phoneNum }) {
@@ -181,14 +186,19 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
             } else {
                 DispatchQueue.main.async {
                     self.checkIfContactIsUser(contact: contact, callback: { (uid) in
-                        self.contactsOnWandr.append(SelectableContact(name: contact.name, phoneNum: contact.phoneNum, uid: uid, selected: false))
-                        localStorage.saveRegisteredContact(registeredContacts: self.contactsOnWandr)
+                        contact.uid = uid
+                        self.contactsOnWandr.append(contact)
+                        localStorage.saveRegisteredContact(registeredContacts: self.contactsOnWandr.map({return SelectableContact(name: $0.name, phoneNum: $0.phoneNum, uid: $0.uid, selected: $0.selected)}))
                         self.contactsTable.reloadData()
                     })
                 }
             }
         }
         print(contactsOnWandr)
+    }
+    
+    func updateTableView() {
+        contactsTable.reloadData()
     }
 }
 
@@ -210,11 +220,11 @@ class recentContactCell: UITableViewCell {
 
 class activeContactCell: UITableViewCell {
     
-    var contact: SelectableContact! {
+    var contactViewModel: ContactViewModel! {
         didSet {
-            contactCellView.title.text = contact.name
-            contactCellView.subTitle.text = contact.phoneNum
-            contactCellView.initialsLabel.text = contact.name.getInitials()
+            contactCellView.title.text = contactViewModel.name
+            contactCellView.subTitle.text = contactViewModel.phoneNum
+            contactCellView.initialsLabel.text = contactViewModel.name.getInitials()
         }
     }
     
@@ -223,6 +233,7 @@ class activeContactCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(contactCellView)
+        contactCellView.setupProfileImage()
         contactCellView.setupRadioButton()
         contactCellView.fillSuperView()
     }
@@ -234,11 +245,11 @@ class activeContactCell: UITableViewCell {
 
 class otherContactCell: UITableViewCell {
     
-    var contact: SelectableContact! {
+    var contactViewModel: ContactViewModel! {
         didSet {
-            contactCellView.title.text = contact.name
-            contactCellView.subTitle.text = contact.phoneNum
-            contactCellView.initialsLabel.text = contact.name.getInitials()
+            contactCellView.title.text = contactViewModel.name
+            contactCellView.subTitle.text = contactViewModel.phoneNum
+            contactCellView.initialsLabel.text = contactViewModel.name.getInitials()
         }
     }
     
@@ -247,7 +258,8 @@ class otherContactCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(contactCellView)
-        contactCellView.setupRadioButton()
+        contactCellView.setupInviteButton()
+        contactCellView.setupInitialsLabel()
         contactCellView.fillSuperView()
     }
     

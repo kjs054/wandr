@@ -7,14 +7,15 @@
 //
 
 import Foundation
-
+import UIKit
 class ContactViewModel {
+    
     var name: String
     var phoneNum: String
     var uid: String?
     var selected: Bool
     
-    init(name: String, phoneNum: String, uid: String?, selected: Bool) {
-        self.name = name; self.phoneNum = phoneNum; self.uid = uid; self.selected = selected
+    init(contact: SelectableContact) {
+        self.name = contact.name; self.phoneNum = contact.phoneNum; self.uid = contact.uid; self.selected = contact.selected;
     }
 }

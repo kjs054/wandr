@@ -17,6 +17,13 @@ class ContactView: UIView {
         return piv
     }()
     
+    let profileImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     let initialsLabel: UILabel = { //Used for non-registered users
         let label = UILabel()
         label.font = UIFont(name: "Avenir-Black", size: 28)
@@ -26,7 +33,7 @@ class ContactView: UIView {
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
-
+    
     let title: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -43,6 +50,20 @@ class ContactView: UIView {
         label.textColor = #colorLiteral(red: 0.5333333333, green: 0.5333333333, blue: 0.5333333333, alpha: 1)
         label.text = "Sub Title"
         return label
+    }()
+    
+    let inviteButton: UIButton = {
+        var button = UIButton()
+        button.setTitle("Invite", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitleColor(wandrBlue, for: .normal)
+        button.layer.borderWidth = 3.0
+        button.layer.borderColor = wandrBlue.cgColor
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 8.0
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
+        button.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 15)
+        return button
     }()
     
     let radioButton: UIButton = {
@@ -80,13 +101,19 @@ class ContactView: UIView {
         profileImageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.8).isActive = true
         profileImageView.widthAnchor.constraint(equalTo: profileImageView.heightAnchor).isActive = true
         profileImageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        setupInitialsLabel() //TODO:- Dynamic if user is registered or not
     }
     
     func setupInitialsLabel() {
         profileImageView.addSubview(initialsLabel)
         initialsLabel.widthAnchor.constraint(equalTo: profileImageView.widthAnchor).isActive = true
         initialsLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor).isActive = true
+    }
+    
+    func setupProfileImage() {
+        profileImageView.addSubview(profileImage)
+        profileImage.widthAnchor.constraint(equalTo: profileImageView.widthAnchor).isActive = true
+        profileImage.heightAnchor.constraint(equalTo: profileImageView.heightAnchor).isActive = true
+        profileImage.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor).isActive = true
     }
     
     func setupRadioButton() {
@@ -96,6 +123,14 @@ class ContactView: UIView {
         radioButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         radioButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         radioButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+    }
+    
+    func setupInviteButton() {
+        addSubview(inviteButton)
+        inviteButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -15).isActive = true
+        inviteButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        inviteButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        inviteButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
     }
     
     func setupTimeStamp() {

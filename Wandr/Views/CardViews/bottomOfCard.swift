@@ -19,7 +19,7 @@ class bottomOfCard: UIView {
     let moreInfoButton: UIButton = {
         let button = UIButton()
         button.setTitle("...", for: .normal)
-        button.setTitleColor(#colorLiteral(red: 0, green: 0.6588235294, blue: 1, alpha: 1), for: .normal)
+        button.setTitleColor(wandrBlue, for: .normal)
         button.titleLabel?.font = UIFont(name: "Avenir-Black", size: 30)
         return button
     }()

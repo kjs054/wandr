@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol categorySelectionDelegate {    // <-- needs :class for weak
+protocol categorySelectionDelegate {
     func updateNavTitle(_ categoryName: String)
 }
 

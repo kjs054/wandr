@@ -57,11 +57,10 @@ class HomeController: UIViewController {
         setupNavigationBar()
         setupLayout()
         setupPlanGesture()
-        fetchUserData { (userExists) in
-            if userExists {
+        fetchCurrentUserData(uid: getUID()) { (userData) in
+            if let userData = userData {
+                self.localStorage.saveCurrentUserData(userData: userData)
                 self.setupProfilePictureNavigationBar()
-            } else {
-                self.showLogin()
             }
         }
     }

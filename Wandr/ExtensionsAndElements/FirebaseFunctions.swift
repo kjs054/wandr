@@ -19,8 +19,9 @@ protocol firebaseFunctions {
     func uploadProfileImageToStorage(image: UIImage, complete:@escaping ()->())
     func addUserDataToUsersCollection()
     func getContacts() -> [SelectableContact]
-    func checkIfContactIsUser(contact: SelectableContact, callback: @escaping ((_ uid:String) ->Void ))
-    func fetchUserData(completionHandler: @escaping (_ userExists: Bool) -> ())
+    func checkIfContactIsUser(contact: ContactViewModel, callback: @escaping ((_ uid:String) ->Void ))
+    func fetchCurrentUserData(uid: String, completionHandler: @escaping (_ userData: Dictionary<String, String>?) -> ())
+    func getUID() -> String
 }
 
 extension firebaseFunctions {
@@ -99,7 +100,7 @@ extension firebaseFunctions {
         return userContacts
     }
     
-    func checkIfContactIsUser(contact: SelectableContact, callback: @escaping ((_ uid:String) ->Void ))  {
+    func checkIfContactIsUser(contact: ContactViewModel, callback: @escaping ((_ uid:String) ->Void ))  {
         let ref = db.collection("registeredPhones").document(contact.phoneNum)
         ref.getDocument { (snapshot, error) in
             if let snapshot = snapshot {
@@ -133,7 +134,7 @@ extension firebaseFunctions {
         }
     }
     
-    fileprivate func getUID() -> String {
+    func getUID() -> String {
         let auth = Auth.auth()
         guard let uid = auth.currentUser?.uid else {
             fatalError("NO USER ID")
@@ -141,19 +142,16 @@ extension firebaseFunctions {
         return uid
     }
     
-    func fetchUserData(completionHandler: @escaping (_ userExists: Bool) -> ()) { //gets the users data from firestore and stores it in currentUser dictionary
-        let localStorage = LocalStorage()
-        let uid = getUID()
+    func fetchCurrentUserData(uid: String, completionHandler: @escaping (_ userData: Dictionary<String, String>?) -> ()) { //gets the users data from firestore and stores it in currentUser dictionary
         let docRef = db.collection("users").document(uid) //Retrieves document named with users id
         docRef.getDocument { (snapshot, error) in
             if let snapshot = snapshot {
                 if snapshot.exists {
                     let data = snapshot.data() as! [String : String]
-                    localStorage.saveCurrentUserData(userData: data)
-                    completionHandler(true)
+                    completionHandler(data)
                     //Perform element setup after fetching complete
                 } else {
-                    completionHandler(false)
+                    completionHandler(nil)
                 }
             }
         }

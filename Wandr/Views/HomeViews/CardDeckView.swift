@@ -101,7 +101,7 @@ class cardCell: GeminiCell {
         cardActionsMenu.addAction(UIAlertAction(title: "Navigate", style: .default, handler: { (_) in
             print("Navigate")
         }))
-        cardActionsMenu.addAction(UIAlertAction(title: "Report", style: .default, handler: { (_) in
+        cardActionsMenu.addAction(UIAlertAction(title: "Report", style: .destructive, handler: { (_) in
             print("Report")
         }))
         cardActionsMenu.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
