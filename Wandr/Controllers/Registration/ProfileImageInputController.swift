@@ -81,7 +81,9 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
         if let imageToUpload = profilePicture.imageView?.image {
             showActivityIndicator()
             self.uploadProfileImageToStorage(image: imageToUpload, complete: ({ () -> () in
-                self.addUserDataToUsersCollection()
+                self.addUserDataToUsersCollection(complete: {
+                    self.showHomeViewController()
+                })
             }))
         } else {
             profilePicture.setTitle("Profile Picture Required", for: .normal)
@@ -127,5 +129,12 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
         let activityIndicator = ActivityIndicatorView()
         view.addSubview(activityIndicator)
         activityIndicator.fillSuperView()
+    }
+    
+    fileprivate func showHomeViewController() {
+        let vc = HomeController()
+        let transition = CATransition().fromBottom()
+        self.navigationController!.view.layer.add(transition, forKey: kCATransition)
+        self.navigationController?.pushViewController(vc, animated: false)
     }
 }
