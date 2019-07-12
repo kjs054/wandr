@@ -30,7 +30,7 @@ extension firebaseFunctions {
     func uploadProfileImageToStorage(image: UIImage, complete:@escaping ()->()) {
         let storage = Storage.storage()
         let storageRef = storage.reference().child("profileImages/\(getUID())")
-        if let uploadData = image.jpeg(.medium) {
+        if let uploadData = image.jpeg(.low) {
             storageRef.putData(uploadData, metadata: nil) { (metaData, error) in
                 if error != nil {
                     print(error!)
@@ -48,13 +48,14 @@ extension firebaseFunctions {
         }
     }
     
-    func addUserDataToUsersCollection() {
+    func addUserDataToUsersCollection(complete:@escaping ()->()) {
         db.collection("users").document(getUID()).setData(newUserData) { err in
             if let err = err {
-                print("Error writing document: \(err)")
+                fatalError(err)
             } else {
                 self.savePhoneNumberToRegisteredPhonesCollection(self.getUID())
                 print("Document Written Successfully")
+                complete()
             }
         }
     }
