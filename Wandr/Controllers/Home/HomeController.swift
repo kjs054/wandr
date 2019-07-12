@@ -61,6 +61,8 @@ class HomeController: UIViewController {
             if let userData = userData {
                 self.localStorage.saveCurrentUserData(userData: userData)
                 self.setupProfilePictureNavigationBar()
+            } else {
+                self.showLogin()
             }
         }
     }
