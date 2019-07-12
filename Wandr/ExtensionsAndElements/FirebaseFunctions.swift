@@ -17,7 +17,7 @@ fileprivate let db = Firestore.firestore()
 
 protocol firebaseFunctions {
     func uploadProfileImageToStorage(image: UIImage, complete:@escaping ()->())
-    func addUserDataToUsersCollection()
+    func addUserDataToUsersCollection(complete:@escaping ()->())
     func getContacts() -> [SelectableContact]
     func checkIfContactIsUser(contact: ContactViewModel, callback: @escaping ((_ uid:String) ->Void ))
     func fetchCurrentUserData(uid: String, completionHandler: @escaping (_ userData: Dictionary<String, String>?) -> ())
