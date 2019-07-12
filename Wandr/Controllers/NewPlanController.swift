@@ -111,6 +111,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
             fetchCurrentUserData(uid: contactsOnWandr[indexPath.row].uid!) { (userData) in
                 if let userData = userData {
                     cell.contactCellView.profileImage.loadImageWithCacheFromURLString(urlstring: userData["profileImageURL"]!)
+                    cell.contactCellView.title.text = userData["name"]!
                 }
             }
             if cell.contactViewModel.selected {
@@ -177,7 +178,8 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     fileprivate func getTableData() {
         userContacts = getContacts().map({return ContactViewModel(contact: $0) })
         let localStorage = LocalStorage()
-        if let savedRegisteredUsers = localStorage.loadRegisteredContacts() {
+        if var savedRegisteredUsers = localStorage.loadRegisteredContacts() {
+            savedRegisteredUsers = Array(Set(savedRegisteredUsers))
             contactsOnWandr = savedRegisteredUsers.map({return ContactViewModel(contact: $0)})
         }
         userContacts.forEach { (contact) in
@@ -222,7 +224,6 @@ class activeContactCell: UITableViewCell {
     
     var contactViewModel: ContactViewModel! {
         didSet {
-            contactCellView.title.text = contactViewModel.name
             contactCellView.subTitle.text = contactViewModel.phoneNum
             contactCellView.initialsLabel.text = contactViewModel.name.getInitials()
         }
