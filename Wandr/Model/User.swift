@@ -8,13 +8,9 @@
 
 import Foundation
 
-let users = [user]()
-
 struct user {
     var name: String
     var profileImageURL: String
-    var age: Int
     var phoneNumber: String
-    var email: String
     var uid: String
 }

@@ -51,7 +51,7 @@ extension firebaseFunctions {
     func addUserDataToUsersCollection(complete:@escaping ()->()) {
         db.collection("users").document(getUID()).setData(newUserData) { err in
             if let err = err {
-                fatalError(err)
+                fatalError("\(err)")
             } else {
                 self.savePhoneNumberToRegisteredPhonesCollection(self.getUID())
                 print("Document Written Successfully")
@@ -70,6 +70,7 @@ extension firebaseFunctions {
     
     func getContacts() -> [SelectableContact] {
         var userContacts = [SelectableContact]()
+        var phonesArray = [String]()
         let cn = CNContactStore()
         cn.requestAccess(for: .contacts) { (granted, err) in
             if let err = err {
@@ -83,11 +84,17 @@ extension firebaseFunctions {
                     try cn.enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
                         let phone = contact.phoneNumbers.first?.value.stringValue ?? "" //get first phone number
                         let name = "\(contact.givenName) \(contact.familyName)" //combine first and last name
-                        if contact.givenName.isEmpty || phone.isEmpty { //if the contact is missing data don't add to array of contacts
+                        if phonesArray.contains(phone) {
+                            print("Duplicate number")
                             return
                         } else {
-                            if let formattedPhone = phone.formatPhone() {
-                                userContacts.append(SelectableContact(name: name, phoneNum: formattedPhone, uid: nil, selected: false))
+                            if contact.givenName.isEmpty || phone.isEmpty { //if the contact is missing data don't add to array of contacts
+                                return
+                            } else {
+                                if let formattedPhone = phone.formatPhone() {
+                                    userContacts.append(SelectableContact(name: name, phoneNum: formattedPhone, uid: nil, selected: false))
+                                    phonesArray.append(phone)
+                                }
                             }
                         }
                     })

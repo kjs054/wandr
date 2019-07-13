@@ -23,7 +23,7 @@ class FriendsBubbles: UIView, UICollectionViewDelegateFlowLayout, UICollectionVi
     override init(frame: CGRect) {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = true
-        widthAnchor.constraint(equalToConstant: CGFloat(29 * users.count)).isActive = true
+        widthAnchor.constraint(equalToConstant: CGFloat(29)).isActive = true
         setupCollectionView()
     }
     
@@ -40,7 +40,7 @@ class FriendsBubbles: UIView, UICollectionViewDelegateFlowLayout, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return users.count
+        return 9
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
