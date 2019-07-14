@@ -13,8 +13,8 @@ import FirebaseFirestore
 class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //MARK:- Variables
-    var userContacts = [ContactViewModel]()
-    var contactsOnWandr = [ContactViewModel]()
+    var userContacts = [SelectableContact]()
+    var contactsOnWandr = [SelectableContact]()
     
     //FIXME:- Add cells for recent contacts and groups
     let recentContactId = "recentContactId"
@@ -106,15 +106,9 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: activeContactId, for: indexPath) as! activeContactCell
-            cell.contactViewModel = contactsOnWandr[indexPath.row]
+            cell.contact = contactsOnWandr[indexPath.row]
             cell.selectionStyle = .none
-            fetchCurrentUserData(uid: contactsOnWandr[indexPath.row].uid!) { (userData) in
-                if let userData = userData {
-                    cell.contactCellView.profileImage.loadImageWithCacheFromURLString(urlstring: userData["profileImageURL"]!)
-                    cell.contactCellView.title.text = userData["name"]!
-                }
-            }
-            if cell.contactViewModel.selected {
+            if cell.contact.selected {
                 cell.contactCellView.radioButton.isSelected = true
                 //TODO:- Add to selected contacts array
             } else {
@@ -123,9 +117,9 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: otherContactId, for: indexPath) as! otherContactCell
-        cell.contactViewModel = userContacts[indexPath.row]
+        cell.contact = userContacts[indexPath.row]
         cell.selectionStyle = .none
-        if cell.contactViewModel.selected {
+        if cell.contact.selected {
             cell.contactCellView.radioButton.isSelected = true
             //TODO:- Add to selected contacts array
         } else {
@@ -176,31 +170,25 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     fileprivate func getTableData() {
-        userContacts = getContacts().map({return ContactViewModel(contact: $0) })
         let localStorage = LocalStorage()
-        if var savedRegisteredUsers = localStorage.loadRegisteredContacts() {
-            savedRegisteredUsers = Array(Set(savedRegisteredUsers))
-            contactsOnWandr = savedRegisteredUsers.map({return ContactViewModel(contact: $0)})
+        if let savedRegisteredUsers = localStorage.loadRegisteredContacts() {
+            contactsOnWandr = savedRegisteredUsers
         }
-        userContacts.forEach { (contact) in
-            if contactsOnWandr.contains(where: { $0.phoneNum == contact.phoneNum }) {
-                return
-            } else {
-                DispatchQueue.main.async {
-                    self.checkIfContactIsUser(contact: contact, callback: { (uid) in
-                        contact.uid = uid
+        getContacts { (contacts) in
+            self.userContacts = contacts
+            self.userContacts.forEach({ (contact) in
+                if contact.userData != nil {
+                    if self.contactsOnWandr.contains(where: {$0.phoneNum == contact.phoneNum}) {
+                        self.userContacts.removeLast() //Removes the active user contact from the all contacts group, since its the latest to be appended
+                    } else {
                         self.contactsOnWandr.append(contact)
-                        localStorage.saveRegisteredContact(registeredContacts: self.contactsOnWandr.map({return SelectableContact(name: $0.name, phoneNum: $0.phoneNum, uid: $0.uid, selected: $0.selected)}))
-                        self.contactsTable.reloadData()
-                    })
+                        localStorage.saveRegisteredContact(registeredContacts: self.contactsOnWandr)
+                        self.userContacts.removeAll(where: {$0.phoneNum == contact.phoneNum})
+                    }
                 }
-            }
+            })
+            self.contactsTable.reloadData()
         }
-        print(contactsOnWandr)
-    }
-    
-    func updateTableView() {
-        contactsTable.reloadData()
     }
 }
 
@@ -222,10 +210,11 @@ class recentContactCell: UITableViewCell {
 
 class activeContactCell: UITableViewCell {
     
-    var contactViewModel: ContactViewModel! {
+    var contact: SelectableContact! {
         didSet {
-            contactCellView.subTitle.text = contactViewModel.phoneNum
-            contactCellView.initialsLabel.text = contactViewModel.name.getInitials()
+            contactCellView.subTitle.text = contact.phoneNum
+            contactCellView.profileImage.loadImageWithCacheFromURLString(urlstring: contact.userData!.profileImageURL)
+            contactCellView.title.text = contact.userData!.name
         }
     }
     
@@ -246,11 +235,11 @@ class activeContactCell: UITableViewCell {
 
 class otherContactCell: UITableViewCell {
     
-    var contactViewModel: ContactViewModel! {
+    var contact: SelectableContact! {
         didSet {
-            contactCellView.title.text = contactViewModel.name
-            contactCellView.subTitle.text = contactViewModel.phoneNum
-            contactCellView.initialsLabel.text = contactViewModel.name.getInitials()
+            contactCellView.title.text = contact.name
+            contactCellView.subTitle.text = contact.phoneNum
+            contactCellView.initialsLabel.text = contact.name.getInitials()
         }
     }
     

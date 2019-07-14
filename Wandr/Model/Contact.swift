@@ -11,23 +11,23 @@ import Foundation
 class SelectableContact: NSObject, NSCoding {
     var name: String
     var phoneNum: String
-    var uid: String?
     var selected: Bool
+    var userData: user?
     
-    init(name: String, phoneNum: String, uid: String?, selected: Bool) {
-        self.name = name; self.phoneNum = phoneNum; self.uid = uid; self.selected = selected;
+    init(name: String, phoneNum: String, userData: user?, selected: Bool) {
+        self.name = name; self.phoneNum = phoneNum; self.userData = userData; self.selected = selected;
     }
     
     required init(coder decoder: NSCoder) {
         self.name = decoder.decodeObject (forKey: "name") as? String ?? ""
         self.phoneNum = decoder.decodeObject  (forKey: "phoneNum") as? String ?? ""
-        self.uid = decoder.decodeObject  (forKey: "uid") as? String ?? ""
         self.selected = decoder.decodeBool  (forKey: "selected")
+        self.userData = decoder.decodeObject(forKey: "userData") as? user
     }
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.name,           forKey: "name")
-        aCoder.encode(self.uid,     forKey: "uid")
+        aCoder.encode(self.userData,     forKey: "userData")
         aCoder.encode(self.phoneNum,     forKey: "phoneNum")
         aCoder.encode(self.selected,    forKey: "selected")
     }

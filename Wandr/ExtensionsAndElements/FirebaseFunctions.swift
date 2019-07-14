@@ -18,8 +18,8 @@ fileprivate let db = Firestore.firestore()
 protocol firebaseFunctions {
     func uploadProfileImageToStorage(image: UIImage, complete:@escaping ()->())
     func addUserDataToUsersCollection(complete:@escaping ()->())
-    func getContacts() -> [SelectableContact]
-    func checkIfContactIsUser(contact: ContactViewModel, callback: @escaping ((_ uid:String) ->Void ))
+    func getContacts(callback:@escaping (_ contacts: [SelectableContact]) -> ())
+    func checkIfContactIsUser(contact: SelectableContact, callback: @escaping ((_ uid:String?) ->Void ))
     func fetchCurrentUserData(uid: String, completionHandler: @escaping (_ userData: Dictionary<String, String>?) -> ())
     func getUID() -> String
 }
@@ -68,7 +68,8 @@ extension firebaseFunctions {
         db.collection("registeredPhones").document(phoneNumber).setData(["uid": uid])
     }
     
-    func getContacts() -> [SelectableContact] {
+    func getContacts(callback: @escaping (_ contacts: [SelectableContact]) -> ()) {
+        let localStorage = LocalStorage()
         var userContacts = [SelectableContact]()
         var phonesArray = [String]()
         let cn = CNContactStore()
@@ -92,7 +93,24 @@ extension firebaseFunctions {
                                 return
                             } else {
                                 if let formattedPhone = phone.formatPhone() {
-                                    userContacts.append(SelectableContact(name: name, phoneNum: formattedPhone, uid: nil, selected: false))
+                                    let contact = SelectableContact(name: name, phoneNum: formattedPhone, userData: nil, selected: false)
+                                    self.checkIfContactIsUser(contact: contact, callback: { (uid) in
+                                        if let uid = uid {
+                                            self.fetchCurrentUserData(uid: uid, completionHandler: { (userData) in
+                                                if let userData = userData {
+                                                    if formattedPhone != localStorage.currentUserData()!["phoneNumber"] {
+                                                        let newuser = user(name: userData["name"]!, profileImageURL: userData["profileImageURL"]!, phoneNumber: userData["phoneNumber"]!, uid: userData["uid"]!)
+                                                        contact.userData = newuser
+                                                        userContacts.append(contact)
+                                                        callback(userContacts)
+                                                    }
+                                                }
+                                            })
+                                        } else {
+                                            userContacts.append(contact)
+                                            callback(userContacts)
+                                        }
+                                    })
                                     phonesArray.append(phone)
                                 }
                             }
@@ -105,10 +123,9 @@ extension firebaseFunctions {
                 print("Denied")
             }
         }
-        return userContacts
     }
     
-    func checkIfContactIsUser(contact: ContactViewModel, callback: @escaping ((_ uid:String) ->Void ))  {
+    func checkIfContactIsUser(contact: SelectableContact, callback: @escaping ((_ uid:String?) ->Void ))  {
         let ref = db.collection("registeredPhones").document(contact.phoneNum)
         ref.getDocument { (snapshot, error) in
             if let snapshot = snapshot {
@@ -125,7 +142,7 @@ extension firebaseFunctions {
                         }
                     })
                 } else {
-                    return
+                    callback(nil)
                 }
             }
         }
