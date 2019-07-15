@@ -18,7 +18,6 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     var selectedContacts = [SelectableContact]()
     
     //FIXME:- Add cells for recent contacts and groups
-    let recentContactId = "recentContactId"
     let activeContactId = "activeContactId"
     let otherContactId = "otherContactId"
     

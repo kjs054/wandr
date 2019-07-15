@@ -70,12 +70,13 @@ class membersView: UIView, UICollectionViewDelegate, UICollectionViewDataSource,
     var selectedIndex: Int = -1
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: memberCellId, for: indexPath) as! membersCell
-        cell.userImage.loadImageWithCacheFromURLString(urlstring: users[indexPath.row].userData!.profileImageURL)
+        cell.userName.text = users[indexPath.row].userData?.name
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: frame.height * 0.8, height: frame.height * 0.8)
+        let username = users[indexPath.row].userData?.name
+        return CGSize(width: CGFloat(username!.count * 8), height: frame.height * 0.6)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -85,14 +86,24 @@ class membersView: UIView, UICollectionViewDelegate, UICollectionViewDataSource,
 
 class membersCell: UICollectionViewCell {
     
-    let userImage = UIImageView()
+    let userName: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Avenir-Heavy", size: 15)
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        return label
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
         layer.cornerRadius = frame.height / 2
-        backgroundView = userImage
+        backgroundColor = wandrBlue
         clipsToBounds = true
+        addSubview(userName)
+        userName.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        userName.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
