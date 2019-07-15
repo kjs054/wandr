@@ -22,6 +22,8 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     let otherContactId = "otherContactId"
     
     //MARK:- Elements
+    var refreshControl = UIRefreshControl()
+    
     let contactsTable: UITableView = {
         let table = UITableView()
         table.allowsSelection = true
@@ -47,6 +49,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         view.backgroundColor = .white //needed to prevent opacity issues during vc presentation
         setupNavigationBar()
         setupCreatePlanButton()
+        setupRefreshControl()
         setupContactsTable()
     }
     
@@ -68,15 +71,20 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         createPlanButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
+    func setupRefreshControl() {
+        refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
+        contactsTable.addSubview(refreshControl) // not required when using UITableViewController
+    }
+    
     func setupContactsTable() {
-        getTableData()
         contactsTable.delegate = self
         contactsTable.dataSource = self
-        //        contactsTable.register(recentContactCell.self, forCellReuseIdentifier: recentContactId)
         contactsTable.register(activeContactCell.self, forCellReuseIdentifier: activeContactId)
         contactsTable.register(otherContactCell.self, forCellReuseIdentifier: otherContactId)
-        view.addSubview(contactsTable)
-        contactsTable.anchor(top: view.topAnchor, bottom: createPlanButton.topAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 15, bottom: -15, right: 0))
+        getTableData {
+            self.view.addSubview(self.contactsTable)
+            self.contactsTable.anchor(top: self.view.topAnchor, bottom: self.createPlanButton.topAnchor, leading: self.view.leadingAnchor, trailing: self.view.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 15, bottom: -15, right: 0))
+        }
     }
     
     //MARK:- Contacts Table Functions
@@ -169,7 +177,13 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         return initials
     }
     
-    fileprivate func getTableData() {
+    @objc func refresh(sender: AnyObject) {
+        getTableData {
+            self.refreshControl.endRefreshing()
+        }
+    }
+    
+    fileprivate func getTableData(complete: @escaping ()->()) {
         let localStorage = LocalStorage()
         if let savedRegisteredUsers = localStorage.loadRegisteredContacts() {
             contactsOnWandr = savedRegisteredUsers
@@ -188,6 +202,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
                 }
             })
             self.contactsTable.reloadData()
+            complete()
         }
     }
 }
