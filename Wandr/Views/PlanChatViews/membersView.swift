@@ -14,6 +14,8 @@ class membersView: UIView, UICollectionViewDelegate, UICollectionViewDataSource,
     let memberCellId = "member"
     let addMemberCellId = "addMember"
     
+    var users = [SelectableContact]()
+    
     //MARK:- Subviews
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -25,11 +27,19 @@ class membersView: UIView, UICollectionViewDelegate, UICollectionViewDataSource,
         return cv
     }()
     
+    let toLabel: UILabel = {
+        let label = UILabel()
+        label.text = "To:"
+        label.textColor = wandrBlue
+        label.adjustsFontSizeToFitWidth = true
+        label.font = UIFont(name: "Avenir-Heavy", size: 22)
+        return label
+    }()
     
     //MARK:- View Setup
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupShadow()
+        self.backgroundColor = .white
         setupCollectionView()
     }
     
@@ -37,19 +47,15 @@ class membersView: UIView, UICollectionViewDelegate, UICollectionViewDataSource,
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func setupShadow() {
-        layer.shadowOffset = CGSize(width: 0, height: 4)
-        layer.shadowOpacity = 0.1
-        layer.shadowColor = UIColor.black.cgColor
-    }
-    
     func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(membersCell.self, forCellWithReuseIdentifier: memberCellId)
-        collectionView.register(addMemberCell.self, forCellWithReuseIdentifier: addMemberCellId)
+        addSubview(toLabel)
+        toLabel.anchor(top: self.topAnchor, bottom: self.bottomAnchor, leading: self.leadingAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0))
+        toLabel.widthAnchor.constraint(equalToConstant: 25)
         addSubview(collectionView)
-        collectionView.fillSuperView()
+        collectionView.anchor(top: self.topAnchor, bottom: self.bottomAnchor, leading: toLabel.trailingAnchor, trailing: self.trailingAnchor)
     }
     
     //MARK:- CollectionView Functions
@@ -58,23 +64,17 @@ class membersView: UIView, UICollectionViewDelegate, UICollectionViewDataSource,
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        return users.count
     }
     
     var selectedIndex: Int = -1
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if indexPath.row == 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: addMemberCellId, for: indexPath) as! addMemberCell
-            return cell
-        }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: memberCellId, for: indexPath) as! membersCell
+        cell.userImage.loadImageWithCacheFromURLString(urlstring: users[indexPath.row].userData!.profileImageURL)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if indexPath.row == 0 {
-            return CGSize(width: frame.height * 0.5, height: frame.height * 0.5)
-        }
         return CGSize(width: frame.height * 0.8, height: frame.height * 0.8)
     }
     
@@ -85,25 +85,14 @@ class membersView: UIView, UICollectionViewDelegate, UICollectionViewDataSource,
 
 class membersCell: UICollectionViewCell {
     
+    let userImage = UIImageView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
         layer.cornerRadius = frame.height / 2
+        backgroundView = userImage
         clipsToBounds = true
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class addMemberCell: UICollectionViewCell {
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .white
-        clipsToBounds = true
-        backgroundView = UIImageView(image: #imageLiteral(resourceName: "add"))
     }
     
     required init?(coder aDecoder: NSCoder) {

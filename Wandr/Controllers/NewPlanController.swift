@@ -15,6 +15,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     //MARK:- Variables
     var userContacts = [SelectableContact]()
     var contactsOnWandr = [SelectableContact]()
+    var selectedContacts = [SelectableContact]()
     
     //FIXME:- Add cells for recent contacts and groups
     let recentContactId = "recentContactId"
@@ -31,15 +32,26 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         return table
     }()
     
-    let createPlanButton: UIButton = {
+    let previewView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
+        view.layer.shadowOffset = CGSize(width: 0, height: -4)
+        view.layer.shadowOpacity = 0.1
+        view.layer.shadowColor = UIColor.black.cgColor
+        return view
+    }()
+    
+    let membersCollection = membersView()
+    
+    let sendButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 20)
         button.titleLabel?.textColor = .white
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 25
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.setTitle("Send", for: .normal)
         button.backgroundColor = wandrBlue
-        button.layer.opacity = 0.5
         return button
     }()
     
@@ -48,15 +60,18 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         super.viewDidLoad()
         view.backgroundColor = .white //needed to prevent opacity issues during vc presentation
         setupNavigationBar()
-        setupCreatePlanButton()
         setupRefreshControl()
         setupContactsTable()
+    }
+    
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return true
     }
     
     func setupNavigationBar() {
         navigationItem.title = "Make A Plan"
         self.navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0, green: 0.6588235294, blue: 1, alpha: 1), .font: UIFont(name: "NexaBold", size: 23)!]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: wandrBlue, .font: UIFont(name: "NexaBold", size: 23)!]
         let closeButton = UIButton()
         closeButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
         closeButton.setImage(#imageLiteral(resourceName: "close"), for: .normal)
@@ -66,14 +81,28 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func setupCreatePlanButton() {
-        view.addSubview(createPlanButton)
-        createPlanButton.anchor(top: nil, bottom: view.safeAreaLayoutGuide.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: -15))
-        createPlanButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        previewView.addSubview(sendButton)
+        sendButton.anchor(top: nil, bottom: view.bottomAnchor, leading: previewView.leadingAnchor, trailing: previewView.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 15, bottom: -15, right: -15))
+        sendButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+    }
+    
+    func setupMembersView() {
+        previewView.addSubview(membersCollection)
+        membersCollection.anchor(top: previewView.topAnchor, bottom: nil, leading: previewView.leadingAnchor, trailing: previewView.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        membersCollection.heightAnchor.constraint(equalToConstant: 60).isActive = true
     }
     
     func setupRefreshControl() {
         refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
         contactsTable.addSubview(refreshControl) // not required when using UITableViewController
+    }
+    
+    func setupPreviewView() {
+        view.addSubview(previewView)
+        previewView.anchor(top: nil, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
+        previewView.heightAnchor.constraint(equalToConstant: 125).isActive = true
+        setupCreatePlanButton()
+        setupMembersView()
     }
     
     func setupContactsTable() {
@@ -83,7 +112,8 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         contactsTable.register(otherContactCell.self, forCellReuseIdentifier: otherContactId)
         getTableData {
             self.view.addSubview(self.contactsTable)
-            self.contactsTable.anchor(top: self.view.topAnchor, bottom: self.createPlanButton.topAnchor, leading: self.view.leadingAnchor, trailing: self.view.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 15, bottom: -15, right: 0))
+            self.view.bringSubviewToFront(self.previewView)
+            self.contactsTable.anchor(top: self.view.topAnchor, bottom: self.view.bottomAnchor, leading: self.view.leadingAnchor, trailing: self.view.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0))
         }
     }
     
@@ -96,8 +126,16 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         if indexPath.section == 0 {
             if contactsOnWandr[indexPath.row].selected { //checks to see if user is already selected
                 contactsOnWandr[indexPath.row].selected = false
+                membersCollection.users.removeAll(where: {$0.phoneNum == contactsOnWandr[indexPath.row].phoneNum})
+                if membersCollection.users.isEmpty {
+                    previewView.removeFromSuperview()
+                }
+                membersCollection.collectionView.reloadData()
             } else {
                 contactsOnWandr[indexPath.row].selected = true
+                membersCollection.users.append(contactsOnWandr[indexPath.row])
+                setupPreviewView()
+                membersCollection.collectionView.reloadData()
             }
         }
         if indexPath.section == 1 {
@@ -110,7 +148,6 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.reloadData()
     }
     
-    var selectedIndexes = [Int]()
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: activeContactId, for: indexPath) as! activeContactCell
@@ -118,7 +155,6 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
             cell.selectionStyle = .none
             if cell.contact.selected {
                 cell.contactCellView.radioButton.isSelected = true
-                //TODO:- Add to selected contacts array
             } else {
                 cell.contactCellView.radioButton.isSelected = false
             }

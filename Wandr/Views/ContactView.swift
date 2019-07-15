@@ -60,7 +60,7 @@ class ContactView: UIView {
         button.layer.borderWidth = 3.0
         button.layer.borderColor = wandrBlue.cgColor
         button.backgroundColor = .white
-        button.layer.cornerRadius = 8.0
+        button.layer.cornerRadius = 14
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 15)
         return button
