@@ -20,7 +20,7 @@ class CardView: UIStackView {
             cardTop.headerInfo.attributedText = cardViewModel.headerAttributedString
             cardTop.categoryBubble.setTitle(cardViewModel.category, for: .normal)
             cardTop.pricingBubble.setTitle("🤑 \(getPricingText(minPrice: cardViewModel.minPrice, maxPrice: cardViewModel.maxPrice))", for: .normal)
-            cardBottom.numberOfSavesCount.text = "and \(cardViewModel.numOfSaves) Others"
+            cardBottom.savesCountLabel.text = "\(cardViewModel.numOfSaves) Saves"
             cardBottom.bottomBarInfo.attributedText = cardViewModel.bottomAttributedString
             cardTop.imageBars.arrangedSubviews.forEach { (bar) in
                 bar.removeFromSuperview()
