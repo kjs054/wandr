@@ -27,15 +27,6 @@ class membersView: UIView, UICollectionViewDelegate, UICollectionViewDataSource,
         return cv
     }()
     
-    let toLabel: UILabel = {
-        let label = UILabel()
-        label.text = "To:"
-        label.textColor = wandrBlue
-        label.adjustsFontSizeToFitWidth = true
-        label.font = UIFont(name: "Avenir-Heavy", size: 22)
-        return label
-    }()
-    
     //MARK:- View Setup
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -51,11 +42,8 @@ class membersView: UIView, UICollectionViewDelegate, UICollectionViewDataSource,
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(membersCell.self, forCellWithReuseIdentifier: memberCellId)
-        addSubview(toLabel)
-        toLabel.anchor(top: self.topAnchor, bottom: self.bottomAnchor, leading: self.leadingAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0))
-        toLabel.widthAnchor.constraint(equalToConstant: 25)
         addSubview(collectionView)
-        collectionView.anchor(top: self.topAnchor, bottom: self.bottomAnchor, leading: toLabel.trailingAnchor, trailing: self.trailingAnchor)
+        collectionView.fillSuperView()
     }
     
     //MARK:- CollectionView Functions
@@ -76,7 +64,7 @@ class membersView: UIView, UICollectionViewDelegate, UICollectionViewDataSource,
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let username = users[indexPath.row].userData?.name
-        return CGSize(width: CGFloat(username!.count * 8), height: frame.height * 0.6)
+        return CGSize(width: CGFloat(username!.count * 9), height: frame.height * 0.6)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
