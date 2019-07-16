@@ -18,24 +18,22 @@ class bottomOfCard: UIView {
     
     let moreInfoButton: UIButton = {
         let button = UIButton()
-        button.setTitle("...", for: .normal)
+        button.setTitle("\u{2022}\u{2022}\u{2022}", for: .normal)
         button.setTitleColor(wandrBlue, for: .normal)
-        button.titleLabel?.font = UIFont(name: "Avenir-Black", size: 30)
+        button.titleLabel?.font = UIFont(name: "Avenir-Book", size: 22)
         return button
     }()
     
     let savesInfo = UIView()
     
-    let friendsWhoSaved = FriendsBubbles()
     let bottomBarInfo: UILabel = {
         let label = UILabel()
         return label
     }()
     
-    let numberOfSavesCount: UILabel = {
+    let savesCountLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 23)
-        label.text = "0 Likes"
         label.textColor = #colorLiteral(red: 0.431372549, green: 0.431372549, blue: 0.431372549, alpha: 1)
         return label
     }()
@@ -68,21 +66,16 @@ class bottomOfCard: UIView {
         saveIcon.widthAnchor.constraint(equalTo: saveIcon.heightAnchor, multiplier: 0.45).isActive = true
     }
     
-    fileprivate func setupFriendsWhoSaved() {
-        savesInfo.addSubview(friendsWhoSaved)
-        friendsWhoSaved.anchor(top: saveIcon.topAnchor, bottom: savesInfo.bottomAnchor, leading: saveIcon.trailingAnchor, trailing: nil)
-    }
-    
     fileprivate func setupNumberOfSavesCount() {
-        savesInfo.addSubview(numberOfSavesCount)
-        numberOfSavesCount.anchor(top: savesInfo.topAnchor, bottom: savesInfo.bottomAnchor, leading: friendsWhoSaved.trailingAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: UIScreen.main.bounds.width * 0.02, bottom: 0, right: 0))
+        savesInfo.addSubview(savesCountLabel)
+        savesCountLabel.anchor(top: savesInfo.topAnchor, bottom: savesInfo.bottomAnchor, leading: saveIcon.trailingAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: UIScreen.main.bounds.width * 0.02, bottom: 0, right: 0))
     }
     
     fileprivate func setupMoreInfoButton() {
         addSubview(moreInfoButton)
         moreInfoButton.translatesAutoresizingMaskIntoConstraints = false
         moreInfoButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -(contentMargin-7)).isActive = true
-        moreInfoButton.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -8).isActive = true
+        moreInfoButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         moreInfoButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.6).isActive = true
         moreInfoButton.widthAnchor.constraint(equalTo: moreInfoButton.heightAnchor).isActive = true
     }
@@ -92,7 +85,6 @@ class bottomOfCard: UIView {
         savesInfo.anchor(top: topAnchor, bottom: nil, leading: leadingAnchor, trailing: moreInfoButton.leadingAnchor, padding: UIEdgeInsets(top: 2, left: contentMargin, bottom: 0, right: 0))
         savesInfo.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.6).isActive = true
         setupSaveIcon()
-        setupFriendsWhoSaved()
     }
     
     fileprivate func setupBottomBarInfo() {
