@@ -321,10 +321,10 @@
 		6318706E22B01DEB005C6FA4 /* CardViews */ = {
 			isa = PBXGroup;
 			children = (
+				0A1D78FD22A72F96004AB1FF /* CardView.swift */,
 				630E649F22AC836A00D07F5D /* topOfCard.swift */,
 				6329FAFF22AAEDBE006C5E33 /* bottomOfCard.swift */,
 				6318706922B0064F005C6FA4 /* FriendsBubbles.swift */,
-				0A1D78FD22A72F96004AB1FF /* CardView.swift */,
 			);
 			path = CardViews;
 			sourceTree = "<group>";

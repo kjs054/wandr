@@ -11,10 +11,10 @@ import UIKit
 let cardViewModels: [CardViewModel] = {
     
     let producers = [
-        place(title: "Autobahn Indoor Speedway", category: "🏎 Go-Kart Track", city: "Jessup, MD", distance: 3.8, minPrice: 25, maxPrice: 150, placeImages: ["dummyPlace"], savesCount: 23, operatingStatus: "Open", operatingStatusMessage: "until 11pm", commentCount: 19),
-        place(title: "Grilled Cheese Co.", category: "🍽 Restaurant", city: "Catonsville, MD", distance: 8.8, minPrice: 7, maxPrice: 15, placeImages: ["grilledCheese","grilledCheese2","grilledCheese3"], savesCount: 122, operatingStatus: "Closed", operatingStatusMessage: "until 6am", commentCount: 12),
-        place(title: "Loch Raven Resevoir", category: "🏊‍♂️ Resevoir", city: "Phoenix, MD", distance: 2.1, minPrice: 0, maxPrice: 0, placeImages: ["lochRaven", "resevoir2", "resevoir3"], savesCount: 34, operatingStatus: "Open", operatingStatusMessage: "24/7", commentCount: 4),
-        place(title: "The Filling Station", category: "☕️ Coffee Shop", city: "Sparks Glencoe, MD", distance: 0.5, minPrice: 5, maxPrice: 12, placeImages: ["fillingstation1", "fillingstation2", "fillingstation3", "fillingstation4"], savesCount: 21, operatingStatus: "Open", operatingStatusMessage: "Closing at 11", commentCount: 5)
+        place(title: "Autobahn Indoor Speedway", category: "🏎 Go-Kart Track", city: "Jessup, MD", distance: 3.8, minPrice: 25, maxPrice: 150, placeImages: ["dummyPlace"], savesCount: 23, operatingStatus: "Open", operatingStatusMessage: "until 11pm", commentCount: 19, rating: 4.2, numberOfRatings: 231),
+        place(title: "Grilled Cheese Co.", category: "🍽 Restaurant", city: "Catonsville, MD", distance: 8.8, minPrice: 7, maxPrice: 15, placeImages: ["grilledCheese","grilledCheese2","grilledCheese3"], savesCount: 122, operatingStatus: "Closed", operatingStatusMessage: "until 6am", commentCount: 12, rating: 3.1, numberOfRatings: 65),
+        place(title: "Loch Raven Resevoir", category: "🏊‍♂️ Resevoir", city: "Phoenix, MD", distance: 2.1, minPrice: 0, maxPrice: 0, placeImages: ["lochRaven", "resevoir2", "resevoir3"], savesCount: 34, operatingStatus: "Open", operatingStatusMessage: "24/7", commentCount: 4, rating: 3.5, numberOfRatings: 98),
+        place(title: "The Filling Station", category: "☕️ Coffee Shop", city: "Sparks Glencoe, MD", distance: 0.5, minPrice: 5, maxPrice: 12, placeImages: ["fillingstation1", "fillingstation2", "fillingstation3", "fillingstation4"], savesCount: 21, operatingStatus: "Open", operatingStatusMessage: "Closing at 11", commentCount: 5, rating: 4.7, numberOfRatings: 122)
         ] as [ProducesCardViewModel]
     
     let viewModels = producers.map({return $0.toCardViewModel()})

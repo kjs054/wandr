@@ -21,6 +21,8 @@ struct place: ProducesCardViewModel {
     var operatingStatus: String
     var operatingStatusMessage: String
     var commentCount: Int
+    var rating: CGFloat
+    var numberOfRatings: Int
     
     func toCardViewModel() -> CardViewModel {
         let headerText = NSMutableAttributedString(string: title, attributes: [.font: UIFont(name: "NexaBold", size: UIScreen.main.bounds.width / 17)!])
@@ -28,11 +30,12 @@ struct place: ProducesCardViewModel {
         paragraphStyle.lineSpacing = 10
         headerText.append(NSAttributedString(string: "\n\(city) \u{2022} \(distance) mi", attributes: [.font: UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 20)!]))
         headerText.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, headerText.length))
-        let bottomInfoText = NSMutableAttributedString(string: operatingStatus, attributes: [.font: UIFont(name: "Avenir-Black", size: UIScreen.main.bounds.width / 22)!])
-        bottomInfoText.addAttribute(NSAttributedString.Key.foregroundColor, value: getOperatingStatusColor(status: operatingStatus), range: NSMakeRange(0, bottomInfoText.length))
-        bottomInfoText.append(NSAttributedString(string: " \(operatingStatusMessage) \u{2022} \(commentCount) Comments", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.431372549, green: 0.431372549, blue: 0.431372549, alpha: 1), .font: UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 26)!]))
-        return CardViewModel(placeImages: placeImages, headerAttributedString: headerText, category: category, minPrice: minPrice, maxPrice: maxPrice, numOfSaves: savesCount, bottomAttributedString: bottomInfoText)
+        let operatingStatusAndRatingsText = NSMutableAttributedString(string: operatingStatus, attributes: [.font: UIFont(name: "Avenir-Black", size: UIScreen.main.bounds.width / 22)!])
+        operatingStatusAndRatingsText.addAttribute(NSAttributedString.Key.foregroundColor, value: getOperatingStatusColor(status: operatingStatus), range: NSMakeRange(0, operatingStatusAndRatingsText.length))
+        operatingStatusAndRatingsText.append(NSAttributedString(string: " \(operatingStatusMessage) \u{2022} \u{2605} \(rating) (\(numberOfRatings))", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.431372549, green: 0.431372549, blue: 0.431372549, alpha: 1), .font: UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 26)!]))
+        return CardViewModel(placeImages: placeImages, headerAttributedString: headerText, category: category, minPrice: minPrice, maxPrice: maxPrice, numOfSaves: savesCount, bottomAttributedString: operatingStatusAndRatingsText)
     }
+    
     fileprivate func getOperatingStatusColor(status: String) -> UIColor {
         switch status {
         case "Open":
