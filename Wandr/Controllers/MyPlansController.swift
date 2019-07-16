@@ -20,7 +20,7 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
         tv.allowsSelection = true
         tv.backgroundColor = .clear
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.showsHorizontalScrollIndicator = false
+        tv.showsVerticalScrollIndicator = false
         return tv
     }()
     
@@ -30,6 +30,10 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
         view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         setupTableView()
         setupNavigationBar()
+    }
+    
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return true
     }
     
     func setupNavigationBar() {
@@ -138,7 +142,10 @@ class MakeBetterPlansCell: UITableViewCell {
         infoView.informationImage.image = #imageLiteral(resourceName: "couch")
         infoView.informationTitle.text = "Lets Make Some Better Plans"
         infoView.informationSubTitle.text = "Another night on the couch? \n Send a place to a friend(s) and \n make some plans."
-        infoView.fillSuperView()
+        infoView.translatesAutoresizingMaskIntoConstraints = false
+        infoView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        infoView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        infoView.heightAnchor.constraint(equalToConstant: 400).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
