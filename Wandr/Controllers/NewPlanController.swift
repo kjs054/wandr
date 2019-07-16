@@ -41,7 +41,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         return view
     }()
     
-    let membersCollection = membersView()
+    let selectedUsersCollection = selectedUsersCollectionView()
     
     let sendButton: UIButton = {
         let button = UIButton()
@@ -79,16 +79,16 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         navigationController?.navigationBar.barTintColor = UIColor.white
     }
     
-    func setupCreatePlanButton() {
+    func setupSendButton() {
         previewView.addSubview(sendButton)
         sendButton.anchor(top: nil, bottom: view.bottomAnchor, leading: previewView.leadingAnchor, trailing: previewView.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 15, bottom: -15, right: -15))
         sendButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
     func setupMembersView() {
-        previewView.addSubview(membersCollection)
-        membersCollection.anchor(top: previewView.topAnchor, bottom: nil, leading: previewView.leadingAnchor, trailing: previewView.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
-        membersCollection.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        previewView.addSubview(selectedUsersCollection)
+        selectedUsersCollection.anchor(top: previewView.topAnchor, bottom: nil, leading: previewView.leadingAnchor, trailing: previewView.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        selectedUsersCollection.heightAnchor.constraint(equalToConstant: 60).isActive = true
     }
     
     func setupRefreshControl() {
@@ -100,7 +100,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         view.addSubview(previewView)
         previewView.anchor(top: nil, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
         previewView.heightAnchor.constraint(equalToConstant: 125).isActive = true
-        setupCreatePlanButton()
+        setupSendButton()
         setupMembersView()
     }
     
@@ -125,16 +125,16 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         if indexPath.section == 0 {
             if contactsOnWandr[indexPath.row].selected { //checks to see if user is already selected
                 contactsOnWandr[indexPath.row].selected = false
-                membersCollection.users.removeAll(where: {$0.phoneNum == contactsOnWandr[indexPath.row].phoneNum})
-                if membersCollection.users.isEmpty {
+                selectedUsersCollection.users.removeAll(where: {$0.phoneNum == contactsOnWandr[indexPath.row].phoneNum})
+                if selectedUsersCollection.users.isEmpty {
                     previewView.removeFromSuperview()
                 }
-                membersCollection.collectionView.reloadData()
+                selectedUsersCollection.collectionView.reloadData()
             } else {
                 contactsOnWandr[indexPath.row].selected = true
-                membersCollection.users.append(contactsOnWandr[indexPath.row])
+                selectedUsersCollection.users.append(contactsOnWandr[indexPath.row])
                 setupPreviewView()
-                membersCollection.collectionView.reloadData()
+                selectedUsersCollection.collectionView.reloadData()
             }
         }
         if indexPath.section == 1 {
@@ -216,6 +216,8 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         getTableData {
             self.refreshControl.endRefreshing()
         }
+        selectedUsersCollection.users.removeAll()
+        previewView.removeFromSuperview()
     }
     
     fileprivate func getTableData(complete: @escaping ()->()) {

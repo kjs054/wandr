@@ -17,7 +17,7 @@ class PlanChatController: UIViewController {
         return sv
     }()
 
-    let membersCollection = membersView()
+    let membersCollection = selectedUsersCollectionView()
     
     let chatView = UIView()
     
