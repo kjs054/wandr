@@ -9,6 +9,9 @@
 import UIKit
 
 class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    var plans = [String]()
+    
     //MARK:- Variables
     let planPreviewId = "planPreviewId"
     let informationCellId = "informationCellId"
@@ -65,7 +68,7 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
         if section == 1 {
             return 1
         }
-        return 3
+        return 0
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -87,7 +90,12 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 1 {
-            return 400
+            if plans.isEmpty {
+                tableView.isScrollEnabled = false
+                return tableView.frame.height
+            } else {
+                return 400
+            }
         }
         return 100
     }
