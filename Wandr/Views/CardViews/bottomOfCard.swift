@@ -26,12 +26,12 @@ class bottomOfCard: UIView {
     
     let savesInfo = UIView()
     
-    let bottomBarInfo: UILabel = {
+    let bottomRowLabel: UILabel = {
         let label = UILabel()
         return label
     }()
     
-    let savesCountLabel: UILabel = {
+    let topRowLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 23)
         label.textColor = #colorLiteral(red: 0.431372549, green: 0.431372549, blue: 0.431372549, alpha: 1)
@@ -59,16 +59,10 @@ class bottomOfCard: UIView {
         setupBottomBarInfo()
         setupNumberOfSavesCount()
     }
-    
-    fileprivate func setupSaveIcon() {
-        savesInfo.addSubview(saveIcon)
-        saveIcon.anchor(top: savesInfo.topAnchor, bottom: savesInfo.bottomAnchor, leading: savesInfo.leadingAnchor, trailing: nil)
-        saveIcon.widthAnchor.constraint(equalTo: saveIcon.heightAnchor, multiplier: 0.45).isActive = true
-    }
-    
+
     fileprivate func setupNumberOfSavesCount() {
-        savesInfo.addSubview(savesCountLabel)
-        savesCountLabel.anchor(top: savesInfo.topAnchor, bottom: savesInfo.bottomAnchor, leading: saveIcon.trailingAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: UIScreen.main.bounds.width * 0.02, bottom: 0, right: 0))
+        savesInfo.addSubview(topRowLabel)
+        topRowLabel.anchor(top: savesInfo.topAnchor, bottom: savesInfo.bottomAnchor, leading: savesInfo.leadingAnchor, trailing: nil)
     }
     
     fileprivate func setupMoreInfoButton() {
@@ -84,12 +78,11 @@ class bottomOfCard: UIView {
         addSubview(savesInfo)
         savesInfo.anchor(top: topAnchor, bottom: nil, leading: leadingAnchor, trailing: moreInfoButton.leadingAnchor, padding: UIEdgeInsets(top: 2, left: contentMargin, bottom: 0, right: 0))
         savesInfo.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.6).isActive = true
-        setupSaveIcon()
     }
     
     fileprivate func setupBottomBarInfo() {
-        addSubview(bottomBarInfo)
-        bottomBarInfo.anchor(top: nil, bottom: bottomAnchor, leading: leadingAnchor, trailing: moreInfoButton.leadingAnchor, padding: UIEdgeInsets(top: 0, left: contentMargin, bottom: -2, right: 0))
-        bottomBarInfo.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.5).isActive = true
+        addSubview(bottomRowLabel)
+        bottomRowLabel.anchor(top: nil, bottom: bottomAnchor, leading: leadingAnchor, trailing: moreInfoButton.leadingAnchor, padding: UIEdgeInsets(top: 0, left: contentMargin, bottom: -2, right: 0))
+        bottomRowLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.5).isActive = true
     }
 }

@@ -14,8 +14,7 @@ struct place: ProducesCardViewModel {
     var category: String
     var city: String
     var distance: Double
-    var minPrice: Int
-    var maxPrice: Int
+    var pricing: Pricing
     var placeImages: [String]
     var savesCount: Int
     var operatingStatus: String
@@ -30,10 +29,11 @@ struct place: ProducesCardViewModel {
         paragraphStyle.lineSpacing = 10
         headerText.append(NSAttributedString(string: "\n\(city) \u{2022} \(distance) mi", attributes: [.font: UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 20)!]))
         headerText.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, headerText.length))
-        let operatingStatusAndRatingsText = NSMutableAttributedString(string: operatingStatus, attributes: [.font: UIFont(name: "Avenir-Black", size: UIScreen.main.bounds.width / 22)!])
-        operatingStatusAndRatingsText.addAttribute(NSAttributedString.Key.foregroundColor, value: getOperatingStatusColor(status: operatingStatus), range: NSMakeRange(0, operatingStatusAndRatingsText.length))
-        operatingStatusAndRatingsText.append(NSAttributedString(string: " \(operatingStatusMessage) \u{2022} \u{2605} \(rating) (\(numberOfRatings))", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.431372549, green: 0.431372549, blue: 0.431372549, alpha: 1), .font: UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 26)!]))
-        return CardViewModel(placeImages: placeImages, headerAttributedString: headerText, category: category, minPrice: minPrice, maxPrice: maxPrice, numOfSaves: savesCount, bottomAttributedString: operatingStatusAndRatingsText)
+        let topRowText = NSMutableAttributedString(string: "\(category)", attributes: [.font: UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 22)!, .foregroundColor: #colorLiteral(red: 0.431372549, green: 0.431372549, blue: 0.431372549, alpha: 1)])
+        let bottomRowText = NSMutableAttributedString(string: operatingStatus, attributes: [.font: UIFont(name: "Avenir-Black", size: UIScreen.main.bounds.width / 22)!])
+        bottomRowText.addAttribute(NSAttributedString.Key.foregroundColor, value: getOperatingStatusColor(status: operatingStatus), range: NSMakeRange(0, bottomRowText.length))
+        bottomRowText.append(NSAttributedString(string: " \(operatingStatusMessage) \u{ff5c} \u{2605} \(rating) \u{ff5c} \(pricing.rawValue)", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.431372549, green: 0.431372549, blue: 0.431372549, alpha: 1), .font: UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 25)!]))
+        return CardViewModel(placeImages: placeImages, headerText: headerText, topRowText: topRowText, bottomRowText: bottomRowText, pricing: pricing, rating: rating)
     }
     
     fileprivate func getOperatingStatusColor(status: String) -> UIColor {

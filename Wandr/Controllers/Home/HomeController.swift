@@ -23,14 +23,15 @@ class HomeController: UIViewController {
     let profileButton = circularImageView()
     
     let titleImageView: UIImageView = {
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "wandrwhite"))
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 38, height: 38))
+        imageView.image = #imageLiteral(resourceName: "wandrwhite")
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
     let filters: filtersView = {
         let view = filtersView()
-        view.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.12).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 90).isActive = true
         view.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
         return view
     }()
@@ -84,6 +85,7 @@ class HomeController: UIViewController {
     
     func setupNavigationBar() {
         navigationItem.titleView = titleImageView
+        navigationItem.titleView?.frame = CGRect(x: 0, y: 0, width: 20, height: 5)
         navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.isTranslucent = false
         let myPlansButton = UIButton()

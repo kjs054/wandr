@@ -17,11 +17,9 @@ class CardView: UIStackView {
         didSet {
             let imageName = cardViewModel.placeImages.first ?? ""
             cardTop.imageView.image = UIImage(named: imageName)
-            cardTop.headerInfo.attributedText = cardViewModel.headerAttributedString
-            cardTop.categoryBubble.setTitle(cardViewModel.category, for: .normal)
-            cardTop.pricingBubble.setTitle("🤑 \(getPricingText(minPrice: cardViewModel.minPrice, maxPrice: cardViewModel.maxPrice))", for: .normal)
-            cardBottom.savesCountLabel.text = "\(cardViewModel.numOfSaves) Saves"
-            cardBottom.bottomBarInfo.attributedText = cardViewModel.bottomAttributedString
+            cardTop.headerInfo.attributedText = cardViewModel.headerText
+            cardBottom.topRowLabel.attributedText = cardViewModel.topRowText
+            cardBottom.bottomRowLabel.attributedText = cardViewModel.bottomRowText
             cardTop.imageBars.arrangedSubviews.forEach { (bar) in
                 bar.removeFromSuperview()
             }
@@ -46,7 +44,7 @@ class CardView: UIStackView {
     
     func setupCardBottom() {
         addArrangedSubview(cardBottom)
-        cardBottom.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        cardBottom.heightAnchor.constraint(equalToConstant: 85).isActive = true
     }
     
     required init(coder: NSCoder) {

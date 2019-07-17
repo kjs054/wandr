@@ -98,6 +98,7 @@ class ContactView: UIView {
     
     func setupProfileImages() {
         addSubview(profileImageView)
+        profileImageView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         profileImageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.8).isActive = true
         profileImageView.widthAnchor.constraint(equalTo: profileImageView.heightAnchor).isActive = true
         profileImageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
@@ -123,6 +124,7 @@ class ContactView: UIView {
         radioButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         radioButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         radioButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        title.rightAnchor.constraint(equalTo: radioButton.leftAnchor).isActive = true
     }
     
     func setupInviteButton() {
@@ -131,6 +133,7 @@ class ContactView: UIView {
         inviteButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         inviteButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         inviteButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        title.rightAnchor.constraint(equalTo: inviteButton.leftAnchor).isActive = true
     }
     
     func setupTimeStamp() {
