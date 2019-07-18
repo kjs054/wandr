@@ -18,9 +18,8 @@ class bottomOfCard: UIView {
     
     let moreInfoButton: UIButton = {
         let button = UIButton()
-        button.setTitle("\u{2022}\u{2022}\u{2022}", for: .normal)
-        button.setTitleColor(wandrBlue, for: .normal)
-        button.titleLabel?.font = UIFont(name: "Avenir-Book", size: 22)
+        button.setImage(#imageLiteral(resourceName: "menuDots"), for: .normal)
+        button.contentMode = .scaleAspectFit
         return button
     }()
     
@@ -68,9 +67,9 @@ class bottomOfCard: UIView {
     fileprivate func setupMoreInfoButton() {
         addSubview(moreInfoButton)
         moreInfoButton.translatesAutoresizingMaskIntoConstraints = false
-        moreInfoButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -(contentMargin-7)).isActive = true
+        moreInfoButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -(contentMargin)).isActive = true
         moreInfoButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        moreInfoButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.6).isActive = true
+        moreInfoButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.3).isActive = true
         moreInfoButton.widthAnchor.constraint(equalTo: moreInfoButton.heightAnchor).isActive = true
     }
     
