@@ -126,7 +126,7 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
     }
     
     fileprivate func showActivityIndicator() {
-        let activityIndicator = ActivityIndicatorView()
+        let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
         view.addSubview(activityIndicator)
         activityIndicator.fillSuperView()
     }
