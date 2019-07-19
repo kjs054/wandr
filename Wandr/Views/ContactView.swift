@@ -10,7 +10,7 @@ import UIKit
 
 class ContactView: UIView {
     
-    //MARK:- Elements
+    //MARK:- Elements    
     let profileImageView: circularView = {
         let piv = circularView()
         piv.translatesAutoresizingMaskIntoConstraints = false
@@ -88,7 +88,7 @@ class ContactView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         isUserInteractionEnabled = false
-        setupProfileImages()
+        setupProfileImageView()
         addSubview(title)
         title.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 15).isActive = true
         title.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -10).isActive = true
@@ -96,7 +96,7 @@ class ContactView: UIView {
         subTitle.anchor(top: title.bottomAnchor, bottom: nil, leading: profileImageView.trailingAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: 15, bottom: -25, right: 0))
     }
     
-    func setupProfileImages() {
+    func setupProfileImageView() {
         addSubview(profileImageView)
         profileImageView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         profileImageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.8).isActive = true

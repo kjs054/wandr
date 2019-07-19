@@ -265,7 +265,9 @@ class activeContactCell: UITableViewCell {
     var contact: SelectableContact! {
         didSet {
             contactCellView.subTitle.text = contact.phoneNum
-            contactCellView.profileImage.loadImageWithCacheFromURLString(urlstring: contact.userData!.profileImageURL)
+            contactCellView.profileImage.loadImageWithCacheFromURLString(urlstring: contact.userData!.profileImageURL) {
+                self.contactCellView.setupProfileImage()
+            }
             contactCellView.title.text = contact.userData!.name
         }
     }
@@ -275,7 +277,6 @@ class activeContactCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(contactCellView)
-        contactCellView.setupProfileImage()
         contactCellView.setupRadioButton()
         contactCellView.fillSuperView()
     }
