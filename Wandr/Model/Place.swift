@@ -33,7 +33,7 @@ struct place: ProducesCardViewModel {
         let bottomRowText = NSMutableAttributedString(string: operatingStatus, attributes: [.font: UIFont(name: "Avenir-Black", size: UIScreen.main.bounds.width / 22)!])
         bottomRowText.addAttribute(NSAttributedString.Key.foregroundColor, value: getOperatingStatusColor(status: operatingStatus), range: NSMakeRange(0, bottomRowText.length))
         bottomRowText.append(NSAttributedString(string: " \(operatingStatusMessage) \u{ff5c} \u{2605} \(rating) \u{ff5c} \(pricing.rawValue)", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.431372549, green: 0.431372549, blue: 0.431372549, alpha: 1), .font: UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 25)!]))
-        return CardViewModel(placeImages: placeImages, headerText: headerText, topRowText: topRowText, bottomRowText: bottomRowText, pricing: pricing, rating: rating)
+        return CardViewModel(placeImages: placeImages, headerText: headerText, topRowText: topRowText, bottomRowText: bottomRowText)
     }
     
     fileprivate func getOperatingStatusColor(status: String) -> UIColor {

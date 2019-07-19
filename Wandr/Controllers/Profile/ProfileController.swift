@@ -209,7 +209,7 @@ class noLikedPlacesCell: UICollectionViewCell {
         self.addSubview(infoView)
         infoView.informationImage.image = #imageLiteral(resourceName: "brokenheart")
         infoView.informationTitle.text = "You Haven't Saved Any Places"
-        infoView.informationSubTitle.text = "Saving places is easy. Click the three \n dots on a place card and then tap 'Save'."
+        infoView.informationSubTitle.text = "Saving places is easy. Click the three \n dots on a card and then tap 'Save'."
         infoView.translatesAutoresizingMaskIntoConstraints = false
         infoView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         infoView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true

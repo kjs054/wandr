@@ -55,7 +55,7 @@ class topOfCard: UIView {
     let gradient = CAGradientLayer()
     func setupGradientLayer() {
         gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
-        gradient.locations = [0,0.35]
+        gradient.locations = [0.01,0.45]
         layer.addSublayer(gradient)
     }
     
@@ -70,7 +70,7 @@ class topOfCard: UIView {
     
     fileprivate func setupHeader() {
         addSubview(headerInfo)
-        headerInfo.anchor(top: topAnchor, bottom: nil, leading: leadingAnchor, trailing: trailingAnchor, padding: UIEdgeInsets(top: contentMargin, left: contentMargin, bottom: 0, right: 0))
+        headerInfo.anchor(top: topAnchor, bottom: nil, leading: leadingAnchor, trailing: trailingAnchor, padding: UIEdgeInsets(top: contentMargin, left: contentMargin, bottom: 0, right: -contentMargin))
     }
     
     fileprivate func setupImageBars() {
