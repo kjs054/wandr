@@ -22,6 +22,8 @@ class HomeController: UIViewController {
     
     let profileButton = circularImageView()
     
+    let activityIndicator = UIActivityIndicatorView(style: .gray)
+    
     let titleImageView: UIImageView = {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 38, height: 38))
         imageView.image = #imageLiteral(resourceName: "wandrwhite")
@@ -83,6 +85,23 @@ class HomeController: UIViewController {
         mainView.bringSubviewToFront(cardDeckView)
     }
     
+    fileprivate func setupProfilePicture() {
+        profileButton.widthAnchor.constraint(equalToConstant: 45).isActive = true
+        profileButton.clipsToBounds = true
+        let profileButtonTapGesture = UITapGestureRecognizer(target: self, action: #selector(showProfile))
+        profileButton.addGestureRecognizer(profileButtonTapGesture)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: profileButton)
+    }
+    
+    fileprivate func setupActivityIndicator() {
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.startAnimating()
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.widthAnchor.constraint(equalToConstant: 45).isActive = true
+        activityIndicator.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: activityIndicator)
+    }
+    
     func setupNavigationBar() {
         navigationItem.titleView = titleImageView
         navigationItem.titleView?.frame = CGRect(x: 0, y: 0, width: 20, height: 5)
@@ -92,11 +111,7 @@ class HomeController: UIViewController {
         myPlansButton.addTarget(self, action: #selector(showMessages), for: .touchUpInside)
         myPlansButton.setImage(#imageLiteral(resourceName: "messageIcon").withRenderingMode(.alwaysOriginal), for: .normal)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: myPlansButton)
-        profileButton.widthAnchor.constraint(equalToConstant: 45).isActive = true
-        profileButton.clipsToBounds = true
-        let profileButtonTapGesture = UITapGestureRecognizer(target: self, action: #selector(showProfile))
-        profileButton.addGestureRecognizer(profileButtonTapGesture)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: profileButton)
+        setupActivityIndicator()
         self.navigationController!.navigationBar.layer.zPosition = -1;
     }
     
@@ -182,7 +197,10 @@ class HomeController: UIViewController {
             print("Could not get image url for some fucking reason")
             return
         }
-        self.profileButton.loadImageWithCacheFromURLString(urlstring: imageURL) //Download, cache, and display
+        self.profileButton.loadImageWithCacheFromURLString(urlstring: imageURL) {
+            self.activityIndicator.stopAnimating()
+            self.setupProfilePicture()
+        } //Download, cache, and display
     }
 }
 
