@@ -98,7 +98,7 @@ class ContactView: UIView {
     
     func setupProfileImageView() {
         addSubview(profileImageView)
-        profileImageView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        profileImageView.leftAnchor.constraint(equalTo: leftAnchor, constant: contentMargin).isActive = true
         profileImageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.8).isActive = true
         profileImageView.widthAnchor.constraint(equalTo: profileImageView.heightAnchor).isActive = true
         profileImageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true

@@ -68,6 +68,7 @@ extension firebaseFunctions {
         db.collection("registeredPhones").document(phoneNumber).setData(["uid": uid])
     }
     
+    
     func getContacts(callback: @escaping (_ contacts: [SelectableContact]) -> ()) {
         let localStorage = LocalStorage()
         var userContacts = [SelectableContact]()
@@ -178,6 +179,25 @@ extension firebaseFunctions {
                 } else {
                     completionHandler(nil)
                 }
+            }
+        }
+    }
+    
+    //MARK:- Chat backend logic
+    
+    func addChatDocument(chatData: Dictionary<String,Any>, complete:@escaping ()->()) {
+        let chatDoc = db.collection("chats").document()
+        let chatID = chatDoc.documentID
+        let users: [String] = chatData["users"] as! [String]
+        chatDoc.setData(chatData) { err in
+            if let err = err {
+                fatalError("\(err)")
+            } else {
+                print("Chat Data Written")
+                users.forEach({ (UID) in
+                    db.collection("users").document(UID).setData(["activeChats":[chatID]], merge: true)
+                })
+                complete()
             }
         }
     }

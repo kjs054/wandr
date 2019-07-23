@@ -69,7 +69,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     
     func setupNavigationBar() {
         let backButton = UIButton()
-        guard let name = localStorage.currentUserData()?["name"] else {
+        guard let name = localStorage.currentUserData()?["name"] as? String else {
             print("Name not found")
             return
         }

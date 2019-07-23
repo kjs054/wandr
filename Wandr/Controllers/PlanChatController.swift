@@ -73,8 +73,9 @@ class PlanChatController: UIViewController {
     
     //MARK:- Navigation Functions
     @objc func dismissViewController() {
+        let vc = MyPlansController()
         let transition = CATransition().fromLeft()
-        navigationController?.view.layer.add(transition, forKey: kCATransition)
-        navigationController?.popViewController(animated: false)
+        self.navigationController!.view.layer.add(transition, forKey: kCATransition)
+        self.navigationController?.pushViewController(vc, animated: false)
     }
 }
