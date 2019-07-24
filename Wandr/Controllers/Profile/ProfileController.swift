@@ -92,7 +92,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     
     //MARK:- Logic
     @objc func dismissViewController() {
-        let transition = CATransition().fromRight()
+        let transition = CATransition().pushTransition(direction: .fromRight)
         self.navigationController!.view.layer.add(transition, forKey: kCATransition)
         navigationController?.popViewController(animated: true)
     }
@@ -111,7 +111,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     
     @objc func showRegistration() {
         let vc = LoginController()
-        let transition = CATransition().fromBottom()
+        let transition = CATransition().moveInTransition(direction: .fromBottom)
         self.navigationController!.view.layer.add(transition, forKey: kCATransition)
         self.navigationController?.pushViewController(vc, animated: false)
     }

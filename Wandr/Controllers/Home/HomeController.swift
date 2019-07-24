@@ -118,7 +118,7 @@ class HomeController: UIViewController {
     //MARK:- Navigation Functions
     @objc func showProfile() {
         let vc = ProfileController()
-        let transition = CATransition().fromLeft()
+        let transition = CATransition().pushTransition(direction: .fromLeft)
         self.navigationController!.view.layer.add(transition, forKey: kCATransition)
         self.navigationController?.pushViewController(vc, animated: false)
     }
@@ -131,14 +131,14 @@ class HomeController: UIViewController {
     
     @objc func showMessages() {
         let vc = MyPlansController()
-        let transition = CATransition().fromRight()
+        let transition = CATransition().pushTransition(direction: .fromRight)
         self.navigationController!.view.layer.add(transition, forKey: kCATransition)
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
     @objc func showLogin() {
         let vc = LoginController()
-        let transition = CATransition().fromBottom()
+        let transition = CATransition().moveInTransition(direction: .fromBottom)
         self.navigationController!.view.layer.add(transition, forKey: kCATransition)
         self.navigationController?.pushViewController(vc, animated: false)
     }
@@ -187,13 +187,13 @@ class HomeController: UIViewController {
     }
     func showRegistration() {
         let vc = LoginController()
-        let transition = CATransition().fromBottom()
+        let transition = CATransition().moveInTransition(direction: .fromBottom)
         self.navigationController!.view.layer.add(transition, forKey: kCATransition)
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
     func setupProfilePictureNavigationBar() {
-        guard let imageURL = localStorage.currentUserData()?["profileImageURL"] else { //Unwraps url stored as type Any to String
+        guard let imageURL = localStorage.currentUserData()?["profileImageURL"] as? String else { //Unwraps url stored as type Any to String
             print("Could not get image url for some fucking reason")
             return
         }

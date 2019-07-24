@@ -260,14 +260,14 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     @objc func setupNewChat() {
         var selectedContactsIds = selectedUsersCollection.users.compactMap({return $0.userData?.uid})
-        selectedContactsIds.append(LocalStorage().currentUserData()!["uid"]!)
+        selectedContactsIds.append(LocalStorage().currentUserData()!["uid"] as! String)
         let chatData = ["name": "default",
                         "users": selectedContactsIds,
                         "created": FieldValue.serverTimestamp()] as [String : Any]
 
         addChatDocument(chatData: chatData) {
             let vc = PlanChatController()
-            let transition = CATransition().fromRight()
+            let transition = CATransition().pushTransition(direction: .fromRight)
             self.navigationController!.view.layer.add(transition, forKey: kCATransition)
             self.navigationController?.pushViewController(vc, animated: false)
         }

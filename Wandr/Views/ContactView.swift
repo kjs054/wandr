@@ -39,7 +39,6 @@ class ContactView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "Avenir-Heavy", size: 19)
         label.textColor = wandrBlue
-        label.text = "Title"
         return label
     }()
     
@@ -48,7 +47,6 @@ class ContactView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "Avenir-Medium", size: 16)
         label.textColor = #colorLiteral(red: 0.5333333333, green: 0.5333333333, blue: 0.5333333333, alpha: 1)
-        label.text = "Sub Title"
         return label
     }()
     
@@ -89,13 +87,11 @@ class ContactView: UIView {
         super.init(frame: frame)
         isUserInteractionEnabled = false
         setupProfileImageView()
-        addSubview(title)
-        title.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 15).isActive = true
-        title.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -10).isActive = true
-        addSubview(subTitle)
-        subTitle.anchor(top: title.bottomAnchor, bottom: nil, leading: profileImageView.trailingAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: 15, bottom: -25, right: 0))
+        setupTitle()
+        setupSubTitle()
     }
     
+    //Static Element Functions
     func setupProfileImageView() {
         addSubview(profileImageView)
         profileImageView.leftAnchor.constraint(equalTo: leftAnchor, constant: contentMargin).isActive = true
@@ -104,6 +100,18 @@ class ContactView: UIView {
         profileImageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
     
+    func setupTitle() {
+        addSubview(title)
+        title.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 15).isActive = true
+        title.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -10).isActive = true
+    }
+    
+    func setupSubTitle() {
+        addSubview(subTitle)
+        subTitle.anchor(top: title.bottomAnchor, bottom: nil, leading: profileImageView.trailingAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: 15, bottom: -25, right: 0))
+    }
+    
+    //Dynamic Element Functions
     func setupInitialsLabel() {
         profileImageView.addSubview(initialsLabel)
         initialsLabel.widthAnchor.constraint(equalTo: profileImageView.widthAnchor).isActive = true
@@ -142,11 +150,11 @@ class ContactView: UIView {
         timeStamp.centerYAnchor.constraint(equalTo: subTitle.centerYAnchor).isActive = true
     }
     
+    //MARK:- Logic
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK:- Logic
     @objc func radioButtonClicked(sender: UIButton) {
         if sender.isSelected {
             sender.isSelected = false

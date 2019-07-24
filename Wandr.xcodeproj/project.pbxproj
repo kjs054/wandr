@@ -30,7 +30,6 @@
 		63133CDF22B5467A00D5ADB1 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63133CDE22B5467A00D5ADB1 /* ProfileController.swift */; };
 		63133CE122B5882C00D5ADB1 /* PlanChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63133CE022B5882C00D5ADB1 /* PlanChatController.swift */; };
 		63133CE622B5917A00D5ADB1 /* selectedUsersCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63133CE522B5917A00D5ADB1 /* selectedUsersCollectionView.swift */; };
-		63176ED422B40FCD0030C2D2 /* PlanPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63176ED322B40FCD0030C2D2 /* PlanPreview.swift */; };
 		6318706A22B0064F005C6FA4 /* FriendsBubbles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318706922B0064F005C6FA4 /* FriendsBubbles.swift */; };
 		6318706C22B01464005C6FA4 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318706B22B01464005C6FA4 /* User.swift */; };
 		6318707022B045DA005C6FA4 /* MyPlansController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318706F22B045DA005C6FA4 /* MyPlansController.swift */; };
@@ -38,6 +37,8 @@
 		631D677822D65368001A7999 /* LocalStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631D677722D65368001A7999 /* LocalStorage.swift */; };
 		631D677A22D690BB001A7999 /* ImageCompression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631D677922D690BB001A7999 /* ImageCompression.swift */; };
 		631E169E22C592810012094C /* downloadCacheDisplayImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631E169D22C592810012094C /* downloadCacheDisplayImage.swift */; };
+		631F784122E7B4D900F85AE2 /* PlanChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631F784022E7B4D900F85AE2 /* PlanChat.swift */; };
+		631F784322E7B5C600F85AE2 /* message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631F784222E7B5C600F85AE2 /* message.swift */; };
 		6328941D22C80A830069EA79 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6328941C22C80A830069EA79 /* StringExtension.swift */; };
 		6329FB0022AAEDBE006C5E33 /* bottomOfCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6329FAFF22AAEDBE006C5E33 /* bottomOfCard.swift */; };
 		6331190E22B2B5DC00B8120A /* Transitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6331190D22B2B5DC00B8120A /* Transitions.swift */; };
@@ -57,8 +58,6 @@
 		6346990722BEC852002AB392 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346990522BEC852002AB392 /* Category.swift */; };
 		6346990822BEC852002AB392 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346990522BEC852002AB392 /* Category.swift */; };
 		6346990A22BEC85A002AB392 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346990922BEC85A002AB392 /* Contact.swift */; };
-		6346990B22BEC85A002AB392 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346990922BEC85A002AB392 /* Contact.swift */; };
-		6346990C22BEC85A002AB392 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346990922BEC85A002AB392 /* Contact.swift */; };
 		6346990E22BEC897002AB392 /* CardDeckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346990D22BEC897002AB392 /* CardDeckView.swift */; };
 		6346990F22BEC897002AB392 /* CardDeckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346990D22BEC897002AB392 /* CardDeckView.swift */; };
 		6346991022BEC897002AB392 /* CardDeckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346990D22BEC897002AB392 /* CardDeckView.swift */; };
@@ -121,7 +120,6 @@
 		63133CDE22B5467A00D5ADB1 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		63133CE022B5882C00D5ADB1 /* PlanChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanChatController.swift; sourceTree = "<group>"; };
 		63133CE522B5917A00D5ADB1 /* selectedUsersCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = selectedUsersCollectionView.swift; sourceTree = "<group>"; };
-		63176ED322B40FCD0030C2D2 /* PlanPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanPreview.swift; sourceTree = "<group>"; };
 		6318706922B0064F005C6FA4 /* FriendsBubbles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsBubbles.swift; sourceTree = "<group>"; };
 		6318706B22B01464005C6FA4 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		6318706F22B045DA005C6FA4 /* MyPlansController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlansController.swift; sourceTree = "<group>"; };
@@ -129,6 +127,8 @@
 		631D677722D65368001A7999 /* LocalStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorage.swift; sourceTree = "<group>"; };
 		631D677922D690BB001A7999 /* ImageCompression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCompression.swift; sourceTree = "<group>"; };
 		631E169D22C592810012094C /* downloadCacheDisplayImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = downloadCacheDisplayImage.swift; sourceTree = "<group>"; };
+		631F784022E7B4D900F85AE2 /* PlanChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanChat.swift; sourceTree = "<group>"; };
+		631F784222E7B5C600F85AE2 /* message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = message.swift; sourceTree = "<group>"; };
 		6328941C22C80A830069EA79 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		6329FAFF22AAEDBE006C5E33 /* bottomOfCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bottomOfCard.swift; sourceTree = "<group>"; };
 		6331190D22B2B5DC00B8120A /* Transitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transitions.swift; sourceTree = "<group>"; };
@@ -203,6 +203,7 @@
 		0A1D78F822A369B0004AB1FF /* ExtensionsAndElements */ = {
 			isa = PBXGroup;
 			children = (
+				631D677722D65368001A7999 /* LocalStorage.swift */,
 				636A8D1E22C2DE7F00F2D1C3 /* FirebaseFunctions.swift */,
 				0A1D78ED22A19B23004AB1FF /* AutoLayoutExtension.swift */,
 				639D6B6122D10ECA0057B1FA /* FormatPhoneExtension.swift */,
@@ -219,15 +220,10 @@
 		0A2BA67422A9942400F2F7C4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				0A2BA67522A9948800F2F7C4 /* Place.swift */,
-				6376412422E11C3100E63E59 /* Event.swift */,
-				631D677722D65368001A7999 /* LocalStorage.swift */,
-				631D2DF422DF8A160043DBB4 /* pricing.swift */,
-				6318706B22B01464005C6FA4 /* User.swift */,
-				6346990122BEC84C002AB392 /* PlaceTag.swift */,
-				6346990922BEC85A002AB392 /* Contact.swift */,
-				6346990522BEC852002AB392 /* Category.swift */,
-				63176ED322B40FCD0030C2D2 /* PlanPreview.swift */,
+				631F784722E8249D00F85AE2 /* Users */,
+				631F784622E8243900F85AE2 /* Filters */,
+				631F784522E8242500F85AE2 /* Plans */,
+				631F784422E8241400F85AE2 /* Cards */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -346,6 +342,43 @@
 				0ADCFB6122A0585E00047E93 /* HomeController.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		631F784422E8241400F85AE2 /* Cards */ = {
+			isa = PBXGroup;
+			children = (
+				0A2BA67522A9948800F2F7C4 /* Place.swift */,
+				6376412422E11C3100E63E59 /* Event.swift */,
+				631D2DF422DF8A160043DBB4 /* pricing.swift */,
+			);
+			path = Cards;
+			sourceTree = "<group>";
+		};
+		631F784522E8242500F85AE2 /* Plans */ = {
+			isa = PBXGroup;
+			children = (
+				631F784222E7B5C600F85AE2 /* message.swift */,
+				631F784022E7B4D900F85AE2 /* PlanChat.swift */,
+			);
+			path = Plans;
+			sourceTree = "<group>";
+		};
+		631F784622E8243900F85AE2 /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+				6346990122BEC84C002AB392 /* PlaceTag.swift */,
+				6346990522BEC852002AB392 /* Category.swift */,
+			);
+			path = Filters;
+			sourceTree = "<group>";
+		};
+		631F784722E8249D00F85AE2 /* Users */ = {
+			isa = PBXGroup;
+			children = (
+				6318706B22B01464005C6FA4 /* User.swift */,
+				6346990922BEC85A002AB392 /* Contact.swift */,
+			);
+			path = Users;
 			sourceTree = "<group>";
 		};
 		63351F7E22AEC5B40027AEC4 /* Controllers */ = {
@@ -585,6 +618,7 @@
 			files = (
 				631D677A22D690BB001A7999 /* ImageCompression.swift in Sources */,
 				630E64A022AC836A00D07F5D /* topOfCard.swift in Sources */,
+				631F784322E7B5C600F85AE2 /* message.swift in Sources */,
 				6318707022B045DA005C6FA4 /* MyPlansController.swift in Sources */,
 				638991FF22B1B7CE007BE014 /* ContactView.swift in Sources */,
 				0A1D78FA22A36A0B004AB1FF /* UIElements.swift in Sources */,
@@ -602,7 +636,6 @@
 				634698FA22BEC82B002AB392 /* LoginController.swift in Sources */,
 				6318706A22B0064F005C6FA4 /* FriendsBubbles.swift in Sources */,
 				638E9E4922C162A900DD4B7B /* EmailInputController.swift in Sources */,
-				63176ED422B40FCD0030C2D2 /* PlanPreview.swift in Sources */,
 				636A8D1D22C2CFF200F2D1C3 /* NameInputController.swift in Sources */,
 				6346991222BEC8A2002AB392 /* FilterCell.swift in Sources */,
 				6346780522B808AD00166628 /* CreateMessageView.swift in Sources */,
@@ -615,6 +648,7 @@
 				6318706C22B01464005C6FA4 /* User.swift in Sources */,
 				0A1D78EE22A19B23004AB1FF /* AutoLayoutExtension.swift in Sources */,
 				633B384322C27B9B00138BE7 /* BirthdayInputController.swift in Sources */,
+				631F784122E7B4D900F85AE2 /* PlanChat.swift in Sources */,
 				0A2BA67622A9948800F2F7C4 /* Place.swift in Sources */,
 				63133CE622B5917A00D5ADB1 /* selectedUsersCollectionView.swift in Sources */,
 				6370C2CD22C6C83800057BE7 /* InformationView.swift in Sources */,
@@ -635,7 +669,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6346990B22BEC85A002AB392 /* Contact.swift in Sources */,
 				6346991322BEC8A2002AB392 /* FilterCell.swift in Sources */,
 				6346990722BEC852002AB392 /* Category.swift in Sources */,
 				6346990F22BEC897002AB392 /* CardDeckView.swift in Sources */,
@@ -648,7 +681,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6346990C22BEC85A002AB392 /* Contact.swift in Sources */,
 				6346991422BEC8A2002AB392 /* FilterCell.swift in Sources */,
 				6346990822BEC852002AB392 /* Category.swift in Sources */,
 				6346991022BEC897002AB392 /* CardDeckView.swift in Sources */,

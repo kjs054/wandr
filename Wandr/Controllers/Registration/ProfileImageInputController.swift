@@ -133,7 +133,7 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
     
     fileprivate func showHomeViewController() {
         let vc = HomeController()
-        let transition = CATransition().fromBottom()
+        let transition = CATransition().moveInTransition(direction: .fromTop)
         self.navigationController!.view.layer.add(transition, forKey: kCATransition)
         self.navigationController?.pushViewController(vc, animated: false)
     }

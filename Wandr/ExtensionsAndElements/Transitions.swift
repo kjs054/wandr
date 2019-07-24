@@ -11,34 +11,18 @@ import UIKit
 let transitionDuration: Double = 0.3
 extension CATransition {
     
-    func fromLeft() -> CATransition {
+    func pushTransition(direction: CATransitionSubtype) -> CATransition {
         self.duration = transitionDuration
         self.type = CATransitionType.push
-        self.subtype = CATransitionSubtype.fromLeft
+        self.subtype = direction
         self.timingFunction = CAMediaTimingFunction(name:CAMediaTimingFunctionName.easeInEaseOut)
         return self
     }
     
-    func fromRight() -> CATransition {
-        self.duration = transitionDuration
-        self.type = CATransitionType.push
-        self.subtype = CATransitionSubtype.fromRight
-        self.timingFunction = CAMediaTimingFunction(name:CAMediaTimingFunctionName.easeInEaseOut)
-        return self
-    }
-    
-    func fromTop() -> CATransition {
+    func moveInTransition(direction: CATransitionSubtype) -> CATransition {
         self.duration = transitionDuration
         self.type = CATransitionType.moveIn
-        self.subtype = CATransitionSubtype.fromBottom
-        self.timingFunction = CAMediaTimingFunction(name:CAMediaTimingFunctionName.easeInEaseOut)
-        return self
-    }
-    
-    func fromBottom() -> CATransition {
-        self.duration = transitionDuration
-        self.type = CATransitionType.moveIn
-        self.subtype = CATransitionSubtype.fromTop
+        self.subtype = direction
         self.timingFunction = CAMediaTimingFunction(name:CAMediaTimingFunctionName.easeInEaseOut)
         return self
     }

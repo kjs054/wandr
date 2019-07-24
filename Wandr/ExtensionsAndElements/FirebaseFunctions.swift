@@ -20,7 +20,7 @@ protocol firebaseFunctions {
     func addUserDataToUsersCollection(complete:@escaping ()->())
     func getContacts(callback:@escaping (_ contacts: [SelectableContact]) -> ())
     func checkIfContactIsUser(contact: SelectableContact, callback: @escaping ((_ uid:String?) ->Void ))
-    func fetchCurrentUserData(uid: String, completionHandler: @escaping (_ userData: Dictionary<String, String>?) -> ())
+    func fetchCurrentUserData(uid: String, completionHandler: @escaping (_ userData: Dictionary<String, Any>?) -> ())
     func getUID() -> String
 }
 
@@ -99,8 +99,8 @@ extension firebaseFunctions {
                                         if let uid = uid {
                                             self.fetchCurrentUserData(uid: uid, completionHandler: { (userData) in
                                                 if let userData = userData {
-                                                    if formattedPhone != localStorage.currentUserData()!["phoneNumber"] {
-                                                        let newuser = user(name: userData["name"]!, profileImageURL: userData["profileImageURL"]!, phoneNumber: userData["phoneNumber"]!, uid: userData["uid"]!)
+                                                    if formattedPhone != localStorage.currentUserData()!["phoneNumber"] as! String {
+                                                        let newuser = user(name: userData["name"] as! String, profileImageURL: userData["profileImageURL"] as! String, phoneNumber: userData["phoneNumber"] as! String, uid: userData["uid"] as! String)
                                                         contact.userData = newuser
                                                         userContacts.append(contact)
                                                         callback(userContacts)
@@ -156,7 +156,6 @@ extension firebaseFunctions {
                 print(error)
                 return;
             }
-            
         }
     }
     
@@ -168,12 +167,20 @@ extension firebaseFunctions {
         return uid
     }
     
-    func fetchCurrentUserData(uid: String, completionHandler: @escaping (_ userData: Dictionary<String, String>?) -> ()) { //gets the users data from firestore and stores it in currentUser dictionary
+    func fetchCurrentUserData(uid: String, completionHandler: @escaping (_ userData: Dictionary<String, Any>?) -> ()) { //gets the users data from firestore and stores it in currentUser dictionary
         let docRef = db.collection("users").document(uid) //Retrieves document named with users id
         docRef.getDocument { (snapshot, error) in
             if let snapshot = snapshot {
                 if snapshot.exists {
-                    let data = snapshot.data() as! [String : String]
+                    let name = snapshot.get("name") as! String
+                    let profileImageURL = snapshot.get("profileImageURL") as! String
+                    let uid = snapshot.get("uid") as! String
+                    let phoneNumber = snapshot.get("phoneNumber") as! String
+                    guard let chats = snapshot.get("activeChats") as? [String] else {
+                        print("NO CHATS")
+                        return
+                    }
+                    let data = ["name": name, "profileImageURL": profileImageURL, "uid": uid, "phoneNumber": phoneNumber, "activeChats": chats] as [String : Any]
                     completionHandler(data)
                     //Perform element setup after fetching complete
                 } else {
@@ -181,6 +188,10 @@ extension firebaseFunctions {
                 }
             }
         }
+    }
+    
+    func fetchUserChats(uid: String, completionHandler: @escaping (_ activeChats: [PlanChat]) -> ()) {
+        
     }
     
     //MARK:- Chat backend logic

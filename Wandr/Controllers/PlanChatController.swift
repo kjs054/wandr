@@ -36,6 +36,7 @@ class PlanChatController: UIViewController {
     
     func setupNavigationBar() {
         let backButton = UIButton()
+        navigationController?.navigationBar.isHidden = false
         navigationItem.title = "Chat Name"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: wandrBlue, .font: UIFont(name: "NexaBold", size: 23)!]
         navigationController?.navigationBar.isTranslucent = false
@@ -74,7 +75,7 @@ class PlanChatController: UIViewController {
     //MARK:- Navigation Functions
     @objc func dismissViewController() {
         let vc = MyPlansController()
-        let transition = CATransition().fromLeft()
+        let transition = CATransition().pushTransition(direction: CATransitionSubtype.fromLeft)
         self.navigationController!.view.layer.add(transition, forKey: kCATransition)
         self.navigationController?.pushViewController(vc, animated: false)
     }
