@@ -24,6 +24,8 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     //MARK:- Elements
     var refreshControl = UIRefreshControl()
     
+    let activityView = activityIndicatorView(color: .white, labelText: "Getting Your Contacts")
+    
     let tableContainer: UIView = {
         let view = UIView()
         view.layer.backgroundColor = UIColor.clear.cgColor
@@ -123,6 +125,10 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
 //        navigationController?.navigationBar.barTintColor = UIColor.white
     }
     
+    func setupActivityView() {
+        view.addSubview(activityView)
+        activityView.anchor(top: navigationBar.bottomAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
+    }
     
     func setupSendButton() {
         previewView.addSubview(sendButton)
@@ -155,6 +161,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         contactsTable.dataSource = self
         contactsTable.register(activeContactCell.self, forCellReuseIdentifier: activeContactId)
         contactsTable.register(otherContactCell.self, forCellReuseIdentifier: otherContactId)
+        setupActivityView()
         getTableData {
             self.view.addSubview(self.tableContainer)
             self.view.bringSubviewToFront(self.previewView)
