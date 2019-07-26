@@ -110,6 +110,49 @@ class cardCell: GeminiCell {
         UIApplication.shared.keyWindow?.rootViewController?.present(cardActionsMenu, animated: true, completion: nil)
     }
     
+    func handlePlanGestureEnded(_ gesture: UIPanGestureRecognizer) {
+        let shouldDismiss = gesture.translation(in: nil).y < sendPlanTranslationThreshold
+        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: .curveEaseOut, animations: {
+            if shouldDismiss {
+                self.cardView.frame = CGRect(x: 0, y: -1000, width: self.cardView.frame.width, height: self.cardView.frame.height)
+                self.showNewPlan()
+            } else {
+                self.cardView.transform = .identity
+            }
+        }) { (_) in
+            if shouldDismiss {
+                self.cardView.transform = .identity
+                self.cardView.frame = CGRect(x: 0, y: 0, width: self.cardView.frame.width, height: self.cardView.frame.height)
+            }
+        }
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if (cardView.frame.origin.y < 0) {
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    @objc fileprivate func handleMakePlanGesture(_ gesture: UIPanGestureRecognizer) {
+        switch gesture.state {
+        case .changed:
+            handlePlanGestureChanged(gesture)
+        case .ended:
+            handlePlanGestureEnded(gesture)
+        default:
+            ()
+        }
+    }
+    
+    func handlePlanGestureChanged(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: nil).y
+        if translation < 0 {
+            self.cardView.transform = CGAffineTransform(translationX: 0, y: gesture.translation(in: nil).y)
+        }
+    }
+    
     func setupMenuLongPressGesture() {
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleMenuLongPressGesture))
         addGestureRecognizer(gesture)
