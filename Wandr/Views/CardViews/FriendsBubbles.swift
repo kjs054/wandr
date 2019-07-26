@@ -8,31 +8,23 @@
 
 import UIKit
 
-class FriendsBubbles: UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
-    let collectionView: UICollectionView = {
+class FriendsBubbles: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
+    let flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = -15
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .clear
-        cv.isScrollEnabled = false
-        return cv
+        return layout
     }()
     
     let friendCellId = "FriendCellId"
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        translatesAutoresizingMaskIntoConstraints = true
-        widthAnchor.constraint(equalToConstant: CGFloat(29)).isActive = true
-        setupCollectionView()
-    }
     
-    func setupCollectionView() {
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(friendCell.self, forCellWithReuseIdentifier: friendCellId)
-        addSubview(collectionView)
-        collectionView.fillSuperView()
+    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+        super.init(frame: frame, collectionViewLayout: flowLayout)
+        translatesAutoresizingMaskIntoConstraints = true
+        delegate = self
+        dataSource = self
+        register(friendCell.self, forCellWithReuseIdentifier: friendCellId)
+        widthAnchor.constraint(equalToConstant: CGFloat(29)).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

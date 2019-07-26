@@ -12,7 +12,7 @@ protocol categorySelectionDelegate {
     func updateNavTitle(_ categoryName: String)
 }
 
-class categoryFiltersView: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class categoryFiltersView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     //MARK:- Variables
     let categoryCellId = "categoryCellId"
@@ -20,28 +20,25 @@ class categoryFiltersView: UIView, UICollectionViewDelegate, UICollectionViewDat
     var selectionDelegate: categorySelectionDelegate?
     
     //MARK:- Elements
-    let collectionView: UICollectionView = {
+    let flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 15 //future dynamic
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .clear
-        cv.showsHorizontalScrollIndicator = false
-        return cv
+        return layout
     }()
     
     //MARK:- View Setup
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+        super.init(frame: frame, collectionViewLayout: flowLayout)
         setupCollectionView()
     }
     
     func setupCollectionView() {
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(filterCell.self, forCellWithReuseIdentifier: categoryCellId)
-        addSubview(collectionView)
-        collectionView.fillSuperView()
+        delegate = self
+        dataSource = self
+        register(filterCell.self, forCellWithReuseIdentifier: categoryCellId)
+        backgroundColor = .clear
+        showsHorizontalScrollIndicator = false
     }
     
     //MARK:- CollectionView Functions
@@ -54,7 +51,7 @@ class categoryFiltersView: UIView, UICollectionViewDelegate, UICollectionViewDat
             let selectedCategory = rankedFilters[indexPath.row].categoryName
             selectionDelegate?.updateNavTitle(selectedCategory)
         }
-        self.collectionView.reloadData()
+        reloadData()
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {

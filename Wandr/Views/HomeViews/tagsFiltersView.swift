@@ -8,34 +8,31 @@
 
 import UIKit
 
-class tagsFiltersView: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class tagsFiltersView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     //MARK:- Variables
     let tagFilterId = "tagCellId"
     
     //MARK:- Elements
-    let collectionView: UICollectionView = {
+    let flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 15 //future dynamic
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .clear
-        cv.showsHorizontalScrollIndicator = false
-        return cv
+        return layout
     }()
     
     //MARK:- View Setup
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+        super.init(frame: frame, collectionViewLayout: flowLayout)
         setupCollectionView()
     }
 
     func setupCollectionView() {
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(filterCell.self, forCellWithReuseIdentifier: tagFilterId)
-        addSubview(collectionView)
-        collectionView.fillSuperView()
+        delegate = self
+        dataSource = self
+        register(filterCell.self, forCellWithReuseIdentifier: tagFilterId)
+        backgroundColor = .clear
+        showsHorizontalScrollIndicator = false
     }
     
     required init?(coder aDecoder: NSCoder) {
