@@ -104,7 +104,7 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
     @objc func dismissViewController() {
         let transition = CATransition().pushTransition(direction: CATransitionSubtype.fromLeft)
         navigationController!.view.layer.add(transition, forKey: nil)
-        navigationController?.popToRootViewController(animated: true)
+        navigationController?.popToRootViewController(animated: false)
     }
     
     func showPlanChatController() {

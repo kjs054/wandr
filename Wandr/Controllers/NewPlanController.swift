@@ -17,14 +17,13 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     var contactsOnWandr = [SelectableContact]()
     var selectedContacts = [SelectableContact]()
     
-    //FIXME:- Add cells for recent contacts and groups
-    let activeContactId = "activeContactId"
-    let otherContactId = "otherContactId"
+    let activeContactId = "activeContact"
+    let otherContactId = "otherContact"
     
     //MARK:- Elements
     var refreshControl = UIRefreshControl()
     
-    let activityView = activityIndicatorView(color: .white, labelText: "Getting Your Contacts")
+    let activityView = activityIndicatorView(color: .white, labelText: "")
     
     let tableContainer: UIView = {
         let view = UIView()
@@ -52,10 +51,11 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     let previewView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .white
-        view.layer.shadowOffset = CGSize(width: 0, height: -4)
         view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 1.0)
+        view.layer.shadowOpacity = 0.2
+        view.layer.shadowRadius = 4.0
         return view
     }()
     
@@ -191,12 +191,12 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
                 if selectedUsersCollection.users.isEmpty {
                     previewView.removeFromSuperview()
                 }
-                selectedUsersCollection.collectionView.reloadData()
+                selectedUsersCollection.reloadData()
             } else {
                 contactsOnWandr[indexPath.row].selected = true
                 selectedUsersCollection.users.append(contactsOnWandr[indexPath.row])
                 setupPreviewView()
-                selectedUsersCollection.collectionView.reloadData()
+                selectedUsersCollection.reloadData()
             }
         }
         if indexPath.section == 1 {

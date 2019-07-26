@@ -24,7 +24,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     let segmentedControl: UISegmentedControl = {
         let items = ["Saved", "History"]
         let sc = UISegmentedControl(items: items)
-        sc.setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "Avenir-Heavy", size: 15) ?? ""], for: .normal)
+        sc.setTitleTextAttributes([.font: UIFont(name: "Avenir-Heavy", size: 15)!], for: .normal)
         sc.selectedSegmentIndex = 0
         sc.tintColor = wandrBlue
         return sc
@@ -94,7 +94,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
     @objc func dismissViewController() {
         let transition = CATransition().pushTransition(direction: .fromRight)
         self.navigationController!.view.layer.add(transition, forKey: kCATransition)
-        navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: false)
     }
     
     @objc func handleLogOut() {
