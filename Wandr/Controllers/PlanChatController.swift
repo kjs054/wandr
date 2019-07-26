@@ -16,10 +16,18 @@ class PlanChatController: UIViewController {
         sv.axis = .vertical
         return sv
     }()
-
-    let membersCollection = selectedUsersCollectionView()
     
-    let chatView = UIView()
+    let titleBar = PlanChatTitleBar()
+    
+    let chatView: ChatView = {
+        let chat = ChatView()
+        chat.layer.shadowColor = UIColor.black.cgColor
+        chat.layer.masksToBounds = false
+        chat.layer.shadowOffset = CGSize(width: 0, height: 1.0)
+        chat.layer.shadowOpacity = 0.2
+        chat.layer.shadowRadius = 4.0
+        return chat
+    }()
     
     let createMessage = CreateMessageView()
     
@@ -27,41 +35,35 @@ class PlanChatController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMainView()
-        setupNavigationBar()
+        setupTitleBar()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         let gesture = UITapGestureRecognizer(target: self, action: #selector(keyboardWillHide))
         view.addGestureRecognizer(gesture)
     }
     
-    func setupNavigationBar() {
-        let backButton = UIButton()
-        navigationController?.navigationBar.isHidden = false
-        navigationItem.title = "Chat Name"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: wandrBlue, .font: UIFont(name: "NexaBold", size: 23)!]
-        navigationController?.navigationBar.isTranslucent = false
-        backButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
-        backButton.setImage(#imageLiteral(resourceName: "leftArrow"), for: .normal)
-        backButton.imageView?.contentMode = .scaleAspectFit
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+    func setupTitleBar() {
+        navigationController?.navigationBar.isHidden = true
+        
     }
     
     fileprivate func setupMainView() {
         view.addSubview(mainView)
-        let subviews = [membersCollection, chatView, createMessage]
+        let subviews = [titleBar, chatView, createMessage]
         mainView.fillSuperView()
         subviews.forEach { (sv) in
             mainView.addArrangedSubview(sv)
-            membersCollection.heightAnchor.constraint(equalToConstant: 60).isActive = true
+            titleBar.heightAnchor.constraint(equalToConstant: 80).isActive = true
             createMessage.heightAnchor.constraint(equalToConstant: 50).isActive = true
         }
         
     }
     
     let bottomSafeArea = UIApplication.shared.delegate?.window??.safeAreaInsets.bottom ?? 0
+    
     @objc func keyboardWillHide(notification: NSNotification) {
         view.endEditing(true)
-        createMessage.frame.origin.y = (view.frame.height - createMessage.frame.height - bottomSafeArea)
+        createMessage.frame.origin.y = (view.frame.height - 94 - bottomSafeArea)
     }
     
     //MARK:- Logic

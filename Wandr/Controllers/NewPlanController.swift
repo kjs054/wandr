@@ -86,7 +86,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         super.viewDidLoad()
         view.backgroundColor = .white //needed to prevent opacity issues during vc presentation
         view.layer.opacity = 50.0
-        setupNavigationBar()
+        setupSendPlanTitleBar()
         setupRefreshControl()
         setupContactsTable()
     }
@@ -95,46 +95,17 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         return true
     }
     
-    func setupNavigationBar() {
+    func setupSendPlanTitleBar() {
+        sendPlanTitleBar.closeButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
         self.navigationController?.navigationBar.isHidden = true
-        self.view.addSubview(navigationBar)
-        navigationBar.anchor(top: self.view.safeAreaLayoutGuide.topAnchor, bottom: nil, leading: self.view.leadingAnchor, trailing: self.view.trailingAnchor)
-        navigationBar.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        let navigationTitle = UILabel()
-        navigationTitle.text = "Send A Plan"
-        navigationTitle.font = UIFont(name: "Avenir-Heavy", size: 17)
-        navigationTitle.textColor = wandrBlue
-        navigationBar.addSubview(navigationTitle)
-        navigationTitle.translatesAutoresizingMaskIntoConstraints = false
-        navigationTitle.centerYAnchor.constraint(equalTo: navigationBar.centerYAnchor, constant: -11).isActive = true
-        navigationTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: contentMargin).isActive = true
-        
-        let navigationSubtitle = UILabel()
-        navigationSubtitle.text = "Autobahn Indoor Speedway"
-        navigationSubtitle.font = UIFont(name: "Avenir-Heavy", size: 17)
-        navigationSubtitle.textColor = #colorLiteral(red: 0.431372549, green: 0.431372549, blue: 0.431372549, alpha: 1)
-        navigationBar.addSubview(navigationSubtitle)
-        navigationSubtitle.translatesAutoresizingMaskIntoConstraints = false
-        navigationSubtitle.centerYAnchor.constraint(equalTo: navigationBar.centerYAnchor, constant: 11).isActive = true
-        navigationSubtitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: contentMargin).isActive = true
-        
-        let closeButton = UIButton()
-        closeButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
-        closeButton.setImage(#imageLiteral(resourceName: "close"), for: .normal)
-        closeButton.imageView?.contentMode = .scaleAspectFit
-        navigationBar.addSubview(closeButton)
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        closeButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        closeButton.rightAnchor.constraint(equalTo: navigationBar.rightAnchor, constant: -20).isActive = true
-        closeButton.centerYAnchor.constraint(equalTo: navigationBar.centerYAnchor).isActive = true
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
-//        navigationController?.navigationBar.barTintColor = UIColor.white
+        self.view.addSubview(sendPlanTitleBar)
+        sendPlanTitleBar.anchor(top: self.view.safeAreaLayoutGuide.topAnchor, bottom: nil, leading: self.view.leadingAnchor, trailing: self.view.trailingAnchor)
+        sendPlanTitleBar.heightAnchor.constraint(equalToConstant: 80).isActive = true
     }
     
     func setupActivityView() {
         view.addSubview(activityView)
-        activityView.anchor(top: navigationBar.bottomAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
+        activityView.anchor(top: sendPlanTitleBar.bottomAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
     }
     
     func setupSendButton() {
@@ -172,7 +143,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         getTableData {
             self.view.addSubview(self.tableContainer)
             self.view.bringSubviewToFront(self.previewView)
-            self.tableContainer.anchor(top: self.navigationBar.bottomAnchor, bottom: self.view.bottomAnchor, leading: self.view.leadingAnchor, trailing: self.view.trailingAnchor)
+            self.tableContainer.anchor(top: self.sendPlanTitleBar.bottomAnchor, bottom: self.view.bottomAnchor, leading: self.view.leadingAnchor, trailing: self.view.trailingAnchor)
             self.tableContainer.addSubview(self.contactsTable)
             self.contactsTable.anchor(top: self.tableContainer.topAnchor, bottom: self.tableContainer.bottomAnchor, leading: self.tableContainer.leadingAnchor, trailing: self.tableContainer.trailingAnchor)
         }
