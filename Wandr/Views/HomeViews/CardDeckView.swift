@@ -23,12 +23,14 @@ class CardDeckView: UIView, UICollectionViewDelegateFlowLayout, UICollectionView
         cv.showsHorizontalScrollIndicator = false
         cv.isPagingEnabled = true
         cv.backgroundColor = .clear
+        cv.layer.masksToBounds = false
         return cv
     }()
     
     //MARK:- View Setup
     override init(frame: CGRect) {
         super.init(frame: frame)
+        layer.masksToBounds = false
         setupCollectionView()
     }
     
@@ -74,11 +76,11 @@ class CardDeckView: UIView, UICollectionViewDelegateFlowLayout, UICollectionView
 
 }
 
-class cardCell: GeminiCell {
+class cardCell: GeminiCell, UIGestureRecognizerDelegate {
     
     //MARK:- Subviews
     let cardView = CardView()
-    
+    let sendPlanTranslationThreshold: CGFloat = -100
     
     //MARK:- Setup Cell
     override init(frame: CGRect) {
@@ -87,6 +89,14 @@ class cardCell: GeminiCell {
         cardView.fillSuperView()
         cardView.cardBottom.moreInfoButton.addTarget(self, action: #selector(didTapMoreInfo), for: .touchUpInside)
         setupMenuLongPressGesture()
+        setupPlanGesture()
+    }
+    
+    func setupPlanGesture() {
+        let planGesture = UIPanGestureRecognizer(target: self, action: #selector(handleMakePlanGesture))
+        addGestureRecognizer(planGesture)
+        planGesture.delegate = self
+        handleMakePlanGesture(planGesture)
     }
     
     //MARK:- Logic
@@ -163,7 +173,7 @@ class cardCell: GeminiCell {
     }
     
     private func showNewPlan() {
-        let vc = NewPlanController()
+        let vc = NewPlanController(planPlace: cardView.cardViewModel)
         let navController = UINavigationController(rootViewController: vc) // Creating a navigation controller with vc at the root of the navigation stack.
         UIApplication.shared.keyWindow?.rootViewController?.present(navController, animated: true, completion: nil)
     }

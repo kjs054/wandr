@@ -46,11 +46,9 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         return table
     }()
     
-    let navigationBar: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    fileprivate let planPlace: CardViewModel
+    
+    lazy var sendPlanTitleBar = SendPlanTitleBar(planTitle: planPlace.headerText)
     
     let previewView: UIView = {
         let view = UIView()
@@ -73,6 +71,15 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         button.backgroundColor = wandrBlue
         return button
     }()
+    
+    init(planPlace: CardViewModel) {
+        self.planPlace = planPlace
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     //MARK:- Controller Functions
     override func viewDidLoad() {
