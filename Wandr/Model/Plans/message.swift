@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct message {
+struct Message {
     var sender: user
     var timestamp: Date
     var content: String

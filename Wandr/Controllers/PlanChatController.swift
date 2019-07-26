@@ -11,6 +11,7 @@ import UIKit
 class PlanChatController: UIViewController {
     
     //MARK:- Elements
+    
     let mainView: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
@@ -22,7 +23,7 @@ class PlanChatController: UIViewController {
     let chatView: ChatView = {
         let chat = ChatView()
         chat.layer.shadowColor = UIColor.black.cgColor
-        chat.layer.masksToBounds = false
+        chat.layer.masksToBounds = true
         chat.layer.shadowOffset = CGSize(width: 0, height: 1.0)
         chat.layer.shadowOpacity = 0.2
         chat.layer.shadowRadius = 4.0
@@ -67,6 +68,7 @@ class PlanChatController: UIViewController {
     }
     
     //MARK:- Logic
+    
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let keyboardHeight = keyboardSize.height
