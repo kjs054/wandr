@@ -126,7 +126,7 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
     }
     
     fileprivate func showActivityIndicator() {
-        let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
+        let activityIndicator = activityIndicatorView(color: wandrBlue, labelText: "Setting Up Your Account")
         view.addSubview(activityIndicator)
         activityIndicator.fillSuperView()
     }
