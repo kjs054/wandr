@@ -12,12 +12,8 @@ import FirebaseAuth
 class HomeController: UIViewController {
 
     //MARK:- Variables
-    var contactsViewHeight: CGFloat = 0
-    let sendPlanTranslationThreshold: CGFloat = -100
     
-    //MARK:- Elements
-    let contactsView = NewPlanController()
-    
+    //MARK:- Elements    
     let localStorage = LocalStorage()
     
     let profileButton = circularImageView()
@@ -59,7 +55,6 @@ class HomeController: UIViewController {
         self.navigationController?.view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         setupNavigationBar()
         setupLayout()
-        setupPlanGesture()
         fetchCurrentUserData(uid: getUID()) { (userData) in
             if let userData = userData {
                 self.localStorage.saveCurrentUserData(userData: userData)
@@ -123,12 +118,6 @@ class HomeController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
-    @objc func showNewPlan() {
-        let vc = NewPlanController()
-        let navController = UINavigationController(rootViewController: vc) // Creating a navigation controller with vc at the root of the navigation stack.
-        self.present(navController, animated:true, completion: nil)
-    }
-    
     @objc func showMessages() {
         let vc = MyPlansController()
         let transition = CATransition().pushTransition(direction: .fromRight)
@@ -143,48 +132,6 @@ class HomeController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
-    //MARK:- Plan Gesture Functions
-    func setupPlanGesture() {
-        let planGesture = UIPanGestureRecognizer(target: self, action: #selector(handleMakePlanGesture))
-        cardDeckView.addGestureRecognizer(planGesture)
-        handleMakePlanGesture(planGesture)
-    }
-    
-    @objc fileprivate func handleMakePlanGesture(_ gesture: UIPanGestureRecognizer) {
-        switch gesture.state {
-        case .changed:
-            handlePlanGestureChanged(gesture)
-        case .ended:
-            handlePlanGestureEnded(gesture)
-        default:
-            ()
-        }
-    }
-    
-    func handlePlanGestureChanged(_ gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: nil).y
-        if translation < 0 {
-            cardDeckView.transform = CGAffineTransform(translationX: 0, y: gesture.translation(in: nil).y)
-            contactsViewHeight = abs(gesture.translation(in: nil).y)
-        }
-    }
-    
-    func handlePlanGestureEnded(_ gesture: UIPanGestureRecognizer) {
-        let shouldDismiss = gesture.translation(in: nil).y < sendPlanTranslationThreshold
-        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: .curveEaseOut, animations: {
-            if shouldDismiss {
-                self.cardDeckView.frame = CGRect(x: 0, y: -1000, width: self.cardDeckView.frame.width, height: self.cardDeckView.frame.height)
-                self.showNewPlan()
-            } else {
-                self.cardDeckView.transform = .identity
-            }
-        }) { (_) in
-            if shouldDismiss {
-                self.cardDeckView.transform = .identity
-                self.cardDeckView.frame = CGRect(x: 0, y: self.filters.frame.height + 15, width: self.cardDeckView.frame.width, height: self.cardDeckView.frame.height)
-            }
-        }
-    }
     func showRegistration() {
         let vc = LoginController()
         let transition = CATransition().moveInTransition(direction: .fromBottom)
