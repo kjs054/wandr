@@ -176,11 +176,10 @@ extension firebaseFunctions {
                     let profileImageURL = snapshot.get("profileImageURL") as! String
                     let uid = snapshot.get("uid") as! String
                     let phoneNumber = snapshot.get("phoneNumber") as! String
-                    guard let chats = snapshot.get("activeChats") as? [String] else {
-                        print("NO CHATS")
-                        return
+                    var data = ["name": name, "profileImageURL": profileImageURL, "uid": uid, "phoneNumber": phoneNumber] as [String : Any]
+                    if let chats = snapshot.get("activeChats") {
+                        data["activeChats"] = chats
                     }
-                    let data = ["name": name, "profileImageURL": profileImageURL, "uid": uid, "phoneNumber": phoneNumber, "activeChats": chats] as [String : Any]
                     completionHandler(data)
                     //Perform element setup after fetching complete
                 } else {
