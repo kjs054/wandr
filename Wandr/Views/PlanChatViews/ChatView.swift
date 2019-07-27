@@ -29,9 +29,13 @@ class ChatView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollecti
         return 1
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: contentMargin, left: 0, bottom: 0, right: 0)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: messageId, for: indexPath) as! MessageCell
-        cell.textView.text = messages[indexPath.row]
+        cell.message = messages[indexPath.item]
         return cell
     }
     
