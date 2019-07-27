@@ -36,11 +36,16 @@ class ChatView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let estimatedCellSize = MessageCell.init(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 1000))
-        estimatedCellSize.textView.text = self.messages[indexPath.item]
-        estimatedCellSize.layoutIfNeeded()
-        let estimatedSize = estimatedCellSize.systemLayoutSizeFitting(CGSize(width: self.frame.width, height: 1000))
-        return CGSize(width: self.frame.width, height: estimatedSize.height + 10)
+        switch messages[indexPath.item].type {
+        case .text:
+            let estimatedCellSize = MessageCell.init(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 1000))
+            estimatedCellSize.textView.text = self.messages[indexPath.item].content
+            estimatedCellSize.layoutIfNeeded()
+            let estimatedSize = estimatedCellSize.systemLayoutSizeFitting(CGSize(width: self.frame.width, height: 1000))
+            return CGSize(width: self.frame.width, height: estimatedSize.height + 10)
+        default:
+            return CGSize(width: self.frame.width, height: 0)
+        }
     }
     
     init(messages: [Message]) {
