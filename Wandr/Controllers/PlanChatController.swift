@@ -30,6 +30,8 @@ class PlanChatController: UIViewController {
         return chat
     }()
     
+    fileprivate lazy var chatView = ChatView(messages: chatData.messages)
+    
     let createMessage = CreateMessageView()
     
     //MARK:- Controller Setup

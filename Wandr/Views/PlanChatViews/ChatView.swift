@@ -12,7 +12,7 @@ class ChatView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollecti
     
     fileprivate let messageId = "message"
     
-    fileprivate var messages = ["Ok", "Sounds good I'll be here", "What is going on? What are we doing. I have a dentist appointment today at 6 so I cant wait too long! Im gonna die stop killing me with your procrastination you dicks"]
+    fileprivate let messages: [Message]
     
     let flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -43,8 +43,9 @@ class ChatView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollecti
         return CGSize(width: self.frame.width, height: estimatedSize.height + 10)
     }
     
-    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(frame: frame, collectionViewLayout: flowLayout)
+    init(messages: [Message]) {
+        self.messages = messages
+        super.init(frame: .zero, collectionViewLayout: flowLayout)
         delegate = self
         dataSource = self
         layer.cornerRadius = 30.0

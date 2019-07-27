@@ -56,7 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.rootViewController = navController
             navController.view.backgroundColor = .white
         } else {
-            let navController = UINavigationController(rootViewController: PlanChatController())
+            let navController = UINavigationController(rootViewController: HomeController())
             self.window?.rootViewController = navController
             navController.view.backgroundColor = .white
         }
