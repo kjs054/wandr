@@ -65,13 +65,7 @@ class PlanChatTitleBar: UIView {
     
     fileprivate func setupNavigationTitle() {
         addSubview(navigationTitle)
-        navigationTitle.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -11).isActive = true
         navigationTitle.leftAnchor.constraint(equalTo: leftAnchor, constant: contentMargin).isActive = true
-        addSubview(navigationSubtitle)
-        navigationSubtitle.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 11).isActive = true
-        navigationSubtitle.leftAnchor.constraint(equalTo: leftAnchor, constant: contentMargin).isActive = true
-        navigationSubtitle.rightAnchor.constraint(equalTo: closeButton.leftAnchor, constant: -contentMargin).isActive = true
-        navigationSubtitle.text = "Members"
     }
     
     required init?(coder aDecoder: NSCoder) {
