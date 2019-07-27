@@ -10,10 +10,11 @@ import UIKit
 
 class PlanChatTitleBar: UIView {
     
+    fileprivate let members: [User]
+    
     let navigationTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Your Chat"
         label.font = UIFont(name: "Avenir-Heavy", size: 17)
         label.textColor = wandrBlue
         return label
@@ -33,8 +34,17 @@ class PlanChatTitleBar: UIView {
         return button
     }()
     
-    init() {
+    init(chatTitle: String, chatMembers: [User]) {
+        print(chatMembers)
+        self.members = chatMembers
         super.init(frame: .zero)
+        setupCloseButton()
+        setupNavigationTitle()
+        setupMembersCollection()
+        navigationTitle.text = chatTitle
+    }
+    
+    fileprivate func setupCloseButton() {
         addSubview(closeButton)
         closeButton.widthAnchor.constraint(equalToConstant: 20).isActive = true
         closeButton.heightAnchor.constraint(equalToConstant: 20).isActive = true

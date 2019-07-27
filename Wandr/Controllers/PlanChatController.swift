@@ -11,6 +11,7 @@ import UIKit
 class PlanChatController: UIViewController {
     
     //MARK:- Elements
+    fileprivate var chatData: PlanChat
     
     let mainView: UIStackView = {
         let sv = UIStackView()
@@ -18,7 +19,7 @@ class PlanChatController: UIViewController {
         return sv
     }()
     
-    let titleBar = PlanChatTitleBar()
+    fileprivate lazy var titleBar = PlanChatTitleBar(chatTitle: chatData.name, chatMembers: chatData.members)
     
     let chatView: ChatView = {
         let chat = ChatView()
@@ -35,10 +36,16 @@ class PlanChatController: UIViewController {
     let createMessage = CreateMessageView()
     
     //MARK:- Controller Setup
+    
+    init(chat: PlanChat) {
+        chatData = chat
+        super.init(nibName: nil, bundle: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMainView()
-        setupTitleBar()
+        navigationController?.navigationBar.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         let gesture = UITapGestureRecognizer(target: self, action: #selector(keyboardWillHide))
@@ -59,23 +66,28 @@ class PlanChatController: UIViewController {
             titleBar.heightAnchor.constraint(equalToConstant: 80).isActive = true
             createMessage.heightAnchor.constraint(equalToConstant: 50).isActive = true
         }
-        
     }
+    
+    //MARK:- Logic
     
     let bottomSafeArea = UIApplication.shared.delegate?.window??.safeAreaInsets.bottom ?? 0
     
     @objc func keyboardWillHide(notification: NSNotification) {
         view.endEditing(true)
         createMessage.frame.origin.y = (view.frame.height - 94 - bottomSafeArea)
+        chatContainer.frame.origin.y = (view.frame.height - chatContainer.frame.height - 94 - bottomSafeArea)
     }
-    
-    //MARK:- Logic
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let keyboardHeight = keyboardSize.height
+            chatContainer.frame.origin.y -= keyboardHeight - bottomSafeArea
             createMessage.frame.origin.y -= keyboardHeight - bottomSafeArea
         }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     //MARK:- Navigation Functions
