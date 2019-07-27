@@ -21,14 +21,15 @@ class PlanChatController: UIViewController {
     
     fileprivate lazy var titleBar = PlanChatTitleBar(chatTitle: chatData.name, chatMembers: chatData.members)
     
-    let chatView: ChatView = {
-        let chat = ChatView()
-        chat.layer.shadowColor = UIColor.black.cgColor
-        chat.layer.masksToBounds = true
-        chat.layer.shadowOffset = CGSize(width: 0, height: 1.0)
-        chat.layer.shadowOpacity = 0.2
-        chat.layer.shadowRadius = 4.0
-        return chat
+    let chatContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 1.0)
+        view.layer.shadowOpacity = 0.2
+        view.layer.masksToBounds = false
+        view.layer.shadowRadius = 4.0
+        return view
     }()
     
     fileprivate lazy var chatView = ChatView(messages: chatData.messages)
@@ -51,15 +52,13 @@ class PlanChatController: UIViewController {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(keyboardWillHide))
         view.addGestureRecognizer(gesture)
     }
-    
-    func setupTitleBar() {
-        navigationController?.navigationBar.isHidden = true
-        
-    }
-    
+   
     fileprivate func setupMainView() {
         view.addSubview(mainView)
-        let subviews = [titleBar, chatView, createMessage]
+        let subviews = [titleBar, chatContainer, createMessage]
+        titleBar.closeButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
+        chatContainer.addSubview(chatView)
+        chatView.fillSuperView()
         mainView.fillSuperView()
         subviews.forEach { (sv) in
             mainView.addArrangedSubview(sv)
