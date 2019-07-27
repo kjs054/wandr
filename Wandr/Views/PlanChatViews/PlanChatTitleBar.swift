@@ -19,12 +19,10 @@ class PlanChatTitleBar: UIView {
         return label
     }()
     
-    let navigationSubtitle: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "Avenir-Heavy", size: 17)
-        label.textColor = #colorLiteral(red: 0.431372549, green: 0.431372549, blue: 0.431372549, alpha: 1)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    fileprivate lazy var membersColleciton: membersBubblesCollection = {
+        let mbc = membersBubblesCollection(chatMembers: members)
+        mbc.translatesAutoresizingMaskIntoConstraints = false
+        return mbc
     }()
     
     let closeButton: UIButton = {
@@ -41,7 +39,21 @@ class PlanChatTitleBar: UIView {
         closeButton.widthAnchor.constraint(equalToConstant: 20).isActive = true
         closeButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
         closeButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -20).isActive = true
-        closeButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        closeButton.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -5).isActive = true
+    }
+    
+    fileprivate func setupMembersCollection() {
+        addSubview(membersColleciton)
+        if (UIApplication.shared.delegate?.window??.safeAreaInsets.top) != nil {
+            navigationTitle.topAnchor.constraint(equalTo: topAnchor).isActive = true
+            membersColleciton.topAnchor.constraint(equalTo: navigationTitle.bottomAnchor, constant: 8).isActive = true
+        }
+        membersColleciton.leftAnchor.constraint(equalTo: leftAnchor, constant: contentMargin).isActive = true
+        membersColleciton.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        membersColleciton.rightAnchor.constraint(equalTo: closeButton.leftAnchor, constant: -contentMargin).isActive = true
+    }
+    
+    fileprivate func setupNavigationTitle() {
         addSubview(navigationTitle)
         navigationTitle.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -11).isActive = true
         navigationTitle.leftAnchor.constraint(equalTo: leftAnchor, constant: contentMargin).isActive = true

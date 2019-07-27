@@ -8,62 +8,78 @@
 
 import UIKit
 
-class FriendsBubbles: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
+class membersBubblesCollection: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    fileprivate let members: [User]
+    
     let flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = -15
+        layout.minimumLineSpacing = 10
         return layout
     }()
     
     let friendCellId = "FriendCellId"
     
-    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(frame: frame, collectionViewLayout: flowLayout)
+    init(chatMembers: [User]) {
+        self.members = chatMembers
+        super.init(frame: .zero, collectionViewLayout: flowLayout)
         translatesAutoresizingMaskIntoConstraints = true
         delegate = self
         dataSource = self
+        layer.masksToBounds = false
+        backgroundColor = .clear
+        layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        layer.shadowRadius = 2.5
+        layer.shadowOffset = CGSize(width: 0, height: 0)
+        layer.shadowOpacity = 0.15
         register(friendCell.self, forCellWithReuseIdentifier: friendCellId)
-        widthAnchor.constraint(equalToConstant: CGFloat(29)).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 9
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: friendCellId, for: indexPath) as! friendCell
-//        cell.profileImage.image = UIImage(named: users[indexPath.row].profileImage)
-        return cell
-    }
-    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: frame.height * 0.75, height: frame.height * 0.75)
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return members.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: friendCellId, for: indexPath) as! friendCell
+        cell.user = members[indexPath.item]
+        return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: self.frame.height, height: self.frame.height)
+    }
+    
 }
 
 class friendCell: UICollectionViewCell {
+    
     let profileImage = UIImageView()
+    
+    var user: User! {
+        didSet {
+            self.isHidden = true
+//            profileImage.loadImageWithCacheFromURLString(urlstring: user.profileImageURL) {
+//                self.backgroundView = self.profileImage
+//                self.isHidden = false
+//            }
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
         layer.cornerRadius = frame.height / 2
         clipsToBounds = true
         layer.borderColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        layer.borderWidth = 4
-        backgroundView = profileImage
     }
     
     required init?(coder aDecoder: NSCoder) {
