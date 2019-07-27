@@ -61,31 +61,78 @@ class ChatView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollecti
 
 class MessageCell: UICollectionViewCell {
     
+    fileprivate func setupBlueBubbleOnRight() {
+        textView.textColor = .white
+        bubbleContainer.backgroundColor = wandrBlue
+        sentUserImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
+        bubbleContainer.trailingAnchor.constraint(equalTo: sentUserImage.leadingAnchor).isActive = true
+    }
+    
+    fileprivate func setupGrayBubbleOnLeft() {
+        textView.textColor = .black
+        bubbleContainer.backgroundColor = #colorLiteral(red: 0.9098039216, green: 0.9098039216, blue: 0.9098039216, alpha: 1)
+        sentUserImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
+        bubbleContainer.leadingAnchor.constraint(equalTo: sentUserImage.trailingAnchor).isActive = true
+    }
+    
+    fileprivate func checkIfSenderIsCurrentUser() {
+        if message.sender.uid == LocalStorage().currentUserData()!["uid"] as! String {
+            setupBlueBubbleOnRight()
+        } else {
+            setupGrayBubbleOnLeft()
+        }
+    }
+    
+    var message: Message! {
+        didSet {
+            checkIfSenderIsCurrentUser()
+            textView.text = message.content
+            sentUserImage.isHidden = true
+            sentUserImage.loadImageWithCacheFromURLString(urlstring: message.sender.profileImageURL) {
+                self.sentUserImage.isHidden = false
+            }
+        }
+    }
+    
     let textView: UITextView = {
         let tv = UITextView()
         tv.isScrollEnabled = false
         tv.isEditable = false
-        tv.textColor = .white
         tv.font = UIFont(name: "Avenir-Medium", size: 17)
         tv.backgroundColor = .clear
         return tv
     }()
     
+    let sentUserImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.cornerRadius = 15
+        imageView.clipsToBounds = true
+        imageView.backgroundColor = .black
+        return imageView
+    }()
+    
     let bubbleContainer: UIView = {
         let bc = UIView()
         bc.layer.cornerRadius = 20
-        bc.backgroundColor = wandrBlue
         return bc
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        bubbleContainer.transform = CGAffineTransform(scaleX: 1, y: -1)
+        sentUserImage.transform = CGAffineTransform(scaleX: 1, y: -1)
         addSubview(bubbleContainer)
-        bubbleContainer.anchor(top: topAnchor, bottom: bottomAnchor, leading: nil, trailing: trailingAnchor, padding: UIEdgeInsets(top: 0, left: contentMargin, bottom: 0, right: -contentMargin))
+        addSubview(sentUserImage)
+        sentUserImage.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        sentUserImage.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        sentUserImage.heightAnchor.constraint(equalTo: sentUserImage.widthAnchor).isActive = true
+        bubbleContainer.anchor(top: topAnchor, bottom: bottomAnchor, leading: nil, trailing: nil, padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: -10))
         bubbleContainer.widthAnchor.constraint(lessThanOrEqualToConstant: 250).isActive = true
         bubbleContainer.addSubview(textView)
         textView.fillSuperView(padding: UIEdgeInsets(top: 0, left: 10, bottom: -10, right: 10))
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
