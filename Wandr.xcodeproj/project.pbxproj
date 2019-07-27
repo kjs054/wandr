@@ -30,7 +30,7 @@
 		63133CDF22B5467A00D5ADB1 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63133CDE22B5467A00D5ADB1 /* ProfileController.swift */; };
 		63133CE122B5882C00D5ADB1 /* PlanChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63133CE022B5882C00D5ADB1 /* PlanChatController.swift */; };
 		63133CE622B5917A00D5ADB1 /* selectedUsersCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63133CE522B5917A00D5ADB1 /* selectedUsersCollectionView.swift */; };
-		6318706A22B0064F005C6FA4 /* FriendsBubbles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318706922B0064F005C6FA4 /* FriendsBubbles.swift */; };
+		6318706A22B0064F005C6FA4 /* membersBubblesCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318706922B0064F005C6FA4 /* membersBubblesCollection.swift */; };
 		6318706C22B01464005C6FA4 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318706B22B01464005C6FA4 /* User.swift */; };
 		6318707022B045DA005C6FA4 /* MyPlansController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318706F22B045DA005C6FA4 /* MyPlansController.swift */; };
 		631D2DF522DF8A160043DBB4 /* pricing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631D2DF422DF8A160043DBB4 /* pricing.swift */; };
@@ -124,7 +124,7 @@
 		63133CDE22B5467A00D5ADB1 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		63133CE022B5882C00D5ADB1 /* PlanChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanChatController.swift; sourceTree = "<group>"; };
 		63133CE522B5917A00D5ADB1 /* selectedUsersCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = selectedUsersCollectionView.swift; sourceTree = "<group>"; };
-		6318706922B0064F005C6FA4 /* FriendsBubbles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsBubbles.swift; sourceTree = "<group>"; };
+		6318706922B0064F005C6FA4 /* membersBubblesCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = membersBubblesCollection.swift; sourceTree = "<group>"; };
 		6318706B22B01464005C6FA4 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		6318706F22B045DA005C6FA4 /* MyPlansController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlansController.swift; sourceTree = "<group>"; };
 		631D2DF422DF8A160043DBB4 /* pricing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pricing.swift; sourceTree = "<group>"; };
@@ -310,6 +310,7 @@
 		63133CE222B58B7100D5ADB1 /* PlanChatViews */ = {
 			isa = PBXGroup;
 			children = (
+				6318706922B0064F005C6FA4 /* membersBubblesCollection.swift */,
 				6370F18522EA8D7900F91974 /* PlanChatTitleBar.swift */,
 				63133CE522B5917A00D5ADB1 /* selectedUsersCollectionView.swift */,
 				6346780422B808AC00166628 /* CreateMessageView.swift */,
@@ -336,7 +337,6 @@
 				0A1D78FD22A72F96004AB1FF /* CardView.swift */,
 				630E649F22AC836A00D07F5D /* topOfCard.swift */,
 				6329FAFF22AAEDBE006C5E33 /* bottomOfCard.swift */,
-				6318706922B0064F005C6FA4 /* FriendsBubbles.swift */,
 			);
 			path = CardViews;
 			sourceTree = "<group>";
@@ -648,7 +648,7 @@
 				6346990A22BEC85A002AB392 /* Contact.swift in Sources */,
 				63351F8422AEDFE40027AEC4 /* tagsFiltersView.swift in Sources */,
 				634698FA22BEC82B002AB392 /* LoginController.swift in Sources */,
-				6318706A22B0064F005C6FA4 /* FriendsBubbles.swift in Sources */,
+				6318706A22B0064F005C6FA4 /* membersBubblesCollection.swift in Sources */,
 				638E9E4922C162A900DD4B7B /* EmailInputController.swift in Sources */,
 				636A8D1D22C2CFF200F2D1C3 /* NameInputController.swift in Sources */,
 				6346991222BEC8A2002AB392 /* FilterCell.swift in Sources */,

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class user: NSObject, NSCoding {
+class User: NSObject, NSCoding {
     var name: String
     var profileImageURL: String
     var phoneNumber: String

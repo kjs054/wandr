@@ -12,9 +12,9 @@ class SelectableContact: NSObject, NSCoding {
     var name: String
     var phoneNum: String
     var selected: Bool
-    var userData: user?
+    var userData: User?
     
-    init(name: String, phoneNum: String, userData: user?, selected: Bool) {
+    init(name: String, phoneNum: String, userData: User?, selected: Bool) {
         self.name = name; self.phoneNum = phoneNum; self.userData = userData; self.selected = selected;
     }
     
@@ -22,7 +22,7 @@ class SelectableContact: NSObject, NSCoding {
         self.name = decoder.decodeObject (forKey: "name") as? String ?? ""
         self.phoneNum = decoder.decodeObject  (forKey: "phoneNum") as? String ?? ""
         self.selected = decoder.decodeBool  (forKey: "selected")
-        self.userData = decoder.decodeObject(forKey: "userData") as? user
+        self.userData = decoder.decodeObject(forKey: "userData") as? User
     }
     
     func encode(with aCoder: NSCoder) {

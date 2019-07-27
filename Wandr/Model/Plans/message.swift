@@ -9,7 +9,7 @@
 import Foundation
 
 struct Message {
-    var sender: user
+    var sender: User
     var timestamp: Date
     var content: String
     var type: Type

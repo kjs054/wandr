@@ -100,7 +100,7 @@ extension firebaseFunctions {
                                             self.fetchCurrentUserData(uid: uid, completionHandler: { (userData) in
                                                 if let userData = userData {
                                                     if formattedPhone != localStorage.currentUserData()!["phoneNumber"] as! String {
-                                                        let newuser = user(name: userData["name"] as! String, profileImageURL: userData["profileImageURL"] as! String, phoneNumber: userData["phoneNumber"] as! String, uid: userData["uid"] as! String)
+                                                        let newuser = User(name: userData["name"] as! String, profileImageURL: userData["profileImageURL"] as! String, phoneNumber: userData["phoneNumber"] as! String, uid: userData["uid"] as! String)
                                                         contact.userData = newuser
                                                         userContacts.append(contact)
                                                         callback(userContacts)

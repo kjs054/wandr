@@ -10,7 +10,7 @@ import Foundation
 
 struct PlanChat {
     var name: String
-    var members: [user]
+    var members: [User]
     var messages: [Message]
     var created: Date
 }
