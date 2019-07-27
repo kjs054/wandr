@@ -54,10 +54,10 @@ class ChatView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollecti
         delegate = self
         dataSource = self
         layer.cornerRadius = 30.0
-        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         backgroundColor = .white
         register(MessageCell.self, forCellWithReuseIdentifier: messageId)
-        
+        transform = CGAffineTransform(scaleX: 1, y: -1)
     }
     
     required init?(coder aDecoder: NSCoder) {
