@@ -251,7 +251,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
                         "created": FieldValue.serverTimestamp()] as [String : Any]
 
         addChatDocument(chatData: chatData) {
-            let vc = PlanChatController()
+            let vc = PlanChatController(chat: PlanChat(name: "The College Boys", members: [User(name: "Kevin Shiflett", profileImageURL: "https://firebasestorage.googleapis.com/v0/b/wandr-244417.appspot.com/o/profileImages%2FFBe0pDwPzGdVZFy88tgAroKWZm72?alt=media&token=f00f10de-5634-4c72-81f7-c6b17c36dd08", phoneNumber: "+1443944433", uid: "FBe0pDwPzGdVZFy88tgAroKWZm72"), User(name: "Jonah Willard", profileImageURL: "https://firebasestorage.googleapis.com/v0/b/wandr-244417.appspot.com/o/profileImages%2FNv93ePKaenP0hygUH7QGn2eqnGq1?alt=media&token=fcefd0a3-0ac0-4532-89e9-73fccc7fc8c8", phoneNumber: "+1443944433", uid: "dfsajkflasjfl")], messages: [Message(sender: User(name: "Kevin Shiflett", profileImageURL: "https://firebasestorage.googleapis.com/v0/b/wandr-244417.appspot.com/o/profileImages%2FFBe0pDwPzGdVZFy88tgAroKWZm72?alt=media&token=f00f10de-5634-4c72-81f7-c6b17c36dd08", phoneNumber: "+1443944433", uid: "FBe0pDwPzGdVZFy88tgAroKWZm72"), timestamp: Date(timeIntervalSinceReferenceDate: -123456789.0), content: "Ok Ill be tfsakdlfjsafsjfka;dfjl;dkfjaklfjsal;dfjsdfalhere", type: .text)], created:  Date(timeIntervalSinceReferenceDate: -123456789.0)))
             let transition = CATransition().pushTransition(direction: .fromRight)
             self.navigationController!.view.layer.add(transition, forKey: kCATransition)
             self.navigationController?.pushViewController(vc, animated: false)
