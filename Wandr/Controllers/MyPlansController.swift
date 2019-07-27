@@ -74,7 +74,7 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             tableView.deselectRow(at: indexPath, animated: true)
-            showPlanChatController()
+//            showPlanChatController()
         }
     }
     
@@ -107,12 +107,12 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
         navigationController?.popToRootViewController(animated: false)
     }
     
-    func showPlanChatController() {
-        let vc = PlanChatController()
-        let transition = CATransition().pushTransition(direction: CATransitionSubtype.fromRight)
-        navigationController?.view.layer.add(transition, forKey: kCATransition)
-        navigationController?.pushViewController(vc, animated: false)
-    }
+//    func showPlanChatController() {
+//        let vc = PlanChatController(chat: nil)
+//        let transition = CATransition().pushTransition(direction: CATransitionSubtype.fromRight)
+//        navigationController?.view.layer.add(transition, forKey: kCATransition)
+//        navigationController?.pushViewController(vc, animated: false)
+//    }
 }
 
 
