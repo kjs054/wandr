@@ -103,7 +103,7 @@ class HomeController: UIViewController {
         navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.isTranslucent = false
         let myPlansButton = UIButton()
-        myPlansButton.addTarget(self, action: #selector(showMessages), for: .touchUpInside)
+        myPlansButton.addTarget(self, action: #selector(showPlans), for: .touchUpInside)
         myPlansButton.setImage(#imageLiteral(resourceName: "messageIcon").withRenderingMode(.alwaysOriginal), for: .normal)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: myPlansButton)
         setupActivityIndicator()
@@ -118,7 +118,7 @@ class HomeController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
-    @objc func showMessages() {
+    @objc func showPlans() {
         let vc = MyPlansController()
         let transition = CATransition().pushTransition(direction: .fromRight)
         self.navigationController!.view.layer.add(transition, forKey: kCATransition)
