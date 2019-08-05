@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
-class PlanChatController: UIViewController {
+class PlanChatController: UIViewController, UITextFieldDelegate {
     
     //MARK:- Elements
     fileprivate var chatData: PlanChat
@@ -32,7 +33,7 @@ class PlanChatController: UIViewController {
         return view
     }()
     
-    fileprivate lazy var chatView = ChatView(messages: chatData.messages)
+    let chatView = ChatView()
     
     let createMessage = CreateMessageView()
     
@@ -46,6 +47,8 @@ class PlanChatController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMainView()
+        fetchMessages()
+        createMessage.messageField.delegate = self
         navigationController?.navigationBar.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -68,6 +71,19 @@ class PlanChatController: UIViewController {
     }
     
     //MARK:- Logic
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if createMessage.messageField == createMessage.messageField {
+            createMessage.messageField.resignFirstResponder()
+            if let messageText = textField.text {
+                addMessageToChat(chatID: chatData.chatID, content: messageText) {
+                    textField.text = ""
+                    print("Message added")
+                }
+            }
+            return false
+        }
+        return true
+    }
     
     let bottomSafeArea = UIApplication.shared.delegate?.window??.safeAreaInsets.bottom ?? 0
     
@@ -87,6 +103,29 @@ class PlanChatController: UIViewController {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func fetchMessages() {
+        var messages = [Message]()
+        let db = Firestore.firestore()
+        let query = db.collection("chats").document(chatData.chatID).collection("messages").order(by: "timestamp")
+        query.addSnapshotListener(includeMetadataChanges: true) { (querySnapshot, error) in
+            if let error = error {
+                print(error)
+                return
+            }
+            querySnapshot?.documentChanges.forEach({ (change) in
+                if change.type == .added {
+                    var data = change.document.data()
+                    let user = self.chatData.members.first(where:{$0.uid == data["sender"] as! String})
+                    data["sender"] = user
+                    messages.append(Message(dictionary: data))
+                    let reversedOrderMsgs = Array(messages.reversed())
+                    self.chatView.messages = reversedOrderMsgs
+                }
+            })
+            self.chatView.reloadData()
+        }
     }
     
     //MARK:- Navigation Functions
