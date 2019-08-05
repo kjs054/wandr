@@ -19,18 +19,18 @@ protocol firebaseFunctions {
     func uploadProfileImageToStorage(image: UIImage, complete:@escaping ()->())
     func addUserDataToUsersCollection(complete:@escaping ()->())
     func getContacts(callback:@escaping (_ contacts: [SelectableContact]) -> ())
-    func checkIfContactIsUser(contact: SelectableContact, callback: @escaping ((_ uid:String?) ->Void ))
-    func fetchCurrentUserData(uid: String, completionHandler: @escaping (_ userData: Dictionary<String, Any>?) -> ())
+    func checkIfContactIsUser(contact: SelectableContact, callback: @escaping (_ user:User?) -> ())
+    func fetchCurrentUserData(uid: String, completionHandler: @escaping (_ userData: User?) -> ())
     func getUID() -> String
 }
 
 extension firebaseFunctions {
     
-    //MARK:- Logic
+    //MARK:- Registration Functions
     func uploadProfileImageToStorage(image: UIImage, complete:@escaping ()->()) {
         let storage = Storage.storage()
         let storageRef = storage.reference().child("profileImages/\(getUID())")
-        if let uploadData = image.jpeg(.low) {
+        if let uploadData = image.jpeg(.lowest) {
             storageRef.putData(uploadData, metadata: nil) { (metaData, error) in
                 if error != nil {
                     print(error!)
@@ -68,7 +68,7 @@ extension firebaseFunctions {
         db.collection("registeredPhones").document(phoneNumber).setData(["uid": uid])
     }
     
-    
+    //MARK:- User Fetching Functions
     func getContacts(callback: @escaping (_ contacts: [SelectableContact]) -> ()) {
         let localStorage = LocalStorage()
         var userContacts = [SelectableContact]()
@@ -87,35 +87,23 @@ extension firebaseFunctions {
                         let phone = contact.phoneNumbers.first?.value.stringValue ?? "" //get first phone number
                         let formattedPhone = phone.formatPhone()
                         let name = "\(contact.givenName) \(contact.familyName)" //combine first and last name
-                        if phonesArray.contains(phone) {
-                            print("Duplicate number")
+                        if formattedPhone == localStorage.currentUserData()!.phoneNumber || phonesArray.contains(phone) || contact.givenName.isEmpty || phone.isEmpty {
+                            print("Issue with contact")
                             return
                         } else {
-                            if contact.givenName.isEmpty || phone.isEmpty { //if the contact is missing data don't add to array of contacts
-                                return
-                            } else {
-                                if let formattedPhone = phone.formatPhone() {
-                                    let contact = SelectableContact(name: name, phoneNum: formattedPhone, userData: nil, selected: false)
-                                    self.checkIfContactIsUser(contact: contact, callback: { (uid) in
-                                        if let uid = uid {
-                                            self.fetchCurrentUserData(uid: uid, completionHandler: { (userData) in
-                                                if let userData = userData {
-                                                    if formattedPhone != localStorage.currentUserData()!["phoneNumber"] as! String {
-                                                        let newuser = User(name: userData["name"] as! String, profileImageURL: userData["profileImageURL"] as! String, phoneNumber: userData["phoneNumber"] as! String, uid: userData["uid"] as! String)
-                                                        contact.userData = newuser
-                                                        userContacts.append(contact)
-                                                        callback(userContacts)
-                                                    }
-                                                }
-                                            })
-                                        } else {
+                            phonesArray.append(phone)
+                            let contact = SelectableContact(name: name, phoneNum: formattedPhone!, userData: nil, selected: false)
+                            self.checkIfContactIsUser(contact: contact, callback: { (userData) in
+                                if let userData = userData { //If they exist
+                                            contact.userData = userData
                                             userContacts.append(contact)
                                             callback(userContacts)
-                                        }
-                                    })
-                                    phonesArray.append(phone)
+                                        
+                                } else { //If not a user
+                                    userContacts.append(contact)
+                                    callback(userContacts)
                                 }
-                            }
+                            })
                         }
                     })
                 } catch let err {
@@ -127,7 +115,7 @@ extension firebaseFunctions {
         }
     }
     
-    func checkIfContactIsUser(contact: SelectableContact, callback: @escaping ((_ uid:String?) ->Void ))  {
+    func checkIfContactIsUser(contact: SelectableContact, callback: @escaping (_ user:User?) ->())  {
         let ref = db.collection("registeredPhones").document(contact.phoneNum)
         ref.getDocument { (snapshot, error) in
             if let snapshot = snapshot {
@@ -140,7 +128,11 @@ extension firebaseFunctions {
                             if snapshot.exists == false {
                                 ref.setData(contactData)
                             }
-                            callback(uidForContact)
+                            self.fetchCurrentUserData(uid: uidForContact) { (user) in
+                                if let user = user {
+                                    callback(user)
+                                }
+                            }
                         }
                     })
                 } else {
