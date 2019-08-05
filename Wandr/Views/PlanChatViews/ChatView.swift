@@ -12,12 +12,12 @@ class ChatView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollecti
     
     fileprivate let messageId = "message"
     
-    fileprivate let messages: [Message]
+    var messages = [Message]()
     
     let flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 10
+        layout.minimumLineSpacing = 5
         return layout
     }()
     
@@ -42,19 +42,18 @@ class ChatView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollecti
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch messages[indexPath.item].type {
         case .text:
-            let estimatedCellSize = MessageCell.init(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 1000))
+            let estimatedCellSize = MessageCell.init(frame: CGRect(x: 0, y: 0, width: 250, height: 1000))
             estimatedCellSize.textView.text = self.messages[indexPath.item].content
             estimatedCellSize.layoutIfNeeded()
             let estimatedSize = estimatedCellSize.systemLayoutSizeFitting(CGSize(width: self.frame.width, height: 1000))
-            return CGSize(width: self.frame.width, height: estimatedSize.height + 10)
+            return CGSize(width: self.frame.width * 0.95, height: estimatedSize.height)
         default:
             return CGSize(width: self.frame.width, height: 0)
         }
     }
     
-    init(messages: [Message]) {
-        self.messages = messages
-        super.init(frame: .zero, collectionViewLayout: flowLayout)
+    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+        super.init(frame: frame, collectionViewLayout: flowLayout)
         delegate = self
         dataSource = self
         layer.cornerRadius = 30.0
@@ -95,11 +94,22 @@ class MessageCell: UICollectionViewCell {
     
     var message: Message! {
         didSet {
-            checkIfSenderIsCurrentUser()
             textView.text = message.content
-            sentUserImage.isHidden = true
-            sentUserImage.loadImageWithCacheFromURLString(urlstring: message.sender.profileImageURL) {
-                self.sentUserImage.isHidden = false
+            nameLabel.text = "\(message.sender.name) - \(message.timestamp.toTime())"
+            if self.message.isFromCurrentLoggedInUser {
+                self.setupBlueBubbleOnRight()
+            } else {
+                self.setupGrayBubbleOnLeft()
+            }
+        }
+    }
+    
+    var doesBreakTheSenderChain: Bool! {
+        didSet {
+            if doesBreakTheSenderChain {
+                nameLabel.isHidden = false
+            } else {
+                nameLabel.isHidden = true
             }
         }
     }
@@ -113,13 +123,10 @@ class MessageCell: UICollectionViewCell {
         return tv
     }()
     
-    let sentUserImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.layer.cornerRadius = 15
-        imageView.clipsToBounds = true
-        imageView.backgroundColor = .black
-        return imageView
+    let nameLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Avenir-Book", size: 10)
+        return label
     }()
     
     let bubbleContainer: UIView = {
@@ -127,16 +134,20 @@ class MessageCell: UICollectionViewCell {
         bc.layer.cornerRadius = 20
         return bc
     }()
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupBubbleContainer()
+        setupNameLabel()
+    }
+    
+    fileprivate func setupBubbleContainer() {
         bubbleContainer.transform = CGAffineTransform(scaleX: 1, y: -1)
-        sentUserImage.transform = CGAffineTransform(scaleX: 1, y: -1)
         addSubview(bubbleContainer)
         bubbleConstraints = bubbleContainer.anchor(top: topAnchor, bottom: bottomAnchor, leading: leadingAnchor, trailing: trailingAnchor)
         bubbleContainer.widthAnchor.constraint(lessThanOrEqualToConstant: 250).isActive = true
         bubbleContainer.addSubview(textView)
-        textView.fillSuperView(padding: UIEdgeInsets(top: 0, left: 10, bottom: -10, right: 10))
+        textView.fillSuperView(padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
     }
     
     fileprivate func setupNameLabel() {
