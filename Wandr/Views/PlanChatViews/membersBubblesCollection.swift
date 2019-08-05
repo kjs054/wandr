@@ -67,10 +67,10 @@ class friendCell: UICollectionViewCell {
     var user: User! {
         didSet {
             self.isHidden = true
-//            profileImage.loadImageWithCacheFromURLString(urlstring: user.profileImageURL) {
-//                self.backgroundView = self.profileImage
-//                self.isHidden = false
-//            }
+            profileImage.loadImageWithCacheFromURLString(urlstring: user.profileImageURL) {
+                self.backgroundView = self.profileImage
+                self.isHidden = false
+            }
         }
     }
     
