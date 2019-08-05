@@ -10,7 +10,7 @@ import UIKit
 
 class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var plans = [String]()
+    var planChats = [PlanChat]()
     
     //MARK:- Variables
     let planPreviewId = "planPreviewId"
@@ -31,6 +31,10 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        fetchUserChats(uid: LocalStorage().currentUserData()!.uid) { (chats) in
+            self.planChats = chats
+            self.tableView.reloadData()
+        }
         setupTableView()
         setupNavigationBar()
     }
@@ -68,13 +72,13 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
         if section == 1 {
             return 1
         }
-        return 0
+        return planChats.count
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             tableView.deselectRow(at: indexPath, animated: true)
-//            showPlanChatController()
+            showPlanChatController(planChat: planChats[indexPath.item])
         }
     }
     
@@ -85,12 +89,13 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: planPreviewId, for: indexPath) as! planPreviewCell
+        cell.plan = planChats[indexPath.item]
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 1 {
-            if plans.isEmpty {
+            if planChats.isEmpty {
                 tableView.isScrollEnabled = false
                 return tableView.frame.height
             } else {
@@ -107,16 +112,23 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
         navigationController?.popToRootViewController(animated: false)
     }
     
-//    func showPlanChatController() {
-//        let vc = PlanChatController(chat: nil)
-//        let transition = CATransition().pushTransition(direction: CATransitionSubtype.fromRight)
-//        navigationController?.view.layer.add(transition, forKey: kCATransition)
-//        navigationController?.pushViewController(vc, animated: false)
-//    }
+    func showPlanChatController(planChat: PlanChat) {
+        let vc = PlanChatController(chat: planChat)
+        let transition = CATransition().pushTransition(direction: CATransitionSubtype.fromRight)
+        navigationController?.view.layer.add(transition, forKey: kCATransition)
+        navigationController?.pushViewController(vc, animated: false)
+    }
 }
 
 
 class planPreviewCell: UITableViewCell {
+    
+    var plan: PlanChat! {
+        didSet {
+            contactCellView.title.text = plan.name
+//            contactCellView.subTitle.text = plan.messages.first?.content
+        }
+    }
     
     //MARK:- Subviews
     let contactCellView = ContactView()
