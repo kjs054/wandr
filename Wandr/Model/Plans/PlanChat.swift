@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import Firebase
 
 struct PlanChat {
     var name: String
+    var chatID: String
     var members: [User]
-    var messages: [Message]
-    var created: Date
+    var created: Timestamp
 }
