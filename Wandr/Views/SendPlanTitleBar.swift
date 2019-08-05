@@ -38,8 +38,8 @@ class SendPlanTitleBar: UIView {
     init(planTitle: NSAttributedString) {
         super.init(frame: .zero)
         addSubview(closeButton)
-        closeButton.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        closeButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        closeButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        closeButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         closeButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -20).isActive = true
         closeButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         addSubview(navigationTitle)

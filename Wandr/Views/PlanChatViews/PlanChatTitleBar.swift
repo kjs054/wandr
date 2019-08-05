@@ -35,7 +35,6 @@ class PlanChatTitleBar: UIView {
     }()
     
     init(chatTitle: String, chatMembers: [User]) {
-        print(chatMembers)
         self.members = chatMembers
         super.init(frame: .zero)
         setupCloseButton()
