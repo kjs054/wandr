@@ -140,14 +140,12 @@ class HomeController: UIViewController {
     }
     
     func setupProfilePictureNavigationBar() {
-        guard let imageURL = localStorage.currentUserData()?["profileImageURL"] as? String else { //Unwraps url stored as type Any to String
-            print("Could not get image url for some fucking reason")
-            return
+        if let imageURL = localStorage.currentUserData()?.profileImageURL { //Unwraps url stored as type Any to String
+            self.profileButton.loadImageWithCacheFromURLString(urlstring: imageURL) {
+                self.activityIndicator.stopAnimating()
+                self.setupProfilePicture()
+            }
         }
-        self.profileButton.loadImageWithCacheFromURLString(urlstring: imageURL) {
-            self.activityIndicator.stopAnimating()
-            self.setupProfilePicture()
-        } //Download, cache, and display
     }
 }
 
