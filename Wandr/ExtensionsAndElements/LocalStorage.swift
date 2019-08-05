@@ -43,7 +43,7 @@ class LocalStorage {
         return nil
     }
     
-    func saveCurrentUserData(userData: Dictionary<String,Any>) {
+    func saveCurrentUserData(userData: User) {
         do {
             let encodedData: Data = try NSKeyedArchiver.archivedData(withRootObject: userData, requiringSecureCoding: false)
             UserDefaults.standard.set(encodedData, forKey: "currentUserData")
@@ -53,11 +53,11 @@ class LocalStorage {
         }
     }
     
-    func currentUserData() -> Dictionary<String,Any>? {
+    func currentUserData() -> User? {
         do {
             if UserDefaults.standard.object(forKey: "currentUserData") != nil{
                 let decodedData = UserDefaults.standard.object(forKey: "currentUserData") as! Data
-                if let decodedPlace = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decodedData) as? Dictionary<String, Any> {
+                if let decodedPlace = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decodedData) as? User {
                     return decodedPlace
                 }
             }

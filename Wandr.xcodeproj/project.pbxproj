@@ -41,6 +41,8 @@
 		631F784322E7B5C600F85AE2 /* message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631F784222E7B5C600F85AE2 /* message.swift */; };
 		631F784B22E9038F00F85AE2 /* activityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631F784A22E9038F00F85AE2 /* activityIndicatorView.swift */; };
 		631F784D22E911E100F85AE2 /* SendPlanTitleBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631F784C22E911E100F85AE2 /* SendPlanTitleBar.swift */; };
+		6326586F22F4B21F00A7B9DD /* AnchoredConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326586E22F4B21F00A7B9DD /* AnchoredConstraints.swift */; };
+		6326587122F7523100A7B9DD /* ConvertFirebaseTimeStamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326587022F7523100A7B9DD /* ConvertFirebaseTimeStamp.swift */; };
 		6328941D22C80A830069EA79 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6328941C22C80A830069EA79 /* StringExtension.swift */; };
 		6329FB0022AAEDBE006C5E33 /* bottomOfCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6329FAFF22AAEDBE006C5E33 /* bottomOfCard.swift */; };
 		6331190E22B2B5DC00B8120A /* Transitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6331190D22B2B5DC00B8120A /* Transitions.swift */; };
@@ -135,6 +137,8 @@
 		631F784222E7B5C600F85AE2 /* message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = message.swift; sourceTree = "<group>"; };
 		631F784A22E9038F00F85AE2 /* activityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = activityIndicatorView.swift; sourceTree = "<group>"; };
 		631F784C22E911E100F85AE2 /* SendPlanTitleBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendPlanTitleBar.swift; sourceTree = "<group>"; };
+		6326586E22F4B21F00A7B9DD /* AnchoredConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchoredConstraints.swift; sourceTree = "<group>"; };
+		6326587022F7523100A7B9DD /* ConvertFirebaseTimeStamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertFirebaseTimeStamp.swift; sourceTree = "<group>"; };
 		6328941C22C80A830069EA79 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		6329FAFF22AAEDBE006C5E33 /* bottomOfCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bottomOfCard.swift; sourceTree = "<group>"; };
 		6331190D22B2B5DC00B8120A /* Transitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transitions.swift; sourceTree = "<group>"; };
@@ -217,9 +221,11 @@
 				636A8D1E22C2DE7F00F2D1C3 /* FirebaseFunctions.swift */,
 				0A1D78ED22A19B23004AB1FF /* AutoLayoutExtension.swift */,
 				639D6B6122D10ECA0057B1FA /* FormatPhoneExtension.swift */,
+				6326587022F7523100A7B9DD /* ConvertFirebaseTimeStamp.swift */,
 				0A1D78F922A36A0B004AB1FF /* UIElements.swift */,
 				63A9A3AC22BF100B0063E8B8 /* cvCellShadowExtension.swift */,
 				631D677922D690BB001A7999 /* ImageCompression.swift */,
+				6326586E22F4B21F00A7B9DD /* AnchoredConstraints.swift */,
 				6328941C22C80A830069EA79 /* StringExtension.swift */,
 				631E169D22C592810012094C /* downloadCacheDisplayImage.swift */,
 				6331190D22B2B5DC00B8120A /* Transitions.swift */,
@@ -629,6 +635,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				631D677A22D690BB001A7999 /* ImageCompression.swift in Sources */,
+				6326586F22F4B21F00A7B9DD /* AnchoredConstraints.swift in Sources */,
 				630E64A022AC836A00D07F5D /* topOfCard.swift in Sources */,
 				631F784322E7B5C600F85AE2 /* message.swift in Sources */,
 				6318707022B045DA005C6FA4 /* MyPlansController.swift in Sources */,
@@ -654,6 +661,7 @@
 				6346991222BEC8A2002AB392 /* FilterCell.swift in Sources */,
 				6346780522B808AD00166628 /* CreateMessageView.swift in Sources */,
 				631D2DF522DF8A160043DBB4 /* pricing.swift in Sources */,
+				6326587122F7523100A7B9DD /* ConvertFirebaseTimeStamp.swift in Sources */,
 				63A9A3AD22BF100B0063E8B8 /* cvCellShadowExtension.swift in Sources */,
 				63351F8222AEC7080027AEC4 /* CardViewModel.swift in Sources */,
 				631E169E22C592810012094C /* downloadCacheDisplayImage.swift in Sources */,
