@@ -22,12 +22,13 @@ extension UIImageView {
         let url = URL(string: urlstring)
         URLSession.shared.dataTask(with: url!) { //Downloads the image from the provided url parameter
             data, response, error in
-            if data != nil {
+            if let data = data {
                 DispatchQueue.main.async {
-                    let imageToCache = UIImage(data: data!)
-                    imageCache.setObject(imageToCache!, forKey: urlstring as AnyObject) //Cache the image
-                    self.image = imageToCache //Make the imageview image display downloaded image
-                    complete()
+                    if let imageToCache = UIImage(data: data) {
+                        imageCache.setObject(imageToCache, forKey: urlstring as AnyObject) //Cache the image
+                        self.image = imageToCache //Make the imageview image display downloaded image
+                        complete()
+                    }
                 }
             }
             }.resume() //If suspended
