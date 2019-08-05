@@ -160,7 +160,7 @@ extension firebaseFunctions {
         return uid
     }
     
-    func fetchCurrentUserData(uid: String, completionHandler: @escaping (_ userData: Dictionary<String, Any>?) -> ()) { //gets the users data from firestore and stores it in currentUser dictionary
+    func fetchCurrentUserData(uid: String, completionHandler: @escaping (_ userData: User?) -> ()) { //gets the users data from firestore and stores it in currentUser dictionary
         let docRef = db.collection("users").document(uid) //Retrieves document named with users id
         docRef.getDocument { (snapshot, error) in
             if let snapshot = snapshot {
@@ -173,7 +173,7 @@ extension firebaseFunctions {
                     if let chats = snapshot.get("activeChats") {
                         data["activeChats"] = chats
                     }
-                    completionHandler(data)
+                    completionHandler(User(name: name, profileImageURL: profileImageURL, phoneNumber: phoneNumber, uid: uid))
                     //Perform element setup after fetching complete
                 } else {
                     completionHandler(nil)
