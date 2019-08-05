@@ -33,8 +33,21 @@ class ChatView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollecti
         return UIEdgeInsets(top: contentMargin, left: 0, bottom: 0, right: 0)
     }
     
+    fileprivate func checkIfNextMessageIsFromSameUser(_ indexPath: IndexPath) -> Bool {
+        if indexPath.row != messages.count - 1 && messages[indexPath.row].sender == messages[indexPath.row + 1].sender {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: messageId, for: indexPath) as! MessageCell
+        if checkIfNextMessageIsFromSameUser(indexPath) {
+            cell.doesBreakTheSenderChain = false
+        } else {
+            cell.doesBreakTheSenderChain = true
+        }
         cell.message = messages[indexPath.item]
         return cell
     }
