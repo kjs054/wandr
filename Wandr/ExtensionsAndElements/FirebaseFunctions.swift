@@ -85,6 +85,7 @@ extension firebaseFunctions {
                 do {
                     try cn.enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
                         let phone = contact.phoneNumbers.first?.value.stringValue ?? "" //get first phone number
+                        let formattedPhone = phone.formatPhone()
                         let name = "\(contact.givenName) \(contact.familyName)" //combine first and last name
                         if phonesArray.contains(phone) {
                             print("Duplicate number")
@@ -189,30 +190,100 @@ extension firebaseFunctions {
         }
     }
     
-    func fetchUserChats(uid: String, completionHandler: @escaping (_ activeChats: [PlanChat]) -> ()) {
-        
-    }
-    
     //MARK:- Chat backend logic
     
-    func addChatDocument(chatData: Dictionary<String,Any>, complete:@escaping ()->()) {
+    func addChatDocument(chatData: Dictionary<String,Any>, complete:@escaping (_ chatID: String)->()) {
         let chatDoc = db.collection("chats").document()
         let chatID = chatDoc.documentID
-        let users: [String] = chatData["users"] as! [String]
+        let users = chatData["members"] as! [String]
         chatDoc.setData(chatData) { err in
             if let err = err {
                 fatalError("\(err)")
             } else {
+                chatDoc.setData(["chatID": chatID], merge: true)
                 print("Chat Data Written")
                 users.forEach({ (UID) in
-                    db.collection("users").document(UID).setData(["activeChats":[chatID]], merge: true)
+                    db.collection("users").document(UID).updateData([
+                        "activeChats": FieldValue.arrayUnion([chatID])
+                        ])
                 })
-                complete()
+                complete(chatID)
             }
         }
     }
+    
+    func fetchUserChats(uid: String, complete: @escaping (_ activeChats: [PlanChat]) -> ()) {
+        let docRef = db.collection("users").document(uid)
+        docRef.getDocument { (snapshot, error) in
+            if let error = error {
+                fatalError("\(error)")
+            } else {
+                if let chats = snapshot?.get("activeChats") as? [String] {
+                    var count = 0
+                    var allChats = [PlanChat]()
+                    chats.forEach({ (chatID) in
+                        self.fetchChatData(chatID: chatID) { (chatData) in
+                            count += 1
+                            allChats.append(chatData)
+                            if count == chats.count {
+                                complete(allChats)
+                            }
+                        }
+                    })
+                }
+            }
+        }
+    }
+    
+    
+    func fetchChatData(chatID: String, complete: @escaping (_ chatData: PlanChat) -> ()) {
+        let docRef = db.collection("chats").document(chatID)
+        docRef.getDocument { (snapshot, error) in
+            if error != nil {
+                print("Couldn't get chat")
+            }
+            if let snapshot = snapshot {
+                let members = snapshot.get("members") as! [String]
+                let name = snapshot.get("name") as! String
+                let id = snapshot.get("chatID") as! String
+                let created = snapshot.get("created") as! Timestamp
+                var count = 0
+                var formattedMembers = [User]()
+                members.forEach({ (user) in
+                    self.fetchCurrentUserData(uid: user) { (user) in
+                        count += 1
+                        formattedMembers.append(user!)
+                        if count == members.count {
+                            let chat = PlanChat(name: name, chatID: id, members: formattedMembers, created: created)
+                            complete(chat)
+                        }
+                    }
+                })
+            }
+        }
+    }
+    
+    func getMessageType(typeString: String) -> Type {
+        switch typeString {
+        case "text":
+            return .text
+        default:
+            return .text
+        }
+    }
+    
+    func addMessageToChat(chatID: String, content: String, complete: @escaping () -> ()) {
+        let docRef = db.collection("chats").document(chatID).collection("messages").document()
+        docRef.setData(["sender": LocalStorage().currentUserData()!.uid, "timestamp": FieldValue.serverTimestamp(), "content": content, "type": "text"])
+        complete()
+    }
 }
+
 
 extension NewPlanController: firebaseFunctions {}
 extension ProfileImageInputController: firebaseFunctions {}
 extension HomeController: firebaseFunctions {}
+extension PlanChatController: firebaseFunctions {}
+extension membersBubblesCollection: firebaseFunctions {}
+extension Message: firebaseFunctions {}
+extension MyPlansController: firebaseFunctions {}
