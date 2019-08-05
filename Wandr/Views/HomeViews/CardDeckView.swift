@@ -38,7 +38,7 @@ class CardDeckView: UIView, UICollectionViewDelegateFlowLayout, UICollectionView
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(cardCell.self, forCellWithReuseIdentifier: cardCellId)
-        collectionView.gemini.rollRotationAnimation().scale(0.6).rollEffect(.rollDown).degree(60) //Sets up animation for swiping through cards using Gemini
+        collectionView.gemini.scaleAnimation().scale(0.6)
         addSubview(collectionView)
         collectionView.fillSuperView() //calls function to fill entire superview in AutoLayoutExtension File
     }
