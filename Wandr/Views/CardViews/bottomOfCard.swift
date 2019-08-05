@@ -81,7 +81,7 @@ class bottomOfCard: UIView {
     
     fileprivate func setupBottomBarInfo() {
         addSubview(bottomRowLabel)
-        bottomRowLabel.anchor(top: nil, bottom: bottomAnchor, leading: leadingAnchor, trailing: moreInfoButton.leadingAnchor, padding: UIEdgeInsets(top: 0, left: contentMargin, bottom: -2, right: 0))
+        bottomRowLabel.anchor(top: nil, bottom: bottomAnchor, leading: leadingAnchor, trailing: moreInfoButton.leadingAnchor, padding: UIEdgeInsets(top: 0, left: contentMargin, bottom: 2, right: 0))
         bottomRowLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.5).isActive = true
     }
 }

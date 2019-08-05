@@ -108,7 +108,7 @@ class ContactView: UIView {
     
     func setupSubTitle() {
         addSubview(subTitle)
-        subTitle.anchor(top: title.bottomAnchor, bottom: nil, leading: profileImageView.trailingAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: 15, bottom: -25, right: 0))
+        subTitle.anchor(top: title.bottomAnchor, bottom: nil, leading: profileImageView.trailingAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: 15, bottom: 25, right: 0))
     }
     
     //Dynamic Element Functions
@@ -128,7 +128,7 @@ class ContactView: UIView {
     func setupRadioButton() {
         addSubview(radioButton)
         radioButton.addTarget(self, action: #selector(radioButtonClicked), for: .touchUpInside)
-        radioButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -15).isActive = true
+        radioButton.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         radioButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         radioButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         radioButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
@@ -137,7 +137,7 @@ class ContactView: UIView {
     
     func setupInviteButton() {
         addSubview(inviteButton)
-        inviteButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -15).isActive = true
+        inviteButton.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         inviteButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         inviteButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         inviteButton.widthAnchor.constraint(equalToConstant: 60).isActive = true

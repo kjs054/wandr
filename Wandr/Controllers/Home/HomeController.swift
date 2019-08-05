@@ -75,7 +75,7 @@ class HomeController: UIViewController {
         mainView.axis = .vertical
         self.view.addSubview(mainView)
         let bottomPadding: CGFloat = hasBottomSafeArea() ? 16 : 0
-        mainView.anchor(top: view.safeAreaLayoutGuide.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 15, left: 0, bottom: -(bottomPadding + 20), right: 0))
+        mainView.anchor(top: view.safeAreaLayoutGuide.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 15, left: 0, bottom: bottomPadding + 20, right: 0))
         mainView.isLayoutMarginsRelativeArrangement = true
         mainView.bringSubviewToFront(cardDeckView)
     }

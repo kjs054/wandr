@@ -110,14 +110,14 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     func setupSendButton() {
         previewView.addSubview(sendButton)
-        sendButton.anchor(top: nil, bottom: view.bottomAnchor, leading: previewView.leadingAnchor, trailing: previewView.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 15, bottom: -15, right: -15))
+        sendButton.anchor(top: nil, bottom: view.bottomAnchor, leading: previewView.leadingAnchor, trailing: previewView.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 15, bottom: 15, right: 15))
         sendButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         sendButton.addTarget(self, action: #selector(setupNewChat), for: .touchUpInside)
     }
     
     func setupMembersView() {
         previewView.addSubview(selectedUsersCollection)
-        selectedUsersCollection.anchor(top: previewView.topAnchor, bottom: nil, leading: previewView.leadingAnchor, trailing: previewView.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        selectedUsersCollection.anchor(top: previewView.topAnchor, bottom: nil, leading: previewView.leadingAnchor, trailing: previewView.trailingAnchor)
         selectedUsersCollection.heightAnchor.constraint(equalToConstant: 60).isActive = true
     }
     

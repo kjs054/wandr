@@ -70,12 +70,12 @@ class topOfCard: UIView {
     
     fileprivate func setupHeader() {
         addSubview(headerInfo)
-        headerInfo.anchor(top: topAnchor, bottom: nil, leading: leadingAnchor, trailing: trailingAnchor, padding: UIEdgeInsets(top: contentMargin, left: contentMargin, bottom: 0, right: -contentMargin))
+        headerInfo.anchor(top: topAnchor, bottom: nil, leading: leadingAnchor, trailing: trailingAnchor, padding: UIEdgeInsets(top: contentMargin, left: contentMargin, bottom: 0, right: contentMargin))
     }
     
     fileprivate func setupImageBars() {
         addSubview(imageBars)
-        imageBars.anchor(top: nil, bottom: bottomAnchor, leading: leadingAnchor, trailing: trailingAnchor, padding: UIEdgeInsets(top: 0, left: 5, bottom: -5, right: -5))
+        imageBars.anchor(top: nil, bottom: bottomAnchor, leading: leadingAnchor, trailing: trailingAnchor, padding: UIEdgeInsets(top: 0, left: 5, bottom: 5, right: 5))
         imageBars.heightAnchor.constraint(equalToConstant: 3).isActive = true
     }
     

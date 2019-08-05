@@ -10,23 +10,39 @@ import UIKit
 
 
 extension UIView {
-    func anchor(top: NSLayoutYAxisAnchor?, bottom: NSLayoutYAxisAnchor?, leading: NSLayoutXAxisAnchor?, trailing: NSLayoutXAxisAnchor?, padding: UIEdgeInsets = .zero, size: CGSize = .zero) {
+    @discardableResult
+    func anchor(top: NSLayoutYAxisAnchor?, bottom: NSLayoutYAxisAnchor?, leading: NSLayoutXAxisAnchor?, trailing: NSLayoutXAxisAnchor?, padding: UIEdgeInsets = .zero, size: CGSize = .zero) -> AnchoredConstraints {
+        
         translatesAutoresizingMaskIntoConstraints = false
+        var anchoredConstraints = AnchoredConstraints()
+        
         if let top = top {
-            topAnchor.constraint(equalTo: top, constant: padding.top).isActive = true
+            anchoredConstraints.top = topAnchor.constraint(equalTo: top, constant: padding.top)
         }
+        
         if let leading = leading {
-            leadingAnchor.constraint(equalTo: leading, constant: padding.left).isActive = true
+            anchoredConstraints.leading = leadingAnchor.constraint(equalTo: leading, constant: padding.left)
         }
-        if let trailing = trailing {
-            trailingAnchor.constraint(equalTo: trailing, constant: padding.right).isActive = true
-        }
+        
         if let bottom = bottom {
-            bottomAnchor.constraint(equalTo: bottom, constant: padding.bottom).isActive = true
+            anchoredConstraints.bottom = bottomAnchor.constraint(equalTo: bottom, constant: -padding.bottom)
         }
+        
+        if let trailing = trailing {
+            anchoredConstraints.trailing = trailingAnchor.constraint(equalTo: trailing, constant: -padding.right)
+        }
+        
         if size.width != 0 {
-            widthAnchor.constraint(equalToConstant: size.width).isActive = true
+            anchoredConstraints.width = widthAnchor.constraint(equalToConstant: size.width)
         }
+        
+        if size.height != 0 {
+            anchoredConstraints.height = heightAnchor.constraint(equalToConstant: size.height)
+        }
+        
+        [anchoredConstraints.top, anchoredConstraints.leading, anchoredConstraints.bottom, anchoredConstraints.trailing, anchoredConstraints.width, anchoredConstraints.height].forEach{ $0?.isActive = true }
+        
+        return anchoredConstraints
     }
     
     func fillSuperView(padding: UIEdgeInsets = .zero) {

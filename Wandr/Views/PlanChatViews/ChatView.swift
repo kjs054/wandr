@@ -71,26 +71,26 @@ class ChatView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollecti
 
 class MessageCell: UICollectionViewCell {
     
+    var bubbleConstraints: AnchoredConstraints!
+    
+    var nameLabelConstraints: AnchoredConstraints!
+    
     fileprivate func setupBlueBubbleOnRight() {
         textView.textColor = .white
         bubbleContainer.backgroundColor = wandrBlue
-        sentUserImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
-        bubbleContainer.trailingAnchor.constraint(equalTo: sentUserImage.leadingAnchor).isActive = true
+        bubbleConstraints.leading?.isActive = false
+        bubbleConstraints.trailing?.isActive = true
+        nameLabelConstraints.trailing?.isActive = true
+        nameLabelConstraints.leading?.isActive = false
     }
     
     fileprivate func setupGrayBubbleOnLeft() {
         textView.textColor = .black
         bubbleContainer.backgroundColor = #colorLiteral(red: 0.9098039216, green: 0.9098039216, blue: 0.9098039216, alpha: 1)
-        sentUserImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
-        bubbleContainer.leadingAnchor.constraint(equalTo: sentUserImage.trailingAnchor).isActive = true
-    }
-    
-    fileprivate func checkIfSenderIsCurrentUser() {
-        if message.sender.uid == LocalStorage().currentUserData()!["uid"] as! String {
-            setupBlueBubbleOnRight()
-        } else {
-            setupGrayBubbleOnLeft()
-        }
+        bubbleConstraints.trailing?.isActive = false
+        bubbleConstraints.leading?.isActive = true
+        nameLabelConstraints.trailing?.isActive = false
+        nameLabelConstraints.leading?.isActive = true
     }
     
     var message: Message! {
@@ -133,16 +133,19 @@ class MessageCell: UICollectionViewCell {
         bubbleContainer.transform = CGAffineTransform(scaleX: 1, y: -1)
         sentUserImage.transform = CGAffineTransform(scaleX: 1, y: -1)
         addSubview(bubbleContainer)
-        addSubview(sentUserImage)
-        sentUserImage.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        sentUserImage.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        sentUserImage.heightAnchor.constraint(equalTo: sentUserImage.widthAnchor).isActive = true
-        bubbleContainer.anchor(top: topAnchor, bottom: bottomAnchor, leading: nil, trailing: nil, padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: -10))
+        bubbleConstraints = bubbleContainer.anchor(top: topAnchor, bottom: bottomAnchor, leading: leadingAnchor, trailing: trailingAnchor)
         bubbleContainer.widthAnchor.constraint(lessThanOrEqualToConstant: 250).isActive = true
         bubbleContainer.addSubview(textView)
         textView.fillSuperView(padding: UIEdgeInsets(top: 0, left: 10, bottom: -10, right: 10))
     }
     
+    fileprivate func setupNameLabel() {
+        addSubview(nameLabel)
+        nameLabel.transform = CGAffineTransform(scaleX: 1, y: -1)
+        nameLabelConstraints = nameLabel.anchor(top: bubbleContainer.bottomAnchor, bottom: nil, leading: leadingAnchor, trailing: trailingAnchor)
+        nameLabelConstraints.leading?.constant = 5
+        nameLabelConstraints.trailing?.constant = -5
+    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
