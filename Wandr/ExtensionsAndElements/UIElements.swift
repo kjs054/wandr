@@ -8,8 +8,6 @@
 
 import UIKit
 
-let wandrBlue: UIColor = #colorLiteral(red: 0, green: 0.6588235294, blue: 1, alpha: 1)
-
 class RoundedButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -35,7 +33,7 @@ class circularImageView: UIImageView {
         clipsToBounds = true
         layer.masksToBounds = true
         contentMode = .scaleAspectFill
-        backgroundColor = wandrBlue
+        backgroundColor = UIColor.mainBlue
     }
 }
 
@@ -47,7 +45,7 @@ class circularView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         clipsToBounds = true
         layer.masksToBounds = true
-        backgroundColor = wandrBlue
+        backgroundColor = UIColor.mainBlue
     }
 }
 
@@ -57,7 +55,7 @@ class LoginAndRegisterTextField: UITextField {
         font = UIFont(name: "Avenir-Heavy", size: 22)
         autocorrectionType = .no
         adjustsFontSizeToFitWidth = true
-        textColor = wandrBlue
+        textColor = UIColor.mainBlue
         backgroundColor = .white
         layer.masksToBounds = true
         layer.cornerRadius = 18
@@ -93,6 +91,6 @@ class infoBubble: UIButton {
         layer.masksToBounds = true
         layer.shadowRadius = 5.0
         layer.shadowOpacity = 1
-        layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        layer.shadowColor = UIColor.black.cgColor
     }
 }

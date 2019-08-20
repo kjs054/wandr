@@ -33,7 +33,7 @@ class bottomOfCard: UIView {
     let topRowLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 23)
-        label.textColor = #colorLiteral(red: 0.431372549, green: 0.431372549, blue: 0.431372549, alpha: 1)
+        label.textColor = UIColor.customGrey
         return label
     }()
     

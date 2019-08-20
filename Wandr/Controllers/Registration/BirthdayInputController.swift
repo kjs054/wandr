@@ -42,7 +42,7 @@ class BirthdayInputController: UIViewController {
         button.setTitle("Next", for: .normal)
         button.layer.masksToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitleColor(wandrBlue, for: .normal)
+        button.setTitleColor(UIColor.mainBlue, for: .normal)
         button.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 20)
         button.layer.cornerRadius = 18
         return button
@@ -50,14 +50,14 @@ class BirthdayInputController: UIViewController {
     
     //MARK:- Controller Setup
     override func viewDidLoad() {
-        view.backgroundColor = wandrBlue
+        view.backgroundColor = UIColor.mainBlue
         setupContentView()
         setupInfoLabel()
         setupBirthdayInput()
         setupNextButton()
         self.navigationController?.navigationBar.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        self.navigationController?.view.backgroundColor = wandrBlue
+        self.navigationController?.view.backgroundColor = UIColor.mainBlue
     }
     
     override func viewDidAppear(_ animated: Bool) {

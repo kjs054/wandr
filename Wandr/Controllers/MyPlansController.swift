@@ -8,18 +8,25 @@
 
 import UIKit
 
-class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MyPlansController: UIViewController, UITableViewDelegate {
+    
+    
+    //MARK:- Variables
+    let backendFunctions = FirebaseFunctions()
     
     var planChats = [PlanChat]()
     
-    //MARK:- Variables
     let planPreviewId = "planPreviewId"
+    
     let informationCellId = "informationCellId"
     
     //MARK:- Elements
+    private var dataSource:TableViewDataSource<PlanChat>?
+    
+    let refreshControl = UIRefreshControl()
+    
     let tableView: UITableView = {
         let tv = UITableView()
-        tv.separatorStyle = .none
         tv.allowsSelection = true
         tv.backgroundColor = .clear
         tv.translatesAutoresizingMaskIntoConstraints = false
@@ -30,13 +37,25 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
     //MARK:- Controller Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        fetchUserChats(uid: LocalStorage().currentUserData()!.uid) { (chats) in
-            self.planChats = chats
-            self.tableView.reloadData()
-        }
-        setupTableView()
+        view.backgroundColor = .white
         setupNavigationBar()
+        getTableData()
+    }
+    
+    func setupRefreshControl() {
+        refreshControl.addTarget(self, action: #selector(getTableData), for: UIControl.Event.valueChanged)
+        tableView.addSubview(refreshControl) // not required when using UITableViewController
+    }
+    
+    @objc func getTableData() {
+        backendFunctions.fetchUserChats(uid: backendFunctions.getUserID()) { (chats)  in
+            if let chats = chats {
+                self.planChats = chats
+                self.setupTableView()
+                self.tableView.reloadData()
+                self.refreshControl.endRefreshing()
+            }
+        }
     }
     
     override var prefersHomeIndicatorAutoHidden: Bool {
@@ -45,8 +64,9 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     func setupNavigationBar() {
         let backButton = UIButton()
+        navigationController?.navigationBar.isHidden = false
         navigationItem.title = "My Plans"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: wandrBlue, .font: UIFont(name: "NexaBold", size: 23)!]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.mainBlue, .font: UIFont(name: "Avenir-Heavy", size: 23)!]
         navigationController?.navigationBar.isTranslucent = false
         backButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
         backButton.setImage(#imageLiteral(resourceName: "leftArrow"), for: .normal)
@@ -56,23 +76,14 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     //MARK:- Plans Table Functions
     func setupTableView() {
+        dataSource = .make(for: planChats, reuseIdentifier: planPreviewId)
         tableView.delegate = self
-        tableView.dataSource = self
+        tableView.dataSource = dataSource
         view.addSubview(tableView)
         tableView.register(planPreviewCell.self, forCellReuseIdentifier: planPreviewId)
         tableView.register(MakeBetterPlansCell.self, forCellReuseIdentifier: informationCellId)
         tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0))
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 1 {
-            return 1
-        }
-        return planChats.count
+        setupRefreshControl()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -82,27 +93,17 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: informationCellId, for: indexPath) as! MakeBetterPlansCell
-            cell.selectionStyle = .none
-            return cell
-        }
-        let cell = tableView.dequeueReusableCell(withIdentifier: planPreviewId, for: indexPath) as! planPreviewCell
-        cell.plan = planChats[indexPath.item]
-        return cell
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 1 {
             if planChats.isEmpty {
                 tableView.isScrollEnabled = false
                 return tableView.frame.height
             } else {
+                tableView.isScrollEnabled = true
                 return 400
             }
         }
-        return 100
+        return 90
     }
     
     //MARK:- Navigation Functions
@@ -113,10 +114,10 @@ class MyPlansController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func showPlanChatController(planChat: PlanChat) {
-        let vc = PlanChatController(chat: planChat)
-        let transition = CATransition().pushTransition(direction: CATransitionSubtype.fromRight)
-        navigationController?.view.layer.add(transition, forKey: kCATransition)
-        navigationController?.pushViewController(vc, animated: false)
+        let vc = PlanChatController(chatID: planChat.chatID)
+        let transition = CATransition().pushTransition(direction: .fromRight)
+        self.navigationController!.view.layer.add(transition, forKey: kCATransition)
+        self.navigationController?.pushViewController(vc, animated: false)
     }
 }
 
@@ -125,20 +126,24 @@ class planPreviewCell: UITableViewCell {
     
     var plan: PlanChat! {
         didSet {
-            contactCellView.title.text = plan.name
-//            contactCellView.subTitle.text = plan.messages.first?.content
+            self.previewView.timeStamp.text = plan.mostRecentMessage.timestamp.offset()
+            self.previewView.subTitle.text = plan.mostRecentMessage.getDisplayText()
+            plan.members.removeAll(where: {$0.name == LocalStorage().currentUserData()?.name})
+            let planName = plan.name.isEmpty ? plan.members.map({$0.name}).joined(separator: ", ") : plan.name
+            previewView.title.text = planName
+            let membersToPass = plan.members.count >= 4 ? plan.members[0..<4] : plan.members[0..<plan.members.count]
+            previewView.members = membersToPass
         }
     }
     
     //MARK:- Subviews
-    let contactCellView = ContactView()
+    let previewView = planChatPreview()
     
     //MARK:- Setup Cell
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubview(contactCellView)
-        contactCellView.setupTimeStamp()
-        contactCellView.fillSuperView()
+        addSubview(previewView)
+        previewView.fillSuperView()
     }
     
     required init?(coder aDecoder: NSCoder) {

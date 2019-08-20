@@ -14,15 +14,18 @@ class CreateMessageView: UIView {
         let field = UITextField()
         field.backgroundColor = .white
         field.layer.cornerRadius = 5
-        field.placeholder = "Type A Message..."
+        field.placeholder = "Type a message..."
         field.font = UIFont(name: "Avenir-Medium", size: 18)
-        field.returnKeyType = .send
         return field
     }()
     
-    let placeButton: UIButton = {
+    let sendButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "maps-and-flags").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setTitle("Send", for: .normal)
+        button.setTitleColor(UIColor.mainBlue, for: .normal)
+        button.setTitleColor(UIColor.customGrey, for: .disabled)
+        button.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 18)
+        button.isEnabled = false
         return button
     }()
     
@@ -31,7 +34,7 @@ class CreateMessageView: UIView {
         backgroundColor = .white
         setupShadow()
         setupMessageField()
-        setupPlaceButton()
+        setupSendButton()
     }
     
     fileprivate func setupShadow() {
@@ -42,13 +45,18 @@ class CreateMessageView: UIView {
     
     fileprivate func setupMessageField() {
         addSubview(messageField)
-        messageField.anchor(top: topAnchor, bottom: bottomAnchor, leading: leadingAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15))
-        messageField.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.8).isActive = true
+        messageField.addTarget(self, action: #selector(textFieldDidChange), for: UIControl.Event.editingChanged)
+        messageField.anchor(top: topAnchor, bottom: bottomAnchor, leading: leadingAnchor, trailing: nil, padding: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0))
+        messageField.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.75).isActive = true
     }
     
-    fileprivate func setupPlaceButton() {
-        addSubview(placeButton)
-        placeButton.anchor(top: topAnchor, bottom: bottomAnchor, leading: messageField.trailingAnchor, trailing: trailingAnchor)
+    @objc func textFieldDidChange() {
+        sendButton.isEnabled = messageField.text != "" ? true : false
+    }
+    
+    fileprivate func setupSendButton() {
+        addSubview(sendButton)
+        sendButton.anchor(top: topAnchor, bottom: bottomAnchor, leading: messageField.trailingAnchor, trailing: trailingAnchor)
     }
     
     required init(coder: NSCoder) {

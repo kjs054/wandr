@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct event: ProducesCardViewModel {
+struct Event: ProducesCardViewModel {
     //Defining properties
     var name: String
     var city: String
@@ -26,8 +26,8 @@ struct event: ProducesCardViewModel {
         paragraphStyle.lineSpacing = 10
         headerText.append(NSAttributedString(string: "\n\(city) \u{2022} \(distance) mi", attributes: [.font: UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 20)!]))
         headerText.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, headerText.length))
-        let topRowText = NSAttributedString(string: "🗓 \(date) @ \(start_time) - \(end_time)", attributes: [.font: UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 22)!, .foregroundColor: #colorLiteral(red: 0.431372549, green: 0.431372549, blue: 0.431372549, alpha: 1)])
-        let bottomRowText = NSAttributedString(string: "🎟 \(ticket_pricing) \u{ff5c} \(attending_count) Going", attributes: [.font: UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 25)!, .foregroundColor: #colorLiteral(red: 0.431372549, green: 0.431372549, blue: 0.431372549, alpha: 1)])
+        let topRowText = NSAttributedString(string: "🗓 \(date) @ \(start_time) - \(end_time)", attributes: [.font: UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 22)!, .foregroundColor: UIColor.customGrey])
+        let bottomRowText = NSAttributedString(string: "🎟 \(ticket_pricing) \u{ff5c} \(attending_count) Going", attributes: [.font: UIFont(name: "Avenir-Heavy", size: UIScreen.main.bounds.width / 25)!, .foregroundColor: UIColor.customGrey])
         return CardViewModel(placeImages: [cover_photo], headerText: headerText, topRowText: topRowText, bottomRowText: bottomRowText)
     }
 }

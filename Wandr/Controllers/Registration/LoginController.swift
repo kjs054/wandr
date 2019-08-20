@@ -36,9 +36,9 @@ class LoginController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 25)
-        button.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        button.backgroundColor = .white
         button.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        button.setTitleColor(wandrBlue, for: .normal)
+        button.setTitleColor(UIColor.mainBlue, for: .normal)
         button.layer.cornerRadius = 20
         return button
     }()
@@ -50,7 +50,7 @@ class LoginController: UIViewController {
         input.layer.cornerRadius = 18
         input.keyboardType = UIKeyboardType.phonePad
         input.backgroundColor = .white
-        input.textColor = wandrBlue
+        input.textColor = UIColor.mainBlue
         input.font = UIFont(name: "Avenir-Heavy", size: 25)
         return input
     }()
@@ -61,7 +61,7 @@ class LoginController: UIViewController {
         button.setTitle("Next", for: .normal)
         button.layer.masksToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitleColor(wandrBlue, for: .normal)
+        button.setTitleColor(UIColor.mainBlue, for: .normal)
         button.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 20)
         button.layer.cornerRadius = 18
         return button
@@ -71,11 +71,11 @@ class LoginController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setNeedsStatusBarAppearanceUpdate()
-        view.backgroundColor = wandrBlue
+        view.backgroundColor = UIColor.mainBlue
         setupContentView()
         self.navigationController?.navigationBar.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        self.navigationController?.view.backgroundColor = wandrBlue
+        self.navigationController?.view.backgroundColor = UIColor.mainBlue
     }
     
     override func viewDidAppear(_ animated: Bool) {

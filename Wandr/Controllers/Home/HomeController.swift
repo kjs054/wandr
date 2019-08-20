@@ -21,8 +21,9 @@ class HomeController: UIViewController {
     let activityIndicator = UIActivityIndicatorView(style: .gray)
     
     let titleImageView: UIImageView = {
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 38, height: 38))
-        imageView.image = #imageLiteral(resourceName: "wandrwhite")
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = #imageLiteral(resourceName: "wandrwhite").withAlignmentRectInsets(UIEdgeInsets(top: -4, left: 0, bottom: -4, right: 0))
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -52,10 +53,10 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
         self.filters.categoryFilters.selectionDelegate = self
-        self.navigationController?.view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        self.navigationController?.view.backgroundColor = .white
         setupNavigationBar()
         setupLayout()
-        fetchCurrentUserData(uid: getUID()) { (userData) in
+        FirebaseFunctions().fetchUserData(uid: FirebaseFunctions().getUserID()) { (userData) in
             if let userData = userData {
                 self.localStorage.saveCurrentUserData(userData: userData)
                 self.setupProfilePictureNavigationBar()
@@ -141,8 +142,7 @@ class HomeController: UIViewController {
     
     func setupProfilePictureNavigationBar() {
         if let imageURL = localStorage.currentUserData()?.profileImageURL { //Unwraps url stored as type Any to String
-            self.profileButton.loadImageWithCacheFromURLString(urlstring: imageURL) {
-                self.activityIndicator.stopAnimating()
+            profileButton.setImage(urlstring: imageURL, size: CGSize(width: 45, height: 45)) {
                 self.setupProfilePicture()
             }
         }
@@ -157,7 +157,7 @@ extension HomeController: categorySelectionDelegate {
             navigationItem.titleView = nil
             navigationItem.title = categoryName
             let attrs = [
-                NSAttributedString.Key.foregroundColor: wandrBlue,
+                NSAttributedString.Key.foregroundColor: UIColor.mainBlue,
                 NSAttributedString.Key.font: UIFont(name: "Avenir-Heavy", size: 20)!
                 ] as [NSAttributedString.Key : Any]
             navigationController?.navigationBar.titleTextAttributes = attrs

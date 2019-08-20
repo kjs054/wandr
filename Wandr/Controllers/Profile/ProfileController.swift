@@ -26,7 +26,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
         let sc = UISegmentedControl(items: items)
         sc.setTitleTextAttributes([.font: UIFont(name: "Avenir-Heavy", size: 15)!], for: .normal)
         sc.selectedSegmentIndex = 0
-        sc.tintColor = wandrBlue
+        sc.tintColor = UIColor.mainBlue
         return sc
     }()
 
@@ -75,7 +75,7 @@ class ProfileController: UIViewController, UICollectionViewDelegateFlowLayout, U
         }
         self.navigationController?.navigationBar.shadowImage = UIImage()
         navigationItem.title = name
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: wandrBlue, .font: UIFont(name: "NexaBold", size: 23)!]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.mainBlue, .font: UIFont(name: "NexaBold", size: 23)!]
         navigationController?.navigationBar.isTranslucent = false
         backButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
         backButton.setImage(#imageLiteral(resourceName: "leftArrow"), for: .normal)

@@ -39,9 +39,14 @@ let categoryFilters = [PlaceCategory(categoryName: "Pizza Places", categoryEmoji
                        PlaceCategory(categoryName: "Coffee Shops", categoryEmoji: "☕️", categoryId: 30, recWeight: 0.876),
                        PlaceCategory(categoryName: "Grocery Stores", categoryEmoji: "🛒", categoryId: 31, recWeight: 0.325)]
 
-struct PlaceCategory {
+class PlaceCategory {
     var categoryName: String
     var categoryEmoji: String
     var categoryId: Int
     var recWeight: Double
+    var selected: Bool
+    
+    init(categoryName: String, categoryEmoji: String, categoryId: Int, recWeight: Double) {
+        self.categoryName = categoryName; self.categoryEmoji = categoryEmoji; self.categoryId = categoryId; self.recWeight = recWeight; self.selected = false
+    }
 }

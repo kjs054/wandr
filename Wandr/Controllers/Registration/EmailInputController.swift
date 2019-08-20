@@ -39,7 +39,7 @@ class EmailInputController: UIViewController {
         button.setTitle("Next", for: .normal)
         button.layer.masksToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitleColor(wandrBlue, for: .normal)
+        button.setTitleColor(UIColor.mainBlue, for: .normal)
         button.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 20)
         button.layer.cornerRadius = 18
         return button
@@ -47,7 +47,7 @@ class EmailInputController: UIViewController {
     
     //MARK:- Controller Setup
     override func viewDidLoad() {
-        view.backgroundColor = wandrBlue
+        view.backgroundColor = UIColor.mainBlue
         setupContentView()
         setupInfoLabel()
         setupEmailField()

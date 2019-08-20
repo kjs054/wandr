@@ -8,6 +8,7 @@ target 'Wandr' do
   pod 'Gemini'
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
+  pod 'Kingfisher'
   pod 'PhoneNumberKit', '~> 2.6'
   pod 'Firebase/Firestore'
   pod 'Firebase/Storage'

@@ -38,7 +38,7 @@ class ContactView: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "Avenir-Heavy", size: 19)
-        label.textColor = wandrBlue
+        label.textColor = UIColor.mainBlue
         return label
     }()
     
@@ -46,7 +46,7 @@ class ContactView: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "Avenir-Medium", size: 16)
-        label.textColor = #colorLiteral(red: 0.5333333333, green: 0.5333333333, blue: 0.5333333333, alpha: 1)
+        label.textColor = UIColor.customGrey
         return label
     }()
     
@@ -54,9 +54,9 @@ class ContactView: UIView {
         var button = UIButton()
         button.setTitle("Invite", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitleColor(wandrBlue, for: .normal)
+        button.setTitleColor(UIColor.mainBlue, for: .normal)
         button.layer.borderWidth = 3.0
-        button.layer.borderColor = wandrBlue.cgColor
+        button.layer.borderColor = UIColor.mainBlue.cgColor
         button.backgroundColor = .white
         button.layer.cornerRadius = 14
         button.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -68,7 +68,7 @@ class ContactView: UIView {
         let button = UIButton()
         button.setImage(#imageLiteral(resourceName: "checked"), for: .selected)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.borderColor = wandrBlue.cgColor
+        button.layer.borderColor = UIColor.mainBlue.cgColor
         button.layer.borderWidth = 3
         button.layer.cornerRadius = 15
         return button
@@ -77,7 +77,7 @@ class ContactView: UIView {
     let timeStamp: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Avenir-Medium", size: 16)
-        label.textColor = #colorLiteral(red: 0.5333333333, green: 0.5333333333, blue: 0.5333333333, alpha: 1)
+        label.textColor = UIColor.customGrey
         label.text = "2h"
         return label
     }()
@@ -128,7 +128,7 @@ class ContactView: UIView {
     func setupRadioButton() {
         addSubview(radioButton)
         radioButton.addTarget(self, action: #selector(radioButtonClicked), for: .touchUpInside)
-        radioButton.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        radioButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -contentMargin).isActive = true
         radioButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         radioButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         radioButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
@@ -137,17 +137,11 @@ class ContactView: UIView {
     
     func setupInviteButton() {
         addSubview(inviteButton)
-        inviteButton.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        inviteButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -contentMargin).isActive = true
         inviteButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         inviteButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         inviteButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         title.rightAnchor.constraint(equalTo: inviteButton.leftAnchor).isActive = true
-    }
-    
-    func setupTimeStamp() {
-        addSubview(timeStamp)
-        timeStamp.anchor(top: nil, bottom: nil, leading: nil, trailing: trailingAnchor)
-        timeStamp.centerYAnchor.constraint(equalTo: subTitle.centerYAnchor).isActive = true
     }
     
     //MARK:- Logic

@@ -30,7 +30,8 @@ class selectedUsersCollectionView: UICollectionView, UICollectionViewDelegate, U
         self.backgroundColor = .white
         delegate = self
         dataSource = self
-        register(membersCell.self, forCellWithReuseIdentifier: memberCellId)    }
+        register(membersCell.self, forCellWithReuseIdentifier: memberCellId)
+    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -77,7 +78,7 @@ class membersCell: UICollectionViewCell {
         super.init(frame: frame)
         backgroundColor = .white
         layer.cornerRadius = frame.height / 2
-        backgroundColor = wandrBlue
+        backgroundColor = UIColor.mainBlue
         clipsToBounds = true
         addSubview(userName)
         userName.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true

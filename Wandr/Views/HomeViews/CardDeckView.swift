@@ -9,7 +9,7 @@
 import UIKit
 import Gemini
 
-class CardDeckView: UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
+class CardDeckView: UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     
     //MARK:- Variables
     let cardCellId = "card"
@@ -27,6 +27,8 @@ class CardDeckView: UIView, UICollectionViewDelegateFlowLayout, UICollectionView
         return cv
     }()
     
+    var reusableDataSource: CollectionViewDataSource<CardViewModel>?
+    
     //MARK:- View Setup
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,8 +38,9 @@ class CardDeckView: UIView, UICollectionViewDelegateFlowLayout, UICollectionView
     
     fileprivate func setupCollectionView() {
         collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(cardCell.self, forCellWithReuseIdentifier: cardCellId)
+        self.reusableDataSource = .make(for: cardViewModels)
+        collectionView.dataSource = reusableDataSource
+        collectionView.register(cardCell.self, forCellWithReuseIdentifier: "card")
         collectionView.gemini.scaleAnimation().scale(0.6)
         addSubview(collectionView)
         collectionView.fillSuperView() //calls function to fill entire superview in AutoLayoutExtension File
@@ -48,26 +51,14 @@ class CardDeckView: UIView, UICollectionViewDelegateFlowLayout, UICollectionView
     }
     
     //MARK:- CollectionView Functions
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cardCellId, for: indexPath) as! cardCell
-        cell.cardView.cardViewModel = cardViewModels[indexPath.row]
-        return cell
-    }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.collectionView.animateVisibleCells()
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cardViewModels.count
-    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: frame.width - 20, height: frame.height)
-    }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -164,12 +155,8 @@ class cardCell: GeminiCell, UIGestureRecognizerDelegate {
     }
     
     func setupMenuLongPressGesture() {
-        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleMenuLongPressGesture))
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(didTapMoreInfo))
         addGestureRecognizer(gesture)
-    }
-    
-    @objc func handleMenuLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
-        didTapMoreInfo()
     }
     
     private func showNewPlan() {

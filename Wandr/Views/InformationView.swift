@@ -19,7 +19,7 @@ class InformationView: UIView {
         let label = UILabel()
         label.font = UIFont(name: "NexaBold", size: 20)
         label.adjustsFontSizeToFitWidth = true
-        label.textColor = wandrBlue
+        label.textColor = UIColor.mainBlue
         return label
     }()
     
@@ -27,7 +27,7 @@ class InformationView: UIView {
         let label = UILabel()
         label.font = UIFont(name: "Avenir-Heavy", size: 17)
         label.adjustsFontSizeToFitWidth = true
-        label.textColor = #colorLiteral(red: 0.5333333333, green: 0.5333333333, blue: 0.5333333333, alpha: 1)
+        label.textColor = UIColor.customGrey
         label.numberOfLines = 0
         label.textAlignment = .center
         return label

@@ -18,21 +18,21 @@ class LocalStorage {
     }
     
     // MARK: User Functions
-    func saveRegisteredContact(registeredContacts: [SelectableContact]){
+    func saveRegisteredContact(registeredContacts: [User]){
         do {
             let encodedData: Data = try NSKeyedArchiver.archivedData(withRootObject: registeredContacts, requiringSecureCoding: false)
-            UserDefaults.standard.set(encodedData, forKey: "registeredContacts")
+            UserDefaults.standard.set(encodedData, forKey: "users")
             UserDefaults.standard.synchronize()
         } catch {
             print("Couldn't Save Contacts Data")
         }
     }
     
-    func loadRegisteredContacts() -> [SelectableContact]? {
+    func loadRegisteredContacts() -> [User]? {
         do {
-            if UserDefaults.standard.object(forKey: "registeredContacts") != nil{
-                let decodedData = UserDefaults.standard.object(forKey: "registeredContacts") as! Data
-                if let decodedPlace = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decodedData) as? [SelectableContact] {
+            if UserDefaults.standard.object(forKey: "users") != nil{
+                let decodedData = UserDefaults.standard.object(forKey: "users") as! Data
+                if let decodedPlace = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decodedData) as? [User] {
                     return decodedPlace
                 }
             }

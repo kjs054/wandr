@@ -12,12 +12,16 @@ protocol categorySelectionDelegate {
     func updateNavTitle(_ categoryName: String)
 }
 
-class categoryFiltersView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class categoryFiltersView: UICollectionView, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     //MARK:- Variables
+    var rankedFilters = categoryFilters.sorted(by: {$0.recWeight > $1.recWeight}) //Sorts by recommendation ranking
+    
     let categoryCellId = "categoryCellId"
     
     var selectionDelegate: categorySelectionDelegate?
+    
+    var reusableDataSource: CollectionViewDataSource<PlaceCategory>?
     
     //MARK:- Elements
     let flowLayout: UICollectionViewFlowLayout = {
@@ -35,42 +39,25 @@ class categoryFiltersView: UICollectionView, UICollectionViewDelegate, UICollect
     
     func setupCollectionView() {
         delegate = self
-        dataSource = self
-        register(filterCell.self, forCellWithReuseIdentifier: categoryCellId)
+        register(filterCell.self, forCellWithReuseIdentifier: "placeCategory")
+        reusableDataSource = .make(for: rankedFilters)
+        dataSource = reusableDataSource
         backgroundColor = .clear
         showsHorizontalScrollIndicator = false
     }
     
     //MARK:- CollectionView Functions
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == selectedIndex {
-            selectedIndex = -1
+        if rankedFilters[indexPath.item].selected {
+            rankedFilters.forEach({$0.selected = false})
             selectionDelegate?.updateNavTitle("")
         } else {
-            selectedIndex = indexPath.row
+            rankedFilters.forEach({$0.selected = false})
+            rankedFilters[indexPath.item].selected = true
             let selectedCategory = rankedFilters[indexPath.row].categoryName
             selectionDelegate?.updateNavTitle(selectedCategory)
         }
         reloadData()
-    }
-
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categoryFilters.count
-    }
-    
-    var selectedIndex: Int = -1
-    
-    let rankedFilters = categoryFilters.sorted(by: {$0.recWeight > $1.recWeight}) //Sorts by recommendation ranking
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: categoryCellId, for: indexPath) as! filterCell
-        let cellBackgroundColor = selectedIndex == indexPath.row ? wandrBlue : #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        cell.backgroundColor = cellBackgroundColor
-        cell.textLabel.text = rankedFilters[indexPath.row].categoryEmoji
-        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

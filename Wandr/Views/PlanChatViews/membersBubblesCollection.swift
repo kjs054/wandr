@@ -8,67 +8,79 @@
 
 import UIKit
 
-class membersBubblesCollection: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
+class membersBubblesCollection: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     
-    fileprivate let members: [User]
+    var members: [User]! {
+        didSet {
+            members.removeAll(where: {$0.name == LocalStorage().currentUserData()?.name})
+            self.reusableDataSource = .make(for: members)
+            dataSource = self.reusableDataSource
+            reloadData()
+        }
+    }
     
     let flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 10
+        layout.minimumLineSpacing = -10
+        layout.minimumInteritemSpacing = 0
         return layout
     }()
     
     let friendCellId = "FriendCellId"
     
-    init(chatMembers: [User]) {
-        self.members = chatMembers
+    var reusableDataSource: CollectionViewDataSource<User>?
+    
+    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: flowLayout)
         translatesAutoresizingMaskIntoConstraints = true
         delegate = self
-        dataSource = self
+        backgroundColor = .white
+        isScrollEnabled = false
+        register(userBubbleCell.self, forCellWithReuseIdentifier: "users")
+        setupShadow()
+    }
+    
+    fileprivate func setupShadow() {
         layer.masksToBounds = false
-        backgroundColor = .clear
-        layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        layer.shadowRadius = 2.5
-        layer.shadowOffset = CGSize(width: 0, height: 0)
-        layer.shadowOpacity = 0.15
-        register(friendCell.self, forCellWithReuseIdentifier: friendCellId)
+        layer.shadowOffset = CGSize(width: 0, height: 4)
+        layer.shadowOpacity = 0.1
+        layer.shadowColor = UIColor.black.cgColor
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        let totalCellWidth = 45 * Double(members.count)
+        let totalCellSpacing = -(Double(10 * members.count))
+        
+        let leftInset = (UIScreen.main.bounds.width - CGFloat(totalCellWidth + totalCellSpacing)) / 2
+        let rightInset = leftInset
+        
+        return UIEdgeInsets(top: -4, left: leftInset, bottom: 0, right: rightInset)
+    }
+
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: self.frame.height * 0.85, height: self.frame.height * 0.85)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return members.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: friendCellId, for: indexPath) as! friendCell
-        cell.user = members[indexPath.item]
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.frame.height, height: self.frame.height)
-    }
-    
 }
 
-class friendCell: UICollectionViewCell {
+class userBubbleCell: UICollectionViewCell {
     
     let profileImage = UIImageView()
+    
     
     var user: User! {
         didSet {
             self.isHidden = true
-            profileImage.loadImageWithCacheFromURLString(urlstring: user.profileImageURL) {
+            profileImage.setImage(urlstring: user.profileImageURL, size: profileImage.frame.size) {
                 self.backgroundView = self.profileImage
+                self.layer.addCircularBorder(size: self.frame.size, strokeColor: self.user.displayColor!, lineWidth: 11)
+                self.layer.addCircularBorder(size: self.frame.size, strokeColor: .white, lineWidth: 7)
                 self.isHidden = false
             }
         }
@@ -79,10 +91,10 @@ class friendCell: UICollectionViewCell {
         backgroundColor = .white
         layer.cornerRadius = frame.height / 2
         clipsToBounds = true
-        layer.borderColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
+

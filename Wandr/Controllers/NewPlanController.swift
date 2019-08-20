@@ -10,17 +10,10 @@ import UIKit
 import Firebase
 import FirebaseFirestore
 
-class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
-    //MARK:- Variables
-    var userContacts = [SelectableContact]()
-    var contactsOnWandr = [SelectableContact]()
-    var selectedContacts = [SelectableContact]()
-    
-    let activeContactId = "activeContact"
-    let otherContactId = "otherContact"
+class NewPlanController: UIViewController {
     
     //MARK:- Elements
+    
     var refreshControl = UIRefreshControl()
     
     let activityView = activityIndicatorView(color: .white, labelText: "")
@@ -35,17 +28,9 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         return view
     }()
     
-    let contactsTable: UITableView = {
-        let table = UITableView()
-        table.allowsSelection = true
-        table.separatorStyle = .none
-        table.layer.cornerRadius = 30.0
-        table.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        table.layer.masksToBounds = true
-        return table
-    }()
+    let contactsTable = contactsTableView()
     
-    fileprivate let planPlace: CardViewModel
+    fileprivate let planPlace: CardViewModel!
     
     lazy var sendPlanTitleBar = SendPlanTitleBar(planTitle: planPlace.headerText)
     
@@ -68,7 +53,7 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         button.layer.cornerRadius = 25
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.setTitle("Send", for: .normal)
-        button.backgroundColor = wandrBlue
+        button.backgroundColor = UIColor.mainBlue
         return button
     }()
     
@@ -81,14 +66,21 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         fatalError("init(coder:) has not been implemented")
     }
     
+    
     //MARK:- Controller Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        contactsTable.selectionDelegate = self
         view.backgroundColor = .white //needed to prevent opacity issues during vc presentation
         view.layer.opacity = 50.0
+        FirebaseFunctions().fetchUserChats(uid: FirebaseFunctions().getUserID()) { (chats)  in
+            if let chats = chats {
+                self.contactsTable.planChats = chats
+            }
+            self.setupContactsTable()
+        }
         setupSendPlanTitleBar()
         setupRefreshControl()
-        setupContactsTable()
         setupSwipeToExitGesture()
     }
     
@@ -146,12 +138,8 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func setupContactsTable() {
-        contactsTable.delegate = self
-        contactsTable.dataSource = self
-        contactsTable.register(activeContactCell.self, forCellReuseIdentifier: activeContactId)
-        contactsTable.register(otherContactCell.self, forCellReuseIdentifier: otherContactId)
         setupActivityView()
-        getTableData {
+        contactsTable.getTableData {
             self.view.addSubview(self.tableContainer)
             self.view.bringSubviewToFront(self.previewView)
             self.tableContainer.anchor(top: self.sendPlanTitleBar.bottomAnchor, bottom: self.view.bottomAnchor, leading: self.view.leadingAnchor, trailing: self.view.trailingAnchor)
@@ -160,113 +148,23 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     
-    //MARK:- Contacts Table Functions
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 {
-            if contactsOnWandr[indexPath.row].selected { //checks to see if user is already selected
-                contactsOnWandr[indexPath.row].selected = false
-                selectedUsersCollection.users.removeAll(where: {$0.phoneNum == contactsOnWandr[indexPath.row].phoneNum})
-                if selectedUsersCollection.users.isEmpty {
-                    previewView.removeFromSuperview()
-                }
-                selectedUsersCollection.reloadData()
-            } else {
-                contactsOnWandr[indexPath.row].selected = true
-                selectedUsersCollection.users.append(contactsOnWandr[indexPath.row])
-                setupPreviewView()
-                selectedUsersCollection.reloadData()
-            }
-        }
-        if indexPath.section == 1 {
-            if userContacts[indexPath.row].selected { //checks to see if user is already selected
-                userContacts[indexPath.row].selected = false
-            } else {
-                userContacts[indexPath.row].selected = true
-            }
-        }
-        tableView.reloadData()
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: activeContactId, for: indexPath) as! activeContactCell
-            cell.contact = contactsOnWandr[indexPath.row]
-            cell.selectionStyle = .none
-            if cell.contact.selected {
-                cell.contactCellView.radioButton.isSelected = true
-            } else {
-                cell.contactCellView.radioButton.isSelected = false
-            }
-            return cell
-        }
-        let cell = tableView.dequeueReusableCell(withIdentifier: otherContactId, for: indexPath) as! otherContactCell
-        cell.contact = userContacts[indexPath.row]
-        cell.selectionStyle = .none
-        if cell.contact.selected {
-            cell.contactCellView.radioButton.isSelected = true
-            //TODO:- Add to selected contacts array
-        } else {
-            cell.contactCellView.radioButton.isSelected = false
-        }
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return contactsOnWandr.count
-        }
-        return userContacts.count
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView()
-        headerView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
-        headerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        headerView.backgroundColor = .white
-        headerView.layer.opacity = 0.98
-        let label = UILabel()
-        headerView.addSubview(label)
-        label.fillSuperView(padding: UIEdgeInsets(top: 0, left: contentMargin, bottom: 0, right: 0))
-        label.font = UIFont(name: "Avenir-Heavy", size: 20)
-        label.textColor = wandrBlue
-        
-        switch section {
-        case 0:
-            label.text = "On Wandr"
-        case 1:
-            label.text = "All Contacts"
-        default:
-            label.text = "All Contacts"
-        }
-        return headerView
-    }
-    
     //MARK:- Navigation Functions
     @objc func dismissViewController() {
         navigationController?.dismiss(animated: true, completion: nil)
     }
     
     @objc func setupNewChat() {
+        sendButton.isEnabled = false
         var selectedContactsIds = selectedUsersCollection.users.compactMap({return $0.userData?.uid})
         selectedContactsIds.append(LocalStorage().currentUserData()!.uid)
-        let chatData = ["name": "default",
+        let chatData = ["name": "",
                         "members": selectedContactsIds,
                         "created": FieldValue.serverTimestamp()] as [String : Any]
-        addChatDocument(chatData: chatData) { (chatID) in
-            self.fetchChatData(chatID: chatID) { (chatData) in
-                let vc = PlanChatController(chat: chatData)
-                let transition = CATransition().pushTransition(direction: .fromRight)
-                self.navigationController!.view.layer.add(transition, forKey: kCATransition)
-                self.navigationController?.pushViewController(vc, animated: false)
-            }
+        FirebaseFunctions().addChatToDatabase(chatData: chatData) { (chatID) in
+            let vc = PlanChatController(chatID: chatID)
+            let transition = CATransition().pushTransition(direction: .fromRight)
+            self.navigationController!.view.layer.add(transition, forKey: kCATransition)
+            self.navigationController?.pushViewController(vc, animated: false)
         }
     }
     
@@ -277,100 +175,29 @@ class NewPlanController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     @objc func refresh(sender: AnyObject) {
-        getTableData {
+        contactsTable.getTableData {
             self.refreshControl.endRefreshing()
         }
         selectedUsersCollection.users.removeAll()
         previewView.removeFromSuperview()
     }
-    
-    fileprivate func getTableData(complete: @escaping ()->()) {
-        let localStorage = LocalStorage()
-        if let savedRegisteredUsers = localStorage.loadRegisteredContacts() {
-            contactsOnWandr = savedRegisteredUsers
-        }
-        getContacts { (contacts) in
-            self.userContacts = contacts
-            self.userContacts.forEach({ (contact) in
-                if contact.userData != nil {
-                    if self.contactsOnWandr.contains(where: {$0.phoneNum == contact.phoneNum}) {
-                        self.userContacts.removeLast() //Removes the active user contact from the all contacts group, since its the latest to be appended
-                    } else {
-                        self.contactsOnWandr.append(contact)
-                        localStorage.saveRegisteredContact(registeredContacts: self.contactsOnWandr)
-                        self.userContacts.removeAll(where: {$0.phoneNum == contact.phoneNum})
-                    }
-                }
-            })
-            self.contactsTable.reloadData()
-            complete()
-        }
-    }
 }
 
-class recentContactCell: UITableViewCell {
+extension NewPlanController: contactDelegate {
     
-    let contactCellView = ContactView()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubview(contactCellView)
-        contactCellView.setupRadioButton()
-        contactCellView.fillSuperView()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class activeContactCell: UITableViewCell {
-    
-    var contact: SelectableContact! {
-        didSet {
-            contactCellView.subTitle.text = contact.phoneNum
-            contactCellView.profileImage.loadImageWithCacheFromURLString(urlstring: contact.userData!.profileImageURL) {
-                self.contactCellView.setupProfileImage()
+    func handleSelectOfUser(selectedContact: SelectableContact) {
+        if selectedContact.selected { //checks to see if user is already selected
+            selectedContact.selected = false
+            selectedUsersCollection.users.removeAll(where: {$0.phoneNum == selectedContact.phoneNum})
+            if selectedUsersCollection.users.isEmpty {
+                previewView.removeFromSuperview()
             }
-            contactCellView.title.text = contact.userData!.name
+            selectedUsersCollection.reloadData()
+        } else {
+            selectedContact.selected = true
+            selectedUsersCollection.users.append(selectedContact)
+            setupPreviewView()
+            selectedUsersCollection.reloadData()
         }
-    }
-    
-    let contactCellView = ContactView()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubview(contactCellView)
-        contactCellView.setupRadioButton()
-        contactCellView.fillSuperView()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class otherContactCell: UITableViewCell {
-    
-    var contact: SelectableContact! {
-        didSet {
-            contactCellView.title.text = contact.name
-            contactCellView.subTitle.text = contact.phoneNum
-            contactCellView.initialsLabel.text = contact.name.getInitials()
-        }
-    }
-    
-    let contactCellView = ContactView()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubview(contactCellView)
-        contactCellView.setupInviteButton()
-        contactCellView.setupInitialsLabel()
-        contactCellView.fillSuperView()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

@@ -14,4 +14,9 @@ struct PlanChat {
     var chatID: String
     var members: [User]
     var created: Timestamp
+    var mostRecentMessage: Message
+}
+
+extension PlanChat: Fetchable {
+    static var apiBase: String { return "chats"}
 }

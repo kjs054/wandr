@@ -10,10 +10,18 @@ import UIKit
 
 class filterCell: UICollectionViewCell {
     
+    var category: PlaceCategory! {
+        didSet {
+            let cellBackgroundColor = category.selected ? UIColor.mainBlue : .white
+            backgroundColor = cellBackgroundColor
+            textLabel.text = category.categoryEmoji
+        }
+    }
+    
     
     let textLabel: UILabel = {
         let label = UILabel()
-        label.textColor = wandrBlue
+        label.textColor = UIColor.mainBlue
         label.textAlignment = .center
         label.adjustsFontSizeToFitWidth = true
         return label

@@ -8,71 +8,31 @@
 
 import UIKit
 
-class ChatView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
-    
-    fileprivate let messageId = "message"
-    
-    var messages = [Message]()
-    
+protocol MessageDelegate {
+    func showMessageActionMenu(message: Message)
+}
+
+class ChatView: UICollectionView {
+        
     let flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 5
+        layout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width, height: 100)
+        layout.minimumLineSpacing = 10
         return layout
     }()
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return messages.count
-    }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: contentMargin, left: 0, bottom: 0, right: 0)
-    }
-    
-    fileprivate func checkIfNextMessageIsFromSameUser(_ indexPath: IndexPath) -> Bool {
-        if indexPath.row != messages.count - 1 && messages[indexPath.row].sender == messages[indexPath.row + 1].sender {
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: messageId, for: indexPath) as! MessageCell
-        if checkIfNextMessageIsFromSameUser(indexPath) {
-            cell.doesBreakTheSenderChain = false
-        } else {
-            cell.doesBreakTheSenderChain = true
-        }
-        cell.message = messages[indexPath.item]
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        switch messages[indexPath.item].type {
-        case .text:
-            let estimatedCellSize = MessageCell.init(frame: CGRect(x: 0, y: 0, width: 250, height: 1000))
-            estimatedCellSize.textView.text = self.messages[indexPath.item].content
-            estimatedCellSize.layoutIfNeeded()
-            let estimatedSize = estimatedCellSize.systemLayoutSizeFitting(CGSize(width: self.frame.width, height: 1000))
-            return CGSize(width: self.frame.width * 0.95, height: estimatedSize.height)
-        default:
-            return CGSize(width: self.frame.width, height: 0)
-        }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
     }
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: flowLayout)
-        delegate = self
-        dataSource = self
-        layer.cornerRadius = 30.0
-        layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         backgroundColor = .white
-        register(MessageCell.self, forCellWithReuseIdentifier: messageId)
         transform = CGAffineTransform(scaleX: 1, y: -1)
     }
     
@@ -81,34 +41,81 @@ class ChatView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollecti
     }
 }
 
+class ChatInfoCell: UICollectionViewCell {
+    
+    var message: Message! {
+        didSet {
+            informationLabel.text = message.getDisplayText()
+        }
+    }
+    
+    let informationLabel: UILabel = {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 30))
+        label.textColor = UIColor.customGrey
+        label.transform = CGAffineTransform(scaleX: 1, y: -1)
+        label.font = UIFont(name: "Avenir-Medium", size: 13)
+        label.textAlignment = .center
+        return label
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(informationLabel)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+}
+
 class MessageCell: UICollectionViewCell {
     
     var bubbleConstraints: AnchoredConstraints!
     
+    var colorIndicatorConstraints: AnchoredConstraints!
+    
+    var profileImageConstraints: AnchoredConstraints!
+    
     var nameLabelConstraints: AnchoredConstraints!
     
     fileprivate func setupBlueBubbleOnRight() {
-        textView.textColor = .white
-        bubbleContainer.backgroundColor = wandrBlue
+        textView.textColor = #colorLiteral(red: 0.1455054283, green: 0.1505178213, blue: 0.1479265988, alpha: 1)
+        nameLabel.textColor = UIColor.customGrey
+        leftColorIndicator.backgroundColor = UIColor.mainBlue
         bubbleConstraints.leading?.isActive = false
         bubbleConstraints.trailing?.isActive = true
         nameLabelConstraints.trailing?.isActive = true
         nameLabelConstraints.leading?.isActive = false
+        colorIndicatorConstraints.leading?.isActive = false
+        colorIndicatorConstraints.trailing?.isActive = true
+        profileImageConstraints.trailing?.isActive = true
+        profileImageConstraints.leading?.isActive = false
+        textView.textAlignment = .right
     }
     
     fileprivate func setupGrayBubbleOnLeft() {
-        textView.textColor = .black
-        bubbleContainer.backgroundColor = #colorLiteral(red: 0.9098039216, green: 0.9098039216, blue: 0.9098039216, alpha: 1)
+        textView.textColor = #colorLiteral(red: 0.1455054283, green: 0.1505178213, blue: 0.1479265988, alpha: 1)
+        nameLabel.textColor = UIColor.customGrey
+        leftColorIndicator.backgroundColor = self.message.sender.displayColor
+        colorIndicatorConstraints.leading?.isActive = true
+        colorIndicatorConstraints.trailing?.isActive = false
         bubbleConstraints.trailing?.isActive = false
         bubbleConstraints.leading?.isActive = true
+        profileImageConstraints.trailing?.isActive = false
+        profileImageConstraints.leading?.isActive = true
         nameLabelConstraints.trailing?.isActive = false
         nameLabelConstraints.leading?.isActive = true
+        textView.textAlignment = .left
     }
+    
+    var messageDelegate: MessageDelegate!
     
     var message: Message! {
         didSet {
             textView.text = message.content
             nameLabel.text = "\(message.sender.name) - \(message.timestamp.toTime())"
+            profileImage.setImage(urlstring: message.sender.profileImageURL, size: CGSize(width: 35, height: 35), complete: {})
             if self.message.isFromCurrentLoggedInUser {
                 self.setupBlueBubbleOnRight()
             } else {
@@ -121,8 +128,12 @@ class MessageCell: UICollectionViewCell {
         didSet {
             if doesBreakTheSenderChain {
                 nameLabel.isHidden = false
+                profileImage.isHidden = false
+                self.bubbleConstraints.bottom?.constant = 0
             } else {
                 nameLabel.isHidden = true
+                profileImage.isHidden = true
+                self.bubbleConstraints.bottom?.constant = 14
             }
         }
     }
@@ -131,48 +142,93 @@ class MessageCell: UICollectionViewCell {
         let tv = UITextView()
         tv.isScrollEnabled = false
         tv.isEditable = false
+        tv.isSelectable = false
         tv.font = UIFont(name: "Avenir-Medium", size: 17)
         tv.backgroundColor = .clear
         return tv
     }()
     
+    let profileImage: circularImageView = {
+        let civ = circularImageView()
+        civ.transform = CGAffineTransform(scaleX: 1, y: -1)
+        return civ
+    }()
+    
     let nameLabel: UILabel = {
         let label = UILabel()
+        label.transform = CGAffineTransform(scaleX: 1, y: -1)
         label.font = UIFont(name: "Avenir-Book", size: 10)
         return label
     }()
     
+    let leftColorIndicator: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 2
+        return view
+    }()
+    
     let bubbleContainer: UIView = {
         let bc = UIView()
-        bc.layer.cornerRadius = 20
+        bc.transform = CGAffineTransform(scaleX: 1, y: -1)
+        bc.layer.cornerRadius = 0
+        bc.layer.masksToBounds = true
         return bc
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupBubbleContainer()
+        setupProfileImage()
+        setupColorIndicator()
         setupNameLabel()
+        setupBubbleContainer()
+        setupMenuLongPressGesture()
+    }
+    
+    override func layoutIfNeeded() {
+        bubbleConstraints.leading?.constant = 35
+        bubbleConstraints.trailing?.constant = -35
+    }
+    
+    fileprivate func setupProfileImage() {
+        addSubview(profileImage)
+        profileImageConstraints = profileImage.anchor(top: nil, bottom: bottomAnchor, leading: leadingAnchor, trailing: trailingAnchor, padding: UIEdgeInsets(top: 0, left: 10, bottom: 6, right: 10))
+        profileImage.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        profileImage.heightAnchor.constraint(equalTo: profileImage.widthAnchor).isActive = true
+    }
+    
+    fileprivate func setupColorIndicator() {
+        addSubview(leftColorIndicator)
+        colorIndicatorConstraints = leftColorIndicator.anchor(top: topAnchor, bottom: bottomAnchor, leading: profileImage.trailingAnchor, trailing: profileImage.leadingAnchor)
+        colorIndicatorConstraints.leading?.constant = 5
+        colorIndicatorConstraints.trailing?.constant = -5
+        leftColorIndicator.widthAnchor.constraint(equalToConstant: 4).isActive = true
     }
     
     fileprivate func setupBubbleContainer() {
-        bubbleContainer.transform = CGAffineTransform(scaleX: 1, y: -1)
         addSubview(bubbleContainer)
-        bubbleConstraints = bubbleContainer.anchor(top: topAnchor, bottom: bottomAnchor, leading: leadingAnchor, trailing: trailingAnchor)
-        bubbleContainer.widthAnchor.constraint(lessThanOrEqualToConstant: 250).isActive = true
+        bubbleConstraints = bubbleContainer.anchor(top: topAnchor, bottom: nameLabel.topAnchor, leading: leftColorIndicator.trailingAnchor, trailing: leftColorIndicator.leadingAnchor)
+        bubbleContainer.widthAnchor.constraint(lessThanOrEqualToConstant: UIScreen.main.bounds.width * 0.70).isActive = true
         bubbleContainer.addSubview(textView)
-        textView.fillSuperView(padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
+        textView.fillSuperView(padding: UIEdgeInsets(top: -5, left: 5, bottom: -5, right: 5))
     }
     
     fileprivate func setupNameLabel() {
         addSubview(nameLabel)
-        nameLabel.transform = CGAffineTransform(scaleX: 1, y: -1)
-        nameLabelConstraints = nameLabel.anchor(top: bubbleContainer.bottomAnchor, bottom: nil, leading: leadingAnchor, trailing: trailingAnchor)
+        nameLabelConstraints = nameLabel.anchor(top: nil, bottom: bottomAnchor, leading: leftColorIndicator.trailingAnchor, trailing: leftColorIndicator.leadingAnchor)
         nameLabelConstraints.leading?.constant = 5
         nameLabelConstraints.trailing?.constant = -5
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func setupMenuLongPressGesture() {
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleChatLongPressGesture))
+        addGestureRecognizer(gesture)
     }
     
+    @objc func handleChatLongPressGesture() {
+        self.messageDelegate.showMessageActionMenu(message: self.message)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }    
 }

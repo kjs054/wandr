@@ -15,14 +15,14 @@ class SendPlanTitleBar: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Send A Plan"
         label.font = UIFont(name: "Avenir-Heavy", size: 17)
-        label.textColor = wandrBlue
+        label.textColor = UIColor.mainBlue
         return label
     }()
     
     let navigationSubtitle: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Avenir-Heavy", size: 17)
-        label.textColor = #colorLiteral(red: 0.431372549, green: 0.431372549, blue: 0.431372549, alpha: 1)
+        label.textColor = UIColor.customGrey
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -35,21 +35,34 @@ class SendPlanTitleBar: UIView {
         return button
     }()
     
-    init(planTitle: NSAttributedString) {
-        super.init(frame: .zero)
+    fileprivate func setupCloseButton() {
         addSubview(closeButton)
         closeButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         closeButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         closeButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -20).isActive = true
         closeButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        closeButton.imageEdgeInsets = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 0)
+    }
+    
+    fileprivate func setupNavigationTitle() {
         addSubview(navigationTitle)
         navigationTitle.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -11).isActive = true
         navigationTitle.leftAnchor.constraint(equalTo: leftAnchor, constant: contentMargin).isActive = true
+    }
+    
+    fileprivate func setupNavigationSubtitle(_ planTitle: NSAttributedString) {
         addSubview(navigationSubtitle)
         navigationSubtitle.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 11).isActive = true
         navigationSubtitle.leftAnchor.constraint(equalTo: leftAnchor, constant: contentMargin).isActive = true
         navigationSubtitle.rightAnchor.constraint(equalTo: closeButton.leftAnchor, constant: -contentMargin).isActive = true
         navigationSubtitle.text = planTitle.string
+    }
+    
+    init(planTitle: NSAttributedString) {
+        super.init(frame: .zero)
+        setupCloseButton()
+        setupNavigationTitle()
+        setupNavigationSubtitle(planTitle)
     }
     
     required init?(coder aDecoder: NSCoder) {

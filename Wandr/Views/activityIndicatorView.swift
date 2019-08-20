@@ -27,7 +27,7 @@ class activityIndicatorView: UIView {
     
     init(color: UIColor, labelText: String) {
         super.init(frame: .zero)
-        let contentColor = color == .white ? wandrBlue : .white
+        let contentColor = color == .white ? UIColor.mainBlue : .white
         activityIndicator.color = contentColor
         activityLabel.textColor = contentColor
         backgroundColor = color

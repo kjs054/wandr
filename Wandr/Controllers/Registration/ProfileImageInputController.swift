@@ -9,7 +9,6 @@
 import UIKit
 
 class ProfileImageInputController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
     //MARK:- Elements
     let profilePicture: RoundedButton = {
         let pp = RoundedButton()
@@ -18,8 +17,8 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
         pp.setTitle("Add A Profile Picture", for: .normal)
         pp.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 20)
         pp.titleLabel?.adjustsFontSizeToFitWidth = true
-        pp.setTitleColor(wandrBlue, for: .normal)
-        pp.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        pp.setTitleColor(UIColor.mainBlue, for: .normal)
+        pp.backgroundColor = .white
         return pp
     }()
     
@@ -35,7 +34,7 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
         button.setTitle("Next", for: .normal)
         button.layer.masksToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitleColor(wandrBlue, for: .normal)
+        button.setTitleColor(UIColor.mainBlue, for: .normal)
         button.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 20)
         button.layer.cornerRadius = 18
         return button
@@ -43,12 +42,12 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
     
     //MARK:- Controller Setup
     override func viewDidLoad() {
-        view.backgroundColor = wandrBlue
+        view.backgroundColor = UIColor.mainBlue
         setupContentView()
         setupBirthdayInput()
         setupNextButton()
         self.navigationController?.navigationBar.isHidden = true
-        self.navigationController?.view.backgroundColor = wandrBlue
+        self.navigationController?.view.backgroundColor = UIColor.mainBlue
     }
     
     fileprivate func setupContentView() {
@@ -78,13 +77,18 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
     
     //MARK:- Logic
     @objc func handleRegistration() {
+        let backend = FirebaseFunctions()
         if let imageToUpload = profilePicture.imageView?.image {
             showActivityIndicator()
-            self.uploadProfileImageToStorage(image: imageToUpload, complete: ({ () -> () in
-                self.addUserDataToUsersCollection(complete: {
-                    self.showHomeViewController()
-                })
-            }))
+            let reference = "profileImages/\(String(describing: backend.getUserID))"
+            backend.uploadImage(reference: reference, image: imageToUpload) {
+                backend.downloadURL(reference: reference) { (imageURL) in
+                    newUserData["profileImageURL"] = imageURL
+                    backend.addNewUserToDatabase(userData: newUserData) {
+                        self.showHomeViewController()
+                    }
+                }
+            }
         } else {
             profilePicture.setTitle("Profile Picture Required", for: .normal)
         }
@@ -126,7 +130,7 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
     }
     
     fileprivate func showActivityIndicator() {
-        let activityIndicator = activityIndicatorView(color: wandrBlue, labelText: "Setting Up Your Account")
+        let activityIndicator = activityIndicatorView(color: UIColor.mainBlue, labelText: "Setting Up Your Account")
         view.addSubview(activityIndicator)
         activityIndicator.fillSuperView()
     }
