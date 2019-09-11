@@ -29,18 +29,14 @@ class User: NSObject, NSCoding {
     
     func getUserColor(index: Int) {
         switch index {
-        case 0:
-            self.displayColor = #colorLiteral(red: 0.4823529412, green: 0.9294117647, blue: 0.6235294118, alpha: 1)
-        case 1:
-            self.displayColor = #colorLiteral(red: 0.8039215686, green: 0.5176470588, blue: 0.9450980392, alpha: 1)
-        case 2:
-            self.displayColor = #colorLiteral(red: 1, green: 0.6862745098, blue: 0.3537920122, alpha: 1)
-        case 3:
-            self.displayColor = #colorLiteral(red: 1, green: 0.4196078431, blue: 0.4196078431, alpha: 1)
-        case 4:
-            self.displayColor = #colorLiteral(red: 1, green: 0.8666666667, blue: 0.3490196078, alpha: 1)
-        default:
-            self.displayColor = UIColor.gray
+        case 0: self.displayColor = #colorLiteral(red: 0.1803921569, green: 0.8352941176, blue: 0.4509803922, alpha: 1)
+        case 1: self.displayColor = #colorLiteral(red: 0.8039215686, green: 0.5176470588, blue: 0.9450980392, alpha: 1)
+        case 2: self.displayColor = #colorLiteral(red: 1, green: 0.6862745098, blue: 0.3537920122, alpha: 1)
+        case 3: self.displayColor = #colorLiteral(red: 1, green: 0.4196078431, blue: 0.4196078431, alpha: 1)
+        case 4: self.displayColor = #colorLiteral(red: 1, green: 0.8666666667, blue: 0.3490196078, alpha: 1)
+        case 5: self.displayColor = #colorLiteral(red: 0, green: 0.8125218372, blue: 0.7882352941, alpha: 1)
+        case 6: self.displayColor = #colorLiteral(red: 0.9921568627, green: 0.4745098039, blue: 0.6588235294, alpha: 1)
+        default: self.displayColor = UIColor.gray
         }
     }
     
@@ -54,7 +50,6 @@ class User: NSObject, NSCoding {
         aCoder.encode(self.uid, forKey: "uid")
         aCoder.encode(self.profileImageURL, forKey: "profileImageURL")
     }
-    
 }
 
 extension User: Fetchable {

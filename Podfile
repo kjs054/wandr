@@ -11,5 +11,7 @@ target 'Wandr' do
   pod 'Kingfisher'
   pod 'PhoneNumberKit', '~> 2.6'
   pod 'Firebase/Firestore'
+  pod 'Firebase/Functions'
   pod 'Firebase/Storage'
+  pod 'NVActivityIndicatorView/AppExtension'
 end

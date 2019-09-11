@@ -77,7 +77,7 @@ class ProfileImageInputController: UIViewController, UIImagePickerControllerDele
     
     //MARK:- Logic
     @objc func handleRegistration() {
-        let backend = FirebaseFunctions()
+        let backend = BackEndFunctions()
         if let imageToUpload = profilePicture.imageView?.image {
             showActivityIndicator()
             let reference = "profileImages/\(String(describing: backend.getUserID))"

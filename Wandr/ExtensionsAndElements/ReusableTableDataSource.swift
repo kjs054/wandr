@@ -63,6 +63,26 @@ extension TableViewDataSource where Model == SelectableContact {
     }
 }
 
+extension TableViewDataSource where Model == User {
+    static func make(for users: [User],
+                     reuseIdentifier: String = "user") -> TableViewDataSource {
+        return TableViewDataSource(models: users, reuseIdentifier: reuseIdentifier) { (data, cell) in
+            let itemCell: ChatUserCell = cell as! ChatUserCell
+            itemCell.user = data
+        }
+    }
+}
+
+extension TableViewDataSource where Model == InformationView {
+    static func make(for info: [InformationView], reuseIdentifier: String = "informationCell") -> TableViewDataSource {
+        return TableViewDataSource(models: info, reuseIdentifier: reuseIdentifier) { (data, cell) in
+            let itemCell: informationCell = cell as! informationCell
+            itemCell.selectionStyle = .none
+            itemCell.infoView = data
+        }
+    }
+}
+
 
 class SectionedTableViewDataSource: NSObject {
     private let dataSources: [UITableViewDataSource]

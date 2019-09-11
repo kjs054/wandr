@@ -10,10 +10,7 @@ import UIKit
 
 class InformationView: UIView {
     
-    let informationImage: UIImageView = {
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "couch"))
-        return imageView
-    }()
+    let informationImage = UIImageView()
     
     let informationTitle: UILabel = {
         let label = UILabel()
@@ -33,8 +30,9 @@ class InformationView: UIView {
         return label
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(image: UIImage, title: String, subtitle: String) {
+        self.informationImage.image = image; self.informationTitle.text = title; self.informationSubTitle.text = subtitle
+        super.init(frame: .zero)
         setupCouchImage()
         setupInformationTitle()
         setupInformationSubTitle()

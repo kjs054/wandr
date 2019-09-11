@@ -33,6 +33,8 @@
 	<true/>
 	<key>NSContactsUsageDescription</key>
 	<string>We need access to your contacts so you can make plans with your friends.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow access to location services while using the app to find places and events.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>NexaBold.otf</string>

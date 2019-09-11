@@ -47,7 +47,7 @@ class filtersView: UIStackView {
         addArrangedSubview(categoryFilters)
         translatesAutoresizingMaskIntoConstraints = false
         distribution = .fillEqually
-        setCustomSpacing(12, after: searchBarView) //future dynamic
+        setCustomSpacing(20, after: searchBarView) //future dynamic
         axis = .vertical
     }
     

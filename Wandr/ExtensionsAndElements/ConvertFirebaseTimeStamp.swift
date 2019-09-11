@@ -42,14 +42,31 @@ extension Timestamp {
     func seconds() -> Int {
         return Calendar.current.dateComponents([.second], from: self.dateValue(), to: Date()).second ?? 0
     }
-    func offset() -> String {
-        if years()   > 0 { return "\(years())y"   }
-        if months()  > 0 { return "\(months())M"  }
-        if weeks()   > 0 { return "\(weeks())w"   }
-        if days()    > 0 { return "\(days())d"    }
-        if hours()   > 0 { return "\(hours())h"   }
-        if minutes() > 0 { return "\(minutes())m" }
-        if seconds() > 0 { return "Now" }
+    @objc func offset() -> String {
+        if years()   >  0 { return "\(years())y"   }
+        if months()  >  0 { return "\(months())M"  }
+        if weeks()   >  0 { return "\(weeks())w"   }
+        if days()    >  0 { return "\(days())d"    }
+        if hours()   >  0 { return "\(hours())h"   }
+        if minutes() >  0 { return "\(minutes())m" }
+        if seconds() >= 0 { return "Now" }
         return ""
+    }
+}
+
+extension UIStackView {
+    
+    func removeAllArrangedSubviews() {
+        
+        let removedSubviews = arrangedSubviews.reduce([]) { (allSubviews, subview) -> [UIView] in
+            self.removeArrangedSubview(subview)
+            return allSubviews + [subview]
+        }
+        
+        // Deactivate all constraints
+        NSLayoutConstraint.deactivate(removedSubviews.flatMap({ $0.constraints }))
+        
+        // Remove the views from self
+        removedSubviews.forEach({ $0.removeFromSuperview() })
     }
 }

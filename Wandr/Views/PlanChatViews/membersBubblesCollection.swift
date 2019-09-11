@@ -10,11 +10,13 @@ import UIKit
 
 class membersBubblesCollection: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     
+    var cellSpacing: CGFloat!
+    
     var members: [User]! {
         didSet {
-            members.removeAll(where: {$0.name == LocalStorage().currentUserData()?.name})
             self.reusableDataSource = .make(for: members)
             dataSource = self.reusableDataSource
+            self.cellSpacing = -(CGFloat(members.count) * 4.5)
             reloadData()
         }
     }
@@ -22,7 +24,6 @@ class membersBubblesCollection: UICollectionView, UICollectionViewDelegateFlowLa
     let flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = -10
         layout.minimumInteritemSpacing = 0
         return layout
     }()
@@ -38,34 +39,18 @@ class membersBubblesCollection: UICollectionView, UICollectionViewDelegateFlowLa
         backgroundColor = .white
         isScrollEnabled = false
         register(userBubbleCell.self, forCellWithReuseIdentifier: "users")
-        setupShadow()
-    }
-    
-    fileprivate func setupShadow() {
-        layer.masksToBounds = false
-        layer.shadowOffset = CGSize(width: 0, height: 4)
-        layer.shadowOpacity = 0.1
-        layer.shadowColor = UIColor.black.cgColor
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        
-        let totalCellWidth = 45 * Double(members.count)
-        let totalCellSpacing = -(Double(10 * members.count))
-        
-        let leftInset = (UIScreen.main.bounds.width - CGFloat(totalCellWidth + totalCellSpacing)) / 2
-        let rightInset = leftInset
-        
-        return UIEdgeInsets(top: -4, left: leftInset, bottom: 0, right: rightInset)
-    }
-
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.frame.height * 0.85, height: self.frame.height * 0.85)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 30, height: 30)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return cellSpacing
     }
 }
 
@@ -76,13 +61,13 @@ class userBubbleCell: UICollectionViewCell {
     
     var user: User! {
         didSet {
-            self.isHidden = true
-            profileImage.setImage(urlstring: user.profileImageURL, size: profileImage.frame.size) {
-                self.backgroundView = self.profileImage
-                self.layer.addCircularBorder(size: self.frame.size, strokeColor: self.user.displayColor!, lineWidth: 11)
-                self.layer.addCircularBorder(size: self.frame.size, strokeColor: .white, lineWidth: 7)
-                self.isHidden = false
+            let memberImage = UIImageView()
+            memberImage.setCachedImage(urlstring: user.profileImageURL, size: self.frame.size) {
+                self.addSubview(memberImage)
+                memberImage.fillSuperView()
+                memberImage.centerInsideSuperView()
             }
+            layer.addCircularBorder(size: frame.size, strokeColor: .white, lineWidth: 4)
         }
     }
     

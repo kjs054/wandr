@@ -17,6 +17,7 @@ enum PresentationDirection {
 
 class SlideInPresentationManager: NSObject {
     var direction: PresentationDirection = .left
+    var height: CGFloat = 50
 }
 
 extension SlideInPresentationManager: UIViewControllerTransitioningDelegate {
@@ -28,7 +29,7 @@ extension SlideInPresentationManager: UIViewControllerTransitioningDelegate {
         let presentationController = SlideInPresentationController(
             presentedViewController: presented,
             presenting: presenting,
-            direction: direction
+            direction: direction, height: height
         )
         return presentationController
     }

@@ -11,36 +11,47 @@ import UIKit
 class CollectionViewDataSource<Model>: NSObject, UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-         return models.count
+        if let models = models {
+            return models.count
+        } else {
+            return 1
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let model = models[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: reuseIdentifier,
-            for: indexPath
-        )
-        
-        cellConfigurator(model, cell)
-        
-        return cell
+        if let models = models {
+            let model = models[indexPath.row]
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: reuseIdentifier,
+                for: indexPath
+            )
+            
+            cellConfigurator!(model, cell)
+            
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: reuseIdentifier,
+                for: indexPath
+            )
+            return cell
+        }
     }
     
-    typealias CellConfigurator = (Model, UICollectionViewCell) -> Void
+    typealias CellConfigurator = ((Model?, UICollectionViewCell) -> Void)?
     
-    var models: [Model]
+    var models: [Model]?
     
     private let reuseIdentifier: String
     private let cellConfigurator: CellConfigurator
     
-    init(models: [Model],
-         reuseIdentifier: String,
-         cellConfigurator: @escaping CellConfigurator) {
-        self.models = models
+    init(models: [Model]? = nil, reuseIdentifier: String, cellConfigurator: CellConfigurator = nil) {
+        if let models = models {
+            self.models = models
+        }
         self.reuseIdentifier = reuseIdentifier
         self.cellConfigurator = cellConfigurator
     }
-    
 }
 
 extension CollectionViewDataSource where Model == CardViewModel {
@@ -60,6 +71,20 @@ extension CollectionViewDataSource where Model == PlaceCategory {
             itemCell.category = data
         }
     }
+    
+    static func makeButtonCell(reuseIdentifier: String = "button") -> CollectionViewDataSource {
+        return CollectionViewDataSource(reuseIdentifier: reuseIdentifier)
+    }
+}
+
+extension CollectionViewDataSource where Model == SelectableContact {
+    static func make(for contacts: [SelectableContact],
+                     reuseIdentifier: String = "selectableContact") -> CollectionViewDataSource {
+        return CollectionViewDataSource(models: contacts, reuseIdentifier: reuseIdentifier) { (data, cell) in
+            let itemCell: membersCell  = cell as! membersCell
+            itemCell.contact = data
+        }
+    }
 }
 
 extension CollectionViewDataSource where Model == User {
@@ -72,4 +97,27 @@ extension CollectionViewDataSource where Model == User {
     }
 }
 
+class SectionedCollectionViewDataSource: NSObject {
+    private let dataSources: [UICollectionViewDataSource]
+    
+    init(dataSources: [UICollectionViewDataSource]) {
+        self.dataSources = dataSources
+    }
+}
 
+extension SectionedCollectionViewDataSource: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        let dataSource = dataSources[section]
+        return dataSource.collectionView(collectionView, numberOfItemsInSection: 0)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let dataSource = dataSources[indexPath.section]
+        let indexPath = IndexPath(row: indexPath.row, section: indexPath.section)
+        return dataSource.collectionView(collectionView, cellForItemAt: indexPath)
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return dataSources.count
+    }
+}

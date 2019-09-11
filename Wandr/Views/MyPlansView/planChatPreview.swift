@@ -17,11 +17,19 @@
 import UIKit
 import Kingfisher
 
-class planChatPreview: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class planChatPreview: UIView, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-    var members = ArraySlice<User>()
+    var members: [User]! {
+        didSet {
+            self.membersDataSource = .make(for: members, reuseIdentifier: memberImageCellId)
+            profileImageCollection.dataSource = membersDataSource
+            profileImageCollection.reloadData()
+        }
+    }
     
     let memberImageCellId = "memberCell"
+    
+    var membersDataSource: CollectionViewDataSource<User>?
     
     //MARK:- Elements
     let profileImageCollection: UICollectionView = {
@@ -63,8 +71,7 @@ class planChatPreview: UIView, UICollectionViewDelegate, UICollectionViewDataSou
         profileImageCollection.contentInsetAdjustmentBehavior = .always
         isUserInteractionEnabled = false
         profileImageCollection.delegate = self
-        profileImageCollection.dataSource = self
-        profileImageCollection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: memberImageCellId)
+        profileImageCollection.register(userBubbleCell.self, forCellWithReuseIdentifier: memberImageCellId)
         setupProfileImageView()
         setupTitle()
         setupTimeStamp()
@@ -109,11 +116,7 @@ class planChatPreview: UIView, UICollectionViewDelegate, UICollectionViewDataSou
             sender.isSelected = true
         }
     }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return members.count
-    }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if members.count == 2 {
             return CGSize(width: 40, height: 40)
@@ -122,20 +125,6 @@ class planChatPreview: UIView, UICollectionViewDelegate, UICollectionViewDataSou
             return CGSize(width: 36, height: 36)
         }
         return CGSize(width: 64, height: 64)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: memberImageCellId, for: indexPath)
-        cell.layer.cornerRadius = cell.frame.height / 2
-        cell.clipsToBounds = true
-        let memberImage = UIImageView()
-        memberImage.setImage(urlstring: members[indexPath.item].profileImageURL, size: cell.frame.size) {
-            cell.addSubview(memberImage)
-            memberImage.fillSuperView()
-            memberImage.centerInsideSuperView()
-        }
-        cell.layer.addCircularBorder(size: frame.size, strokeColor: .white, lineWidth: 5.0)
-        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

@@ -10,22 +10,24 @@ import UIKit
 
 //Configurations
 let cardCornerRadius: CGFloat = 20
+
 let contentMargin: CGFloat = UIScreen.main.bounds.width * 0.045
 
 class CardView: UIStackView {
+    
     var cardViewModel: CardViewModel! {
         didSet {
+            cardTop.imageView.image = UIImage()
             let imageName = cardViewModel.placeImages.first ?? ""
-            cardTop.imageView.image = UIImage(named: imageName)
-            cardTop.headerInfo.attributedText = cardViewModel.headerText
-            cardBottom.topRowLabel.attributedText = cardViewModel.topRowText
-            cardBottom.bottomRowLabel.attributedText = cardViewModel.bottomRowText
-            cardTop.imageBars.arrangedSubviews.forEach { (bar) in
-                bar.removeFromSuperview()
-            }
-            (0..<cardViewModel.placeImages.count).forEach { (_) in
-                setupBarView()
-            }
+            cardTop.imageView.downloaded(from: imageName, contentMode: .scaleAspectFill)
+            cardBottom.titleLabel.text = cardViewModel.headerContent["title"]
+            cardBottom.distanceLabel.text = cardViewModel.headerContent["distance"]
+            cardBottom.setupDetailsStacks(content: cardViewModel.detailsContent)
+            cardTop.saveButton.tintColor = .black
+            cardTop.saveButton.alpha = 0.5
+//            cardBottom.topRowLabel.attributedText = cardViewModel.topRowText
+            cardTop.imageBars.arrangedSubviews.forEach { (bar) in bar.removeFromSuperview() }
+            (0..<cardViewModel.placeImages.count).forEach { (_) in setupBarView() }
             cardTop.imageBars.arrangedSubviews.first?.backgroundColor = UIColor.white
         }
     }
@@ -36,15 +38,14 @@ class CardView: UIStackView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addArrangedSubview(cardTop)
+        cardBottom.heightAnchor.constraint(equalToConstant: 250).isActive = true
         setupCardBottom()
-        distribution = .equalSpacing
         axis = .vertical
         cardTop.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleImageTap)))
     }
     
     func setupCardBottom() {
         addArrangedSubview(cardBottom)
-        cardBottom.heightAnchor.constraint(equalToConstant: 85).isActive = true
     }
     
     required init(coder: NSCoder) {

@@ -32,7 +32,7 @@ class NewPlanController: UIViewController {
     
     fileprivate let planPlace: CardViewModel!
     
-    lazy var sendPlanTitleBar = SendPlanTitleBar(planTitle: planPlace.headerText)
+    lazy var sendPlanTitleBar = SendPlanTitleBar(planTitle: planPlace.headerContent["title"]!)
     
     let previewView: UIView = {
         let view = UIView()
@@ -73,7 +73,7 @@ class NewPlanController: UIViewController {
         contactsTable.selectionDelegate = self
         view.backgroundColor = .white //needed to prevent opacity issues during vc presentation
         view.layer.opacity = 50.0
-        FirebaseFunctions().fetchUserChats(uid: FirebaseFunctions().getUserID()) { (chats)  in
+        BackEndFunctions().fetchUserChats(uid: BackEndFunctions().getUserID()) { (chats)  in
             if let chats = chats {
                 self.contactsTable.planChats = chats
             }
@@ -156,11 +156,11 @@ class NewPlanController: UIViewController {
     @objc func setupNewChat() {
         sendButton.isEnabled = false
         var selectedContactsIds = selectedUsersCollection.users.compactMap({return $0.userData?.uid})
-        selectedContactsIds.append(LocalStorage().currentUserData()!.uid)
+        selectedContactsIds.append(BackEndFunctions().getUserID())
         let chatData = ["name": "",
                         "members": selectedContactsIds,
                         "created": FieldValue.serverTimestamp()] as [String : Any]
-        FirebaseFunctions().addChatToDatabase(chatData: chatData) { (chatID) in
+        BackEndFunctions().addChatToDatabase(chatData: chatData) { (chatID) in
             let vc = PlanChatController(chatID: chatID)
             let transition = CATransition().pushTransition(direction: .fromRight)
             self.navigationController!.view.layer.add(transition, forKey: kCATransition)

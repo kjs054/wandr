@@ -12,7 +12,7 @@ class MyPlansController: UIViewController, UITableViewDelegate {
     
     
     //MARK:- Variables
-    let backendFunctions = FirebaseFunctions()
+    let backendFunctions = BackEndFunctions()
     
     var planChats = [PlanChat]()
     
@@ -21,7 +21,7 @@ class MyPlansController: UIViewController, UITableViewDelegate {
     let informationCellId = "informationCellId"
     
     //MARK:- Elements
-    private var dataSource:TableViewDataSource<PlanChat>?
+    private var dataSource:SectionedTableViewDataSource?
     
     let refreshControl = UIRefreshControl()
     
@@ -38,8 +38,11 @@ class MyPlansController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setupNavigationBar()
         getTableData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        setupNavigationBar()
     }
     
     func setupRefreshControl() {
@@ -49,12 +52,10 @@ class MyPlansController: UIViewController, UITableViewDelegate {
     
     @objc func getTableData() {
         backendFunctions.fetchUserChats(uid: backendFunctions.getUserID()) { (chats)  in
-            if let chats = chats {
-                self.planChats = chats
-                self.setupTableView()
-                self.tableView.reloadData()
-                self.refreshControl.endRefreshing()
-            }
+            if let chats = chats {  self.planChats = chats  }
+            self.setupTableView()
+            self.refreshControl.endRefreshing()
+            self.tableView.reloadData()
         }
     }
     
@@ -66,23 +67,25 @@ class MyPlansController: UIViewController, UITableViewDelegate {
         let backButton = UIButton()
         navigationController?.navigationBar.isHidden = false
         navigationItem.title = "My Plans"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.mainBlue, .font: UIFont(name: "Avenir-Heavy", size: 23)!]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.mainBlue, .font: UIFont(name: "Avenir-Heavy", size: 19)!]
         navigationController?.navigationBar.isTranslucent = false
         backButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
         backButton.setImage(#imageLiteral(resourceName: "leftArrow"), for: .normal)
         backButton.imageView?.contentMode = .scaleAspectFit
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+        navigationController?.navigationBar.addShadow()
+        navigationController?.navigationBar.layer.zPosition = 2
     }
     
     //MARK:- Plans Table Functions
     func setupTableView() {
-        dataSource = .make(for: planChats, reuseIdentifier: planPreviewId)
+        dataSource = SectionedTableViewDataSource(dataSources: [TableViewDataSource.make(for: planChats, reuseIdentifier: planPreviewId), TableViewDataSource.make(for: [InformationView(image: #imageLiteral(resourceName: "couch"), title: "Lets Make Some Better Plans", subtitle: "Another night on the couch? \n Send a place to a friend(s) and \n make some plans.")], reuseIdentifier: "betterPlans")])
         tableView.delegate = self
         tableView.dataSource = dataSource
         view.addSubview(tableView)
         tableView.register(planPreviewCell.self, forCellReuseIdentifier: planPreviewId)
-        tableView.register(MakeBetterPlansCell.self, forCellReuseIdentifier: informationCellId)
-        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0))
+        tableView.register(informationCell.self, forCellReuseIdentifier: "betterPlans")
+        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
         setupRefreshControl()
     }
     
@@ -126,14 +129,19 @@ class planPreviewCell: UITableViewCell {
     
     var plan: PlanChat! {
         didSet {
-            self.previewView.timeStamp.text = plan.mostRecentMessage.timestamp.offset()
+            if plan.members.count > 1 { plan.members.removeAll(where: {$0.name == LocalStorage().currentUserData()?.name}) }
+            if plan.members.count > 4 { plan.members = Array(plan.members[0..<4]) }
+            setTimestamp()
             self.previewView.subTitle.text = plan.mostRecentMessage.getDisplayText()
-            plan.members.removeAll(where: {$0.name == LocalStorage().currentUserData()?.name})
             let planName = plan.name.isEmpty ? plan.members.map({$0.name}).joined(separator: ", ") : plan.name
             previewView.title.text = planName
-            let membersToPass = plan.members.count >= 4 ? plan.members[0..<4] : plan.members[0..<plan.members.count]
-            previewView.members = membersToPass
+            previewView.members = plan.members
         }
+    }
+    
+    @objc func setTimestamp() {
+        Timer.scheduledTimer(timeInterval: 60.0, target: self, selector: #selector(setTimestamp), userInfo: nil, repeats: true)
+        self.previewView.timeStamp.text = plan.mostRecentMessage.timestamp.offset()
     }
     
     //MARK:- Subviews
@@ -151,22 +159,22 @@ class planPreviewCell: UITableViewCell {
     }
 }
 
-class MakeBetterPlansCell: UITableViewCell {
+class informationCell: UITableViewCell {
     
     //MARK:- Subviews
-    let infoView = InformationView()
+    var infoView: InformationView! {
+        didSet {
+            setupInformationView()
+        }
+    }
     
     //MARK:- Setup Cell
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupInformationView()
     }
-    
+
     func setupInformationView() {
         addSubview(infoView)
-        infoView.informationImage.image = #imageLiteral(resourceName: "couch")
-        infoView.informationTitle.text = "Lets Make Some Better Plans"
-        infoView.informationSubTitle.text = "Another night on the couch? \n Send a place to a friend(s) and \n make some plans."
         infoView.translatesAutoresizingMaskIntoConstraints = false
         infoView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         infoView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true

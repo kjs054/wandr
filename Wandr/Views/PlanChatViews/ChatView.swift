@@ -13,6 +13,7 @@ protocol MessageDelegate {
 }
 
 class ChatView: UICollectionView {
+    
         
     let flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -97,7 +98,7 @@ class MessageCell: UICollectionViewCell {
     fileprivate func setupGrayBubbleOnLeft() {
         textView.textColor = #colorLiteral(red: 0.1455054283, green: 0.1505178213, blue: 0.1479265988, alpha: 1)
         nameLabel.textColor = UIColor.customGrey
-        leftColorIndicator.backgroundColor = self.message.sender.displayColor
+        leftColorIndicator.backgroundColor = self.message.sender.displayColor ?? UIColor.customGrey
         colorIndicatorConstraints.leading?.isActive = true
         colorIndicatorConstraints.trailing?.isActive = false
         bubbleConstraints.trailing?.isActive = false
@@ -115,7 +116,7 @@ class MessageCell: UICollectionViewCell {
         didSet {
             textView.text = message.content
             nameLabel.text = "\(message.sender.name) - \(message.timestamp.toTime())"
-            profileImage.setImage(urlstring: message.sender.profileImageURL, size: CGSize(width: 35, height: 35), complete: {})
+            profileImage.setCachedImage(urlstring: message.sender.profileImageURL, size: CGSize(width: 35, height: 35), complete: {})
             if self.message.isFromCurrentLoggedInUser {
                 self.setupBlueBubbleOnRight()
             } else {

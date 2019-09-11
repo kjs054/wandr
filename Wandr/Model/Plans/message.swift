@@ -30,20 +30,13 @@ struct Message {
     func getDisplayText() -> String {
         let senderName = self.isFromCurrentLoggedInUser ? "You" : self.sender.name
         switch self.type {
-        case .text:
-            return "\(senderName): \(self.content)"
-        case .info(.created):
-            return "\(senderName) created a plan"
-        case .info(.invitedMember):
-            return "\(senderName) invited \(self.content)"
-        case .info(.renamed):
-            return"\(senderName) named the plan '\(self.content)'"
-        case .info(.deleted):
-            return "\(senderName) deleted a message"
-        case .info(.memberLeft):
-            return "\(senderName) left the plan"
-        default:
-            return ""
+        case .text:                 return "\(senderName): \(self.content)"
+        case .info(.created):       return "\(senderName) created a plan"
+        case .info(.invitedMember): return "\(senderName) invited \(self.content)"
+        case .info(.renamed):       return"\(senderName) named the plan '\(self.content)'"
+        case .info(.deleted):       return "\(senderName) deleted a message"
+        case .info(.memberLeft):    return "\(senderName) left the plan"
+        default:                    return ""
         }
     }
 }

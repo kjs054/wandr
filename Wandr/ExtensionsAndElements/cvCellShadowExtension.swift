@@ -16,16 +16,3 @@ extension UICollectionViewCell {
         layer.shadowOpacity = 0.15
     }
 }
-
-extension CALayer {
-    func addCircularBorder(size: CGSize, strokeColor: UIColor, lineWidth: CGFloat) {
-        let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: ([.topLeft, .topRight, .bottomLeft, .bottomRight]), cornerRadii: size)
-        let borderShape = CAShapeLayer.init()
-        borderShape.path = maskPath.cgPath
-        self.masksToBounds = true
-        borderShape.fillColor = nil
-        borderShape.strokeColor = strokeColor.cgColor
-        borderShape.lineWidth = lineWidth
-        addSublayer(borderShape)
-    }
-}

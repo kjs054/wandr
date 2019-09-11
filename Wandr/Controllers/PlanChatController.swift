@@ -14,7 +14,7 @@ class PlanChatController: UIViewController, UITextFieldDelegate {
     //MARK:- Variables
     fileprivate var chatID: String
     
-    fileprivate let backend = FirebaseFunctions()
+    fileprivate let backend = BackEndFunctions()
     
     fileprivate var hasFetchedMessages: Bool!
     
@@ -27,29 +27,21 @@ class PlanChatController: UIViewController, UITextFieldDelegate {
     fileprivate var chatData: PlanChat! {
         didSet {
             self.membersNamesToDisplay = self.chatData.members
-            self.membersNamesToDisplay.removeAll(where: {$0.name == LocalStorage().currentUserData()?.name})
+            membersNamesToDisplay.removeAll(where: {$0.uid == BackEndFunctions().getUserID()})
+            for (i, user) in self.membersNamesToDisplay.enumerated() {user.getUserColor(index: i)}
             if hasFetchedMessages == false {
                 fetchMessages()
                 hasFetchedMessages = true
             }
             if hasAddedMembers == false {
-                membersCollection.members = chatData.members
-                if chatData.name.isEmpty {
-                    self.planChatName.setTitle(self.getNavigationBarTitle(), for: .normal)
-                }
-                self.planChatName.setTitle(self.getNavigationBarTitle(), for: .normal)
+                self.titleView.members = chatData.members
                 hasAddedMembers = true
             } else {
-                if chatData.members.count - 1 != membersCollection.members.count {
-                    membersCollection.members = chatData.members
-                    if chatData.name.isEmpty {
-                        self.planChatName.setTitle(self.getNavigationBarTitle(), for: .normal)
-                    }
+                if chatData.members.count - 1 != self.titleView.membersCollection.members.count {
+                    self.titleView.members = chatData.members
                 }
             }
-            if chatData.name != planChatName.titleLabel?.text {
-                self.planChatName.setTitle(self.getNavigationBarTitle(), for: .normal)
-            }
+            self.titleView.planName = self.getNavigationBarTitle()
         }
     }
     
@@ -68,17 +60,7 @@ class PlanChatController: UIViewController, UITextFieldDelegate {
     
     let chatView = ChatView()
     
-    let membersCollection = membersBubblesCollection()
-    
-    let planChatName: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 18)
-        button.setTitleColor(UIColor.mainBlue, for: .normal)
-        button.titleLabel?.adjustsFontSizeToFitWidth = true
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
+    let titleView = PlanTitleView(frame: CGRect(x: 0, y: 0, width: 900, height: 35))
     
     let activityView = activityIndicatorView(color: .white, labelText: "Loading Chat Data")
     
@@ -101,6 +83,9 @@ class PlanChatController: UIViewController, UITextFieldDelegate {
             self.activityView.removeFromSuperview()
             self.setupMainView()
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         self.setupNavigationBar()
     }
     
@@ -111,26 +96,21 @@ class PlanChatController: UIViewController, UITextFieldDelegate {
     
     func setupNavigationBar() {
         navigationController?.navigationBar.isHidden = false
-        planChatName.addTarget(self, action: #selector(showChangeNameAlert), for: .touchUpInside)
-        navigationItem.titleView = planChatName
+//        planChatName.addTarget(self, action: #selector(showChangeNameAlert), for: .touchUpInside)
+        navigationController?.navigationBar.topItem?.titleView = titleView
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.mainBlue, .font: UIFont(name: "Avenir-Heavy", size: 18)!]
         navigationController?.navigationBar.isTranslucent = false
         let backButton = UIButton()
         backButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
         backButton.setImage(#imageLiteral(resourceName: "leftArrow"), for: .normal)
-        backButton.imageEdgeInsets = UIEdgeInsets(top: 2, left: 0, bottom: 2, right: 2)
         backButton.imageView?.contentMode = .scaleAspectFit
-        let moreInfoButton = UIButton()
-        moreInfoButton.addTarget(self, action: #selector(showChatActionMenu), for: .touchUpInside)
-        moreInfoButton.setImage(#imageLiteral(resourceName: "menuDots"), for: .normal)
-        moreInfoButton.imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 0)
-        moreInfoButton.imageView?.contentMode = .scaleAspectFit
         navigationController?.navigationBar.layer.zPosition = 4
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
+        let showPlanInfoGesture = UITapGestureRecognizer(target: self, action: #selector(showChatMenu))
+        titleView.addGestureRecognizer(showPlanInfoGesture)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: moreInfoButton)
+        navigationController?.navigationBar.addShadow()
     }
+    
     
     fileprivate func handleKeyboardLogic() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -145,16 +125,14 @@ class PlanChatController: UIViewController, UITextFieldDelegate {
     fileprivate func setupMainView() {
         view.addSubview(mainView)
         view.backgroundColor = .white
-        let subviews = [membersCollection, chatView, createMessage]
+        let subviews = [chatView, createMessage]
         setupChatView()
         setupCreateMessageView()
         mainView.fillSuperView()
         subviews.forEach { (sv) in
             mainView.addArrangedSubview(sv)
-            membersCollection.heightAnchor.constraint(equalToConstant: 50).isActive = true
             createMessage.heightAnchor.constraint(equalToConstant: 50).isActive = true
         }
-        mainView.bringSubviewToFront(membersCollection)
     }
     
     fileprivate func setupChatView() {
@@ -174,10 +152,10 @@ class PlanChatController: UIViewController, UITextFieldDelegate {
     @objc func dismissViewController() {
         let transition = CATransition().pushTransition(direction: CATransitionSubtype.fromLeft)
         navigationController!.view.layer.add(transition, forKey: nil)
-        for vc in navigationController?.viewControllers ?? [] {
-            if vc is MyPlansController {
-                navigationController?.popToViewController(vc, animated: false)
-            }
+        if ((navigationController?.viewControllers.contains(where: {$0 is MyPlansController}))!) {
+            navigationController?.popViewController(animated: false)
+        } else {
+            navigationController?.pushViewController(MyPlansController(), animated: false)
         }
     }
     
@@ -192,32 +170,15 @@ class PlanChatController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @objc func showChatActionMenu() {
-        let chatActionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        chatActionMenu.addAction(UIAlertAction(title: "Add Member", style: .default, handler: { (_) in
-            let vc = AddMemberToPlanController(chatData: self.chatData)
-            let slideInTransitioningDelegate = SlideInPresentationManager()
-            slideInTransitioningDelegate.direction = .bottom
-            vc.transitioningDelegate = slideInTransitioningDelegate
-            vc.modalPresentationStyle = .custom
-            self.present(vc, animated: true)
-        }))
-        chatActionMenu.addAction(UIAlertAction(title: "Change Group Name", style: .default, handler: { (_) in
-            self.showChangeNameAlert()
-        }))
-        chatActionMenu.addAction(UIAlertAction(title: "Mute", style: .default, handler: { (_) in
-            
-        }))
-        chatActionMenu.addAction(UIAlertAction(title: "Leave Plan", style: .destructive, handler: { (_) in
-            let warningAlert = UIAlertController(title: "Are You Sure?", message: "You will not be able to access these plans unless re-invited.", preferredStyle: .alert)
-            warningAlert.addAction(UIAlertAction(title: "I'm Sure", style: .destructive , handler: { (_) in
-                self.backend.leaveChat(chatID: self.chatID)
-            }))
-            warningAlert.addAction(UIAlertAction(title: "Nevermind!", style: .default))
-            self.present(warningAlert, animated: true)
-        }))
-        chatActionMenu.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        self.present(chatActionMenu, animated: true, completion: nil)
+    @objc func showChatMenu() {
+        self.createMessage.messageField.resignFirstResponder()
+        let vc = PlanChatMenuController(chatData: self.chatData)
+        let slideInTransitioningDelegate = SlideInPresentationManager()
+        slideInTransitioningDelegate.direction = .bottom
+        slideInTransitioningDelegate.height = UIScreen.main.bounds.height * 0.8
+        vc.transitioningDelegate = slideInTransitioningDelegate
+        vc.modalPresentationStyle = .custom
+        self.present(vc, animated: true)
     }
     
     let bottomSafeArea = UIApplication.shared.delegate?.window??.safeAreaInsets.bottom ?? 0
@@ -242,8 +203,13 @@ class PlanChatController: UIViewController, UITextFieldDelegate {
     }
     
     func fetchMessages() {
-        backend.fetchChatMessages(chatData: chatData) { (messages) in
-            self.messages.insert(contentsOf: messages, at: 0)
+        backend.fetchChatMessages(chatData: chatData) { (messages, changeType) in
+            if changeType == .added {
+                self.messages.insert(contentsOf: messages, at: 0)
+            }
+            if changeType == .removed {
+                self.messages.removeAll(where: {$0.messageID == messages[0].messageID})
+            }
             self.chatView.reloadData()
         }
     }
@@ -251,6 +217,9 @@ class PlanChatController: UIViewController, UITextFieldDelegate {
     fileprivate func getNavigationBarTitle() -> String {
         if chatData.name == "" {
             var otherUsersCount = ""
+            if membersNamesToDisplay.count == 0 {
+                return "😥 You're All Alone"
+            }
             if membersNamesToDisplay.count > 2 {
                 let count = membersNamesToDisplay.count
                 membersNamesToDisplay = Array(membersNamesToDisplay[0 ..< 2])
@@ -260,19 +229,6 @@ class PlanChatController: UIViewController, UITextFieldDelegate {
         } else {
             return chatData.name
         }
-    }
-    
-    @objc func showChangeNameAlert() {
-        let changeNameAlert = UIAlertController(title: "Change Group Name", message: "Name changes will be seen by all of the group", preferredStyle: .alert)
-        changeNameAlert.addTextField()
-        changeNameAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        changeNameAlert.addAction(UIAlertAction(title: "Done", style: .default, handler: { (_) in
-            if let newNameInput = changeNameAlert.textFields![0].text {
-                self.backend.changeChatName(chatID: self.chatID, name: newNameInput)
-                self.createMessage.messageField.resignFirstResponder()
-            }
-        }))
-        self.present(changeNameAlert, animated: true)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -339,12 +295,9 @@ extension PlanChatController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch messages[indexPath.item].type {
-        case .text:
-            return CGSize(width: self.chatView.frame.width, height: 100)
-        case .info:
-            return CGSize(width: self.chatView.frame.width, height: 45)
-        default:
-            return CGSize(width: self.chatView.frame.width, height: 0)
+        case .text: return CGSize(width: self.chatView.frame.width, height: 100)
+        case .info: return CGSize(width: self.chatView.frame.width, height: 45)
+        default:    return CGSize(width: self.chatView.frame.width, height: 0)
         }
     }
     

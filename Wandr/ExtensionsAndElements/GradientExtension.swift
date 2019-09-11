@@ -21,10 +21,12 @@ extension UIView {
     }
 }
 
-extension UIViewController {
-    func presentOnRoot(`with` viewController : UIViewController){
-        let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
-        self.present(navigationController, animated: false, completion: nil)
+
+extension String {
+    func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = self.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedString.Key.font: font], context: nil)
+        return boundingBox.height
     }
 }
+

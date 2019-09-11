@@ -12,18 +12,16 @@ class filterCell: UICollectionViewCell {
     
     var category: PlaceCategory! {
         didSet {
-            let cellBackgroundColor = category.selected ? UIColor.mainBlue : .white
-            backgroundColor = cellBackgroundColor
-            textLabel.text = category.categoryEmoji
+            backgroundColor = category.selected ? UIColor.mainBlue : .white
+            textLabel.textColor = category.selected ? UIColor.white : .customGrey
+            textLabel.text = "\(category.emoji) \(category.title)"
         }
     }
     
-    
     let textLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.mainBlue
+        label.textColor = UIColor.customGrey
         label.textAlignment = .center
-        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -37,13 +35,15 @@ class filterCell: UICollectionViewCell {
     
     func setupTextLabel() {
         textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.widthAnchor.constraint(equalToConstant: frame.width).isActive = true
-        textLabel.heightAnchor.constraint(equalToConstant: frame.height).isActive = true
-        textLabel.font = UIFont(name: "Avenir-Heavy", size: frame.height * 0.45)
         contentView.addSubview(textLabel)
+        textLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 10).isActive = true
+        textLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        textLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10).isActive = true
+        textLabel.font = UIFont(name: "Avenir-Heavy", size: 16)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
 }
